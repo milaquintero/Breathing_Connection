@@ -14,7 +14,7 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   Future<void> getUserData() async{
     //get user data from backend
-    User curUser = await UserService.userData();
+    User curUser = await UserService.userData(1);
     //update shareable resource with user data
     UserService.curUser = curUser;
   }

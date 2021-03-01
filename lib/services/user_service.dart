@@ -6,8 +6,13 @@ import 'package:breathing_connection/models/user.dart';
 class UserService {
   static User curUser;
   //get user data from backend
-  static Future<User> userData() async{
-    Response userResponse = await get('$BASE_URL/users/1');
-    return User.fromJson(jsonDecode(userResponse.body));
+  static Future<User> userData(userID) async{
+    try{
+      Response userResponse = await get('$BASE_URL/users/$userID');
+      return User.fromJson(jsonDecode(userResponse.body));
+    }
+    catch(error){
+      throw new Exception(error);
+    }
   }
 }
