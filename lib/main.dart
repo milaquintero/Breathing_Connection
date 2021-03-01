@@ -7,7 +7,6 @@ import 'package:breathing_connection/pages/environment.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/',
     routes: {
       '/': (context)=>Loading(),
       '/home': (context)=>Home(),
