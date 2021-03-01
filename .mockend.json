@@ -1,0 +1,11 @@
+{
+  "Technique": {
+    "id": "int",
+    "title": "string",
+    "description": "string"
+  },
+  "User": {
+    "id": "int",
+    "username": "string"
+  }
+}
