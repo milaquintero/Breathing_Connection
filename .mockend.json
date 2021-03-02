@@ -1,11 +1,24 @@
 {
-  "Technique": {
-    "id": "int",
-    "title": "string",
-    "description": "string"
-  },
   "User": {
-    "id": "int",
-    "username": "string"
+    "userID": "int",
+    "username": "string",
+    "email": "string",
+    "selectedTechniques": "Technique[]",
+    "appSettings": {
+      "breathingSound": "boolean",
+      "backgroundSound": "boolean",
+      "vibration": "boolean",
+      "dailyReminders": "boolean",
+      "theme": "int"
+    }
+  },
+  "Technique": {
+    "techniqueID": "int",
+    "title": "string",
+    "description": "string",
+    "inhaleDuration": "int",
+    "firstHoldDuration": "int",
+    "exhaleDuration": "int",
+    "secondHoldDuration": "int"
   }
 }
