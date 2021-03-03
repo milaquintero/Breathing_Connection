@@ -19,18 +19,19 @@ class _HomeState extends State<Home> {
     NavLink(route: '/technique-list', title: 'Techniques', icon: Icons.article_rounded),
     NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(navLinks: this.sideNavLinks, headerImg: this.sideNavHeaderImg),
       appBar: AppBar(
         toolbarHeight: appBarHeight,
-        backgroundColor: homeAppBarBg,
+        backgroundColor: brandPrimary,
         centerTitle: true,
         elevation: 0,
         title: Text(
             'Breathing Connection',
-            style: homeAppBarTextStyle,
+            style: appBarTextStyle,
         )
       ),
       body: Container(

@@ -4,7 +4,34 @@
       "id": 1,
       "username": "Viznaga",
       "email": "viz@viz.com",
-      "selectedTechniques": [
+      "amTechnique": {
+        "techniqueID": 1,
+        "title": "'4-7-8'",
+        "description": "Fall asleep faster and wake up better recovered.",
+        "inhaleDuration": 4,
+        "firstHoldDuration": 7,
+        "exhaleDuration": 8,
+        "secondHoldDuration": 0
+      },
+      "pmTechnique": {
+        "techniqueID": 2,
+        "title": "Slow Paced Breathing",
+        "description": "Lower blood pressure.",
+        "inhaleDuration": 4,
+        "firstHoldDuration": 0,
+        "exhaleDuration": 6,
+        "secondHoldDuration": 0
+      },
+      "challengeTechnique": {
+        "techniqueID": 3,
+        "title": "COPD Breathing",
+        "description": "Relieve COPD and Asthma Symptoms.",
+        "inhaleDuration": 2,
+        "firstHoldDuration": 0,
+        "exhaleDuration": 6,
+        "secondHoldDuration": 0
+      },
+      "customTechniques": [
 
       ],
       "appSettings": {
@@ -19,7 +46,7 @@
   "techniques": [
     {
       "techniqueID": 1,
-      "title": "4-7-8",
+      "title": "'4-7-8'",
       "description": "Fall asleep faster and wake up better recovered.",
       "inhaleDuration": 4,
       "firstHoldDuration": 7,
@@ -27,7 +54,7 @@
       "secondHoldDuration": 0
     },
     {
-      "techniqueID": 1,
+      "techniqueID": 2,
       "title": "Slow Paced Breathing",
       "description": "Lower blood pressure.",
       "inhaleDuration": 4,
@@ -36,7 +63,7 @@
       "secondHoldDuration": 0
     },
     {
-      "techniqueID": 1,
+      "techniqueID": 3,
       "title": "COPD Breathing",
       "description": "Relieve COPD and Asthma Symptoms.",
       "inhaleDuration": 2,
