@@ -16,3 +16,7 @@ EdgeInsets homeMainTextPadding = EdgeInsets.fromLTRB(0, 32, 0, 0);
 TextStyle homeMainTextStyle = TextStyle(
     fontSize: 24
 );
+
+//TODO: Technique card style
+
+//TODO: Technique card header style

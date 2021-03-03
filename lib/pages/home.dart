@@ -1,4 +1,8 @@
+import 'package:breathing_connection/models/user.dart';
+import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/nav_link.dart';
+import 'package:breathing_connection/widgets/technique_card.dart';
+import 'package:breathing_connection/widgets/technique_card_header.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/widgets/nav_drawer.dart';
 
@@ -19,6 +23,7 @@ class _HomeState extends State<Home> {
     NavLink(route: '/technique-list', title: 'Techniques', icon: Icons.article_rounded),
     NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
   ];
+  User curUser = UserService.curUser;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +56,34 @@ class _HomeState extends State<Home> {
               child: Text(
                   'Your breathing Journey',
                   style: homeMainTextStyle
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(8, 22, 8, 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey[200],
+                    borderRadius: BorderRadius.all(Radius.circular(5))
+                  ),
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 16),
+                      TechniqueCardHeader(headerText: 'AM', bgColor: Colors.green[900],),
+                      TechniqueCard(
+                        technique: curUser.amTechnique,
+                      ),
+                      TechniqueCardHeader(headerText: 'PM', bgColor: Colors.indigo[900],),
+                      TechniqueCard(
+                        technique: curUser.pmTechnique,
+                      ),
+                      TechniqueCardHeader(headerText: 'Challenge', bgColor: Colors.orange[900],),
+                      TechniqueCard(
+                        technique: curUser.challengeTechnique,
+                      )
+                    ],
+                  ),
+                ),
               ),
             )
           ],
