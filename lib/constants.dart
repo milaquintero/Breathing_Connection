@@ -1,4 +1,4 @@
 //dev base url
-const BASE_URL = "https://mockend.com/milaquintero/breathing_connection";
+const BASE_URL = "https://breathing-connection.free.beeceptor.com";
 //prod base url
 //const BASE_URL = "";
