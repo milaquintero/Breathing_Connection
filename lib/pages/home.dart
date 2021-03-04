@@ -1,3 +1,5 @@
+import 'package:breathing_connection/main.dart';
+import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/nav_link.dart';
@@ -24,9 +26,37 @@ class _HomeState extends State<Home> {
     NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
   ];
   User curUser = UserService.curUser;
-
   @override
   Widget build(BuildContext context) {
+    //main content to display in ListView
+    List<Widget> mainContent = [
+      SizedBox(height: 16),
+      TechniqueCardHeader(headerText: 'AM', bgColor: Colors.green[900],),
+      TechniqueCard(
+        technique: curUser.amTechnique,
+      ),
+      TechniqueCardHeader(headerText: 'PM', bgColor: Colors.indigo[900],),
+      TechniqueCard(
+        technique: this.curUser.pmTechnique,
+      ),
+      TechniqueCardHeader(headerText: 'Challenge', bgColor: Colors.orange[900],),
+      TechniqueCard(
+        technique: curUser.challengeTechnique,
+      )
+    ];
+    //TODO: add condition for paid version users
+    //add header if user has paid version
+    mainContent.add(TechniqueCardHeader(
+      headerText: 'Custom',
+      bgColor: Colors.yellow[900],
+    ));
+    //format custom techniques into technique cards
+    List<TechniqueCard> customTechniques = curUser.customTechniques.map(
+      (customTechnique)=> TechniqueCard(technique: customTechnique)
+    ).toList();
+    //add formatted custom techniques
+    mainContent.addAll(customTechniques);
+
     return Scaffold(
       drawer: NavDrawer(navLinks: this.sideNavLinks, headerImg: this.sideNavHeaderImg),
       appBar: AppBar(
@@ -67,21 +97,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.all(Radius.circular(5))
                   ),
                   child: ListView(
-                    children: [
-                      SizedBox(height: 16),
-                      TechniqueCardHeader(headerText: 'AM', bgColor: Colors.green[900],),
-                      TechniqueCard(
-                        technique: curUser.amTechnique,
-                      ),
-                      TechniqueCardHeader(headerText: 'PM', bgColor: Colors.indigo[900],),
-                      TechniqueCard(
-                        technique: curUser.pmTechnique,
-                      ),
-                      TechniqueCardHeader(headerText: 'Challenge', bgColor: Colors.orange[900],),
-                      TechniqueCard(
-                        technique: curUser.challengeTechnique,
-                      )
-                    ],
+                    children: mainContent,
                   ),
                 ),
               ),
