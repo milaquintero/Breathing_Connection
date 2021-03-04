@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../styles.dart';
 class TechniqueCardHeader extends StatelessWidget {
   final String headerText;
   final Color bgColor;
@@ -6,10 +8,10 @@ class TechniqueCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(16,4,16,4),
-      padding: EdgeInsets.symmetric(vertical: 10),
+      margin: techniqueCardHeadContainerMargin,
+      padding: techniqueCardHeadContainerPadding,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderRadius: roundedBorder,
         color: bgColor
       ),
       child: Row(
@@ -18,10 +20,7 @@ class TechniqueCardHeader extends StatelessWidget {
         children: [
           Text(
               headerText,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+              style: techniqueCardHeadTextStyle,
           ),
         ],
       ),

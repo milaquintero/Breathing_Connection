@@ -31,25 +31,24 @@ class _HomeState extends State<Home> {
     //main content to display in ListView
     List<Widget> mainContent = [
       SizedBox(height: 16),
-      TechniqueCardHeader(headerText: 'AM', bgColor: Colors.green[900],),
+      TechniqueCardHeader(headerText: 'AM', bgColor: amTechniqueHeadBgColor,),
       TechniqueCard(
         technique: curUser.amTechnique,
       ),
-      TechniqueCardHeader(headerText: 'PM', bgColor: Colors.indigo[900],),
+      TechniqueCardHeader(headerText: 'PM', bgColor: pmTechniqueHeadBgColor,),
       TechniqueCard(
         technique: this.curUser.pmTechnique,
       ),
-      TechniqueCardHeader(headerText: 'Challenge', bgColor: Colors.orange[900],),
+      TechniqueCardHeader(headerText: 'Challenge', bgColor: challengeTechniqueHeadBgColor,),
       TechniqueCard(
         technique: curUser.challengeTechnique,
       )
     ];
     //TODO: add condition for paid version users
     //add header if user has paid version
-    mainContent.add(TechniqueCardHeader(
-      headerText: 'Custom',
-      bgColor: Colors.yellow[900],
-    ));
+    mainContent.add(
+        TechniqueCardHeader(headerText: 'Custom', bgColor: customTechniqueHeadBgColor,)
+    );
     //format custom techniques into technique cards
     List<TechniqueCard> customTechniques = curUser.customTechniques.map(
       (customTechnique)=> TechniqueCard(technique: customTechnique)
@@ -93,8 +92,8 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.fromLTRB(8, 22, 8, 0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey[200],
-                    borderRadius: BorderRadius.all(Radius.circular(5))
+                    color: wellSectionBg,
+                    borderRadius: roundedBorder
                   ),
                   child: ListView(
                     children: mainContent,
