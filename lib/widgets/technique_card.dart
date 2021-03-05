@@ -1,9 +1,11 @@
 import 'package:breathing_connection/models/technique.dart';
+import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 import '../styles.dart';
 class TechniqueCard extends StatelessWidget {
   final Technique technique;
+  final curUser = UserService.curUser;
   TechniqueCard({this.technique});
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,7 @@ class TechniqueCard extends StatelessWidget {
       padding: techniqueCardContainerPadding,
       child: Card(
         child: ListTile(
+          enabled: curUser.hasFullAccess || (!curUser.hasFullAccess && !technique.isPaidVersionOnly),
           contentPadding: techniqueCardContentPadding,
           onTap: (){},
           title: Text(technique.title),

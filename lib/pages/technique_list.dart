@@ -23,14 +23,17 @@ class _TechniqueListState extends State<TechniqueList> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView.builder(
-      itemCount: availableTechniques.length,
-      itemBuilder: (context, index){
-        return TechniqueCard(
-          technique: availableTechniques[index]
-        );
-      },
+      body: Container(
+        color: wellSectionBg,
+        child: ListView.builder(
+        itemCount: availableTechniques.length,
+        itemBuilder: (context, index){
+          return TechniqueCard(
+            technique: availableTechniques[index]
+          );
+        },
     ),
+      ),
     );
   }
 }

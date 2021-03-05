@@ -6,6 +6,7 @@
       "email": "viz@viz.com",
       "hasFullAccess": false,
       "amTechnique": {
+        "isPaidVersionOnly": false,
         "techniqueID": 1,
         "title": "'4-7-8'",
         "description": "Fall asleep faster and wake up better recovered.",
@@ -15,6 +16,7 @@
         "secondHoldDuration": 0
       },
       "pmTechnique": {
+        "isPaidVersionOnly": false,
         "techniqueID": 2,
         "title": "Slow Paced Breathing",
         "description": "Lower blood pressure.",
@@ -24,6 +26,7 @@
         "secondHoldDuration": 0
       },
       "challengeTechnique": {
+        "isPaidVersionOnly": false,
         "techniqueID": 3,
         "title": "COPD Breathing",
         "description": "Relieve COPD and Asthma Symptoms.",
@@ -33,7 +36,26 @@
         "secondHoldDuration": 0
       },
       "customTechniques": [
-
+        {
+          "isPaidVersionOnly": true,
+          "techniqueID": 4,
+          "title": "Custom Technique 1",
+          "description": "Custom Technique 1.",
+          "inhaleDuration": 2,
+          "firstHoldDuration": 2,
+          "exhaleDuration": 2,
+          "secondHoldDuration": 2
+        },
+        {
+          "isPaidVersionOnly": true,
+          "techniqueID": 5,
+          "title": "Custom Technique 2",
+          "description": "Custom Technique 2.",
+          "inhaleDuration": 2,
+          "firstHoldDuration": 2,
+          "exhaleDuration": 2,
+          "secondHoldDuration": 2
+        }
       ],
       "appSettings": {
         "breathingSound": true,
@@ -46,6 +68,7 @@
   ],
   "techniques": [
     {
+      "isPaidVersionOnly": false,
       "techniqueID": 1,
       "title": "'4-7-8'",
       "description": "Fall asleep faster and wake up better recovered.",
@@ -55,6 +78,7 @@
       "secondHoldDuration": 0
     },
     {
+      "isPaidVersionOnly": false,
       "techniqueID": 2,
       "title": "Slow Paced Breathing",
       "description": "Lower blood pressure.",
@@ -64,6 +88,7 @@
       "secondHoldDuration": 0
     },
     {
+      "isPaidVersionOnly": false,
       "techniqueID": 3,
       "title": "COPD Breathing",
       "description": "Relieve COPD and Asthma Symptoms.",
@@ -71,6 +96,46 @@
       "firstHoldDuration": 0,
       "exhaleDuration": 6,
       "secondHoldDuration": 0
+    },
+    {
+      "isPaidVersionOnly": true,
+      "techniqueID": 4,
+      "title": "Custom Technique 1",
+      "description": "Custom Technique 1.",
+      "inhaleDuration": 2,
+      "firstHoldDuration": 2,
+      "exhaleDuration": 2,
+      "secondHoldDuration": 2
+    },
+    {
+      "isPaidVersionOnly": true,
+      "techniqueID": 5,
+      "title": "Custom Technique 2",
+      "description": "Custom Technique 2.",
+      "inhaleDuration": 2,
+      "firstHoldDuration": 2,
+      "exhaleDuration": 2,
+      "secondHoldDuration": 2
+    },
+    {
+      "isPaidVersionOnly": true,
+      "techniqueID": 6,
+      "title": "Custom Technique 3",
+      "description": "Custom Technique 3.",
+      "inhaleDuration": 2,
+      "firstHoldDuration": 2,
+      "exhaleDuration": 2,
+      "secondHoldDuration": 2
+    },
+    {
+      "isPaidVersionOnly": true,
+      "techniqueID": 7,
+      "title": "Custom Technique 4",
+      "description": "Custom Technique 4.",
+      "inhaleDuration": 2,
+      "firstHoldDuration": 2,
+      "exhaleDuration": 2,
+      "secondHoldDuration": 2
     }
   ]
 }
