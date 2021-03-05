@@ -5,12 +5,13 @@ import 'package:breathing_connection/models/technique.dart';
 class User{
   int userId;
   String username;
+  bool hasFullAccess;
   Settings appSettings;
   Technique amTechnique;
   Technique pmTechnique;
   Technique challengeTechnique;
   List<Technique> customTechniques;
-  User({this.userId, this.username, this.appSettings,
+  User({this.userId, this.username, this.appSettings, this.hasFullAccess,
     this.amTechnique, this.pmTechnique, this.challengeTechnique,
     this.customTechniques});
   factory User.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class User{
     return User(
       userId: json['id'],
       username: json['username'],
+      hasFullAccess: json['hasFullAccess'],
       amTechnique: Technique.fromJson(json['amTechnique']),
       pmTechnique: Technique.fromJson(json['pmTechnique']),
       challengeTechnique: Technique.fromJson(json['challengeTechnique']),

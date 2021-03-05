@@ -44,17 +44,19 @@ class _HomeState extends State<Home> {
         technique: curUser.challengeTechnique,
       )
     ];
-    //TODO: add condition for paid version users
-    //add header if user has paid version
-    mainContent.add(
-        TechniqueCardHeader(headerText: 'Custom', bgColor: customTechniqueHeadBgColor,)
-    );
-    //format custom techniques into technique cards
-    List<TechniqueCard> customTechniques = curUser.customTechniques.map(
-      (customTechnique)=> TechniqueCard(technique: customTechnique)
-    ).toList();
-    //add formatted custom techniques
-    mainContent.addAll(customTechniques);
+    //check if user has paid version
+    if(curUser.hasFullAccess){
+      //add header if user has paid version
+      mainContent.add(
+          TechniqueCardHeader(headerText: 'Custom', bgColor: customTechniqueHeadBgColor,)
+      );
+      //format custom techniques into technique cards
+      List<TechniqueCard> customTechniques = curUser.customTechniques.map(
+              (customTechnique)=> TechniqueCard(technique: customTechnique)
+      ).toList();
+      //add formatted custom techniques
+      mainContent.addAll(customTechniques);
+    }
 
     return Scaffold(
       drawer: NavDrawer(navLinks: this.sideNavLinks, headerImg: this.sideNavHeaderImg),

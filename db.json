@@ -4,6 +4,7 @@
       "id": 1,
       "username": "Viznaga",
       "email": "viz@viz.com",
+      "hasFullAccess": false,
       "amTechnique": {
         "techniqueID": 1,
         "title": "'4-7-8'",
