@@ -1,12 +1,10 @@
-import 'package:breathing_connection/main.dart';
-import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/nav_link.dart';
-import 'package:breathing_connection/widgets/technique_card.dart';
-import 'package:breathing_connection/widgets/technique_card_header.dart';
+import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/widgets/nav_drawer.dart';
+import 'package:flutter/rendering.dart';
 
 import '../styles.dart';
 
@@ -31,28 +29,39 @@ class _HomeState extends State<Home> {
     //main content to display in ListView
     List<Widget> mainContent = [
       SizedBox(height: 16),
-      TechniqueCardHeader(headerText: 'AM', bgColor: amTechniqueHeadBgColor,),
-      TechniqueCard(
+      TechniqueSection(
+        headerText: 'Early Session',
+        bgImage: amTechniqueHeadBgImg,
         technique: curUser.amTechnique,
+        textBgColor: Colors.black,
+        textColor: Colors.white
       ),
-      TechniqueCardHeader(headerText: 'PM', bgColor: pmTechniqueHeadBgColor,),
-      TechniqueCard(
-        technique: this.curUser.pmTechnique,
+      TechniqueSection(
+        headerText: 'Late Session',
+        bgImage: pmTechniqueHeadBgImg,
+        technique: curUser.pmTechnique,
+        textBgColor: Colors.grey[50],
+        textColor: Colors.grey[900]
       ),
-      TechniqueCardHeader(headerText: 'Challenge', bgColor: challengeTechniqueHeadBgColor,),
-      TechniqueCard(
+      TechniqueSection(
+        headerText: 'Challenge',
+        bgImage: challengeTechniqueHeadBgImg,
         technique: curUser.challengeTechnique,
-      )
+        textBgColor: Colors.black,
+        textColor: Colors.white
+      ),
     ];
     //check if user has paid version
     if(curUser.hasFullAccess){
-      //add header if user has paid version
-      mainContent.add(
-          TechniqueCardHeader(headerText: 'Custom', bgColor: customTechniqueHeadBgColor,)
-      );
       //format custom techniques into technique cards
-      List<TechniqueCard> customTechniques = curUser.customTechniques.map(
-              (customTechnique)=> TechniqueCard(technique: customTechnique)
+      List<TechniqueSection> customTechniques = curUser.customTechniques.map(
+              (customTechnique)=> TechniqueSection(
+                  headerText: 'Custom',
+                  bgImage: customTechniqueHeadBgImg,
+                  technique: customTechnique,
+                  textBgColor: Colors.white,
+                  textColor: Colors.black
+              )
       ).toList();
       //add formatted custom techniques
       mainContent.addAll(customTechniques);
@@ -60,21 +69,11 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       drawer: NavDrawer(navLinks: this.sideNavLinks, headerImg: this.sideNavHeaderImg),
-      appBar: AppBar(
-        toolbarHeight: appBarHeight,
-        backgroundColor: brandPrimary,
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-            'Breathing Connection',
-            style: appBarTextStyle,
-        )
-      ),
       body: Container(
         child: Column(
           children: [
             Padding(
-              padding: homeLogoPadding,
+              padding: EdgeInsets.fromLTRB(0, 84, 0, 0),
               child: Center(
                 child: Image(
                   image: AssetImage('assets/logo_with_name.jpg'),
@@ -91,13 +90,13 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(8, 22, 8, 0),
+                padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: wellSectionBg,
-                    borderRadius: roundedBorder
+                    color: wellSectionBg
                   ),
                   child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: mainContent,
                   ),
                 ),
