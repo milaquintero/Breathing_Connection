@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'package:breathing_connection/models/settings.dart';
+import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/models/technique.dart';
 
 class User{
   int userId;
   String username;
   bool hasFullAccess;
-  Settings appSettings;
+  UserSettings userSettings;
   Technique amTechnique;
   Technique pmTechnique;
   Technique challengeTechnique;
   List<Technique> customTechniques;
-  User({this.userId, this.username, this.appSettings, this.hasFullAccess,
+  User({this.userId, this.username, this.userSettings, this.hasFullAccess,
     this.amTechnique, this.pmTechnique, this.challengeTechnique,
     this.customTechniques});
   factory User.fromJson(Map<String, dynamic> json) {
@@ -24,7 +24,7 @@ class User{
       pmTechnique: Technique.fromJson(json['pmTechnique']),
       challengeTechnique: Technique.fromJson(json['challengeTechnique']),
       customTechniques: jsonCustomTechniques.map((jsonTechnique) => Technique.fromJson(jsonTechnique)).toList(),
-      appSettings: Settings.fromJson(json['appSettings'])
+      userSettings: UserSettings.fromJson(json['userSettings'])
     );
   }
   @override
