@@ -1,10 +1,12 @@
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/technique.dart';
+import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -13,10 +15,16 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
   Future<void> getUserData() async{
-    //get user data from backend
+    //get user data from backend and update shareable resource with user data
     User curUser = await UserService.userData(1);
-    //update shareable resource with user data
-    UserService.curUser = curUser;
+    Provider.of<User>(context, listen: false).userId = curUser.userId;
+    Provider.of<User>(context, listen: false).username = curUser.username;
+    Provider.of<User>(context, listen: false).userSettings = curUser.userSettings;
+    Provider.of<User>(context, listen: false).hasFullAccess = curUser.hasFullAccess;
+    Provider.of<User>(context, listen: false).customTechniques = curUser.customTechniques;
+    Provider.of<User>(context, listen: false).pmTechnique = curUser.pmTechnique;
+    Provider.of<User>(context, listen: false).amTechnique = curUser.amTechnique;
+    Provider.of<User>(context, listen: false).challengeTechnique = curUser.challengeTechnique;
   }
 
   Future<void> getTechniques() async{

@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/models/technique.dart';
+import 'package:flutter/cupertino.dart';
 
-class User{
+class User extends ChangeNotifier{
   int userId;
   String username;
   bool hasFullAccess;
@@ -26,6 +26,10 @@ class User{
       customTechniques: jsonCustomTechniques.map((jsonTechnique) => Technique.fromJson(jsonTechnique)).toList(),
       userSettings: UserSettings.fromJson(json['userSettings'])
     );
+  }
+  updateSettings(UserSettings newSettings){
+    userSettings = newSettings;
+    notifyListeners();
   }
   @override
   String toString() {

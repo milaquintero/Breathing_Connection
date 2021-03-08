@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class UserSettings{
   bool breathingSound;
   bool backgroundSound;

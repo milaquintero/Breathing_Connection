@@ -4,6 +4,7 @@ import 'package:breathing_connection/widgets/nav_link.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 import '../styles.dart';
 
@@ -17,15 +18,15 @@ class _HomeState extends State<Home> {
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
   //list of links for side nav
   //TODO: receive this list from backend user service
-  List<NavLink> sideNavLinks = [
+  List<NavLink> navLinks = [
     NavLink(route: '/home', title: 'Home', icon: Icons.home),
     NavLink(route: '/technique-list', title: 'Techniques', icon: Icons.article_rounded),
     NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
     NavLink(route: '/pro', title: 'Pro License', icon: Icons.add_moderator),
   ];
-  User curUser = UserService.curUser;
   @override
   Widget build(BuildContext context) {
+    User curUser = Provider.of<User>(context);
     //main content to display in ListView
     List<Widget> mainContent = [
       SizedBox(height: 16),
@@ -107,7 +108,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         type : BottomNavigationBarType.fixed,
-        items: sideNavLinks.map((link)=> BottomNavigationBarItem(
+        items: navLinks.map((link)=> BottomNavigationBarItem(
           icon: Icon(link.icon),
           label: link.title
           )
@@ -116,7 +117,7 @@ class _HomeState extends State<Home> {
           //only switch route if changing from home (first link)
           if(index != 0){
             setState(() {
-              Navigator.pushNamed(context, sideNavLinks[index].route);
+              Navigator.pushNamed(context, navLinks[index].route);
             });
           }
         },
