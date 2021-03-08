@@ -10,37 +10,68 @@ class SettingCard extends StatefulWidget {
 }
 
 class _SettingCardState extends State<SettingCard> {
-  TextStyle settingTextStyle = TextStyle(
-    fontSize: 24
-  );
   @override
   Widget build(BuildContext context) {
+    TextStyle settingTextStyle = TextStyle(
+        fontSize: 22,
+        color: Colors.blueGrey[900]
+    );
+    EdgeInsets cardPadding = EdgeInsets.all(20);
     //get run time type of value
     Type type = widget.settingValue.runtimeType;
     List<Widget> settingDisplay;
     //if setting type is boolean
     if(type.toString() == "bool"){
       settingDisplay = [
-        Text(
-          widget.settingName,
-          style: settingTextStyle,
-        ),
-        Switch(
-          value: widget.settingValue,
-          onChanged: (newVal){
-            widget.callbackFn(newVal);
-          },
+        Card(
+          margin: EdgeInsets.zero,
+          child: ListTile(
+              contentPadding: cardPadding,
+              leading: Icon(
+                  Icons.multitrack_audio_rounded,
+                  size: 32,),
+              title: Text(
+                widget.settingName,
+                style: settingTextStyle,
+              ),
+              trailing: Switch(
+                value: widget.settingValue,
+                onChanged: (newVal){
+                  widget.callbackFn(newVal);
+              },
+            ),
+          ),
         )
       ];
     }
     //if setting type is string
     else{
       settingDisplay = [
-        Text(
-          widget.settingName,
-          style: settingTextStyle,
+        Card(
+          margin: EdgeInsets.zero,
+          child: ListTile(
+            contentPadding: cardPadding,
+            leading: Icon(
+              Icons.color_lens_outlined,
+              size: 32,
+            ),
+            title: Text(
+                widget.settingName,
+                style: settingTextStyle,
+            ),
+            trailing: Container(
+              padding: EdgeInsets.only(right: 8),
+              width: 53,
+              height: 45,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Colors.lightBlue[900]
+                ),
+              ),
+            ),
           ),
-        Text(widget.settingValue.toString())
+        )
       ];
     }
     return Container(

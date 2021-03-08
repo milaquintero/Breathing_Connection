@@ -22,9 +22,6 @@ String pmTechniqueHeadBgImg = 'assets/night.jpg';
 String challengeTechniqueHeadBgImg = 'assets/day.jpg';
 String customTechniqueHeadBgImg = 'assets/night.jpg';
 
-//Technique card style
-EdgeInsets techniqueCardContainerPadding = EdgeInsets.all(8);
-EdgeInsets techniqueCardContentPadding = EdgeInsets.symmetric(vertical: 8, horizontal: 12);
 //Technique card header style
 TextStyle techniqueCardHeadTextStyle = TextStyle(
   color: Colors.white,
