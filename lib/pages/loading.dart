@@ -17,14 +17,7 @@ class _LoadingState extends State<Loading> {
   Future<void> getUserData() async{
     //get user data from backend and update shareable resource with user data
     User curUser = await UserService.userData(1);
-    Provider.of<User>(context, listen: false).userId = curUser.userId;
-    Provider.of<User>(context, listen: false).username = curUser.username;
-    Provider.of<User>(context, listen: false).userSettings = curUser.userSettings;
-    Provider.of<User>(context, listen: false).hasFullAccess = curUser.hasFullAccess;
-    Provider.of<User>(context, listen: false).customTechniques = curUser.customTechniques;
-    Provider.of<User>(context, listen: false).pmTechnique = curUser.pmTechnique;
-    Provider.of<User>(context, listen: false).amTechnique = curUser.amTechnique;
-    Provider.of<User>(context, listen: false).challengeTechnique = curUser.challengeTechnique;
+    Provider.of<User>(context, listen: false).setAllProperties(curUser);
   }
 
   Future<void> getTechniques() async{

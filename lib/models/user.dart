@@ -27,6 +27,16 @@ class User extends ChangeNotifier{
       userSettings: UserSettings.fromJson(json['userSettings'])
     );
   }
+  setAllProperties(User user){
+    userId = user.userId;
+    username = user.username;
+    hasFullAccess = user.hasFullAccess;
+    amTechnique = user.amTechnique;
+    pmTechnique = user.pmTechnique;
+    challengeTechnique = user.challengeTechnique;
+    customTechniques = user.customTechniques;
+    userSettings = user.userSettings;
+  }
   updateSettings(UserSettings newSettings){
     userSettings = newSettings;
     notifyListeners();
