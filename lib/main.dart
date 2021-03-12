@@ -1,10 +1,7 @@
+import 'package:breathing_connection/pages/root.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/pages/loading.dart';
-import 'package:breathing_connection/pages/home.dart';
-import 'package:breathing_connection/pages/app_settings.dart';
-import 'package:breathing_connection/pages/technique_list.dart';
-import 'package:breathing_connection/pages/environment.dart';
 
 import 'models/user.dart';
 
@@ -22,10 +19,7 @@ class BreathingConnection extends StatelessWidget {
       child: MaterialApp(
         routes: {
           '/': (context)=>Loading(),
-          '/home': (context)=>Home(),
-          '/settings': (context)=>AppSettings(),
-          '/technique-list': (context)=>TechniqueList(),
-          '/environment': (context)=>Environment()
+          '/home': (context)=>RootPage(),
         },
       )
     );

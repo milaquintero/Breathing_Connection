@@ -18,7 +18,7 @@ class TechniqueSection extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(bgImage),
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.fitHeight
         )
       ),
       child: Column(

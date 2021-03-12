@@ -1,6 +1,4 @@
 import 'package:breathing_connection/models/user.dart';
-import 'package:breathing_connection/services/user_service.dart';
-import 'package:breathing_connection/widgets/nav_link.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,14 +14,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   //image header for side nav
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
-  //list of links for side nav
-  //TODO: receive this list from backend user service
-  List<NavLink> navLinks = [
-    NavLink(route: '/home', title: 'Home', icon: Icons.home),
-    NavLink(route: '/technique-list', title: 'Techniques', icon: Icons.article_rounded),
-    NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
-    NavLink(route: '/pro', title: 'Pro License', icon: Icons.add_moderator),
-  ];
   @override
   Widget build(BuildContext context) {
     User curUser = Provider.of<User>(context);
@@ -68,59 +58,34 @@ class _HomeState extends State<Home> {
       mainContent.addAll(customTechniques);
     }
 
-    return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 84, 0, 0),
-              child: Center(
-                child: Image(
-                  image: AssetImage('assets/logo_with_name.jpg'),
-                  width: 200,
-                ),
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 32, 0, 0),
+            child: Center(
+              child: Image(
+                image: AssetImage('assets/logo_with_name.jpg'),
+                width: 200,
               ),
             ),
-            Padding(
-              padding: homeMainTextPadding,
-              child: Text(
-                  'Your breathing Journey',
-                  style: homeMainTextStyle
-              ),
+          ),
+          Padding(
+            padding: homeMainTextPadding,
+            child: Text(
+                'Your breathing Journey',
+                style: homeMainTextStyle
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: wellSectionBg
-                  ),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: mainContent,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        type : BottomNavigationBarType.fixed,
-        items: navLinks.map((link)=> BottomNavigationBarItem(
-          icon: Icon(link.icon),
-          label: link.title
+          ),
+          Flexible(
+            child: ListView(
+              padding: EdgeInsets.only(top: 32),
+              scrollDirection: Axis.horizontal,
+              children: mainContent,
+            ),
           )
-        ).toList(),
-        onTap: (index){
-          //only switch route if changing from home (first link)
-          if(index != 0){
-            setState(() {
-              Navigator.pushNamed(context, navLinks[index].route);
-            });
-          }
-        },
+        ],
       ),
     );
   }
