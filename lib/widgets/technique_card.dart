@@ -10,7 +10,15 @@ class TechniqueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User curUser = Provider.of<User>(context);
-    EdgeInsets techniqueCardContentPadding = EdgeInsets.all(16);
+    TextStyle techniqueTitleStyle = TextStyle(
+        fontSize: 22,
+        color: Colors.blueGrey[900]
+    );
+    TextStyle techniqueSubtitleStyle = TextStyle(
+        fontSize: 15,
+        color: Colors.grey[600]
+    );
+    EdgeInsets techniqueCardContentPadding = EdgeInsets.all(20);
     return Container(
       child: Card(
         margin: EdgeInsets.zero,
@@ -18,7 +26,10 @@ class TechniqueCard extends StatelessWidget {
           enabled: curUser.hasFullAccess || (!curUser.hasFullAccess && !technique.isPaidVersionOnly),
           contentPadding: techniqueCardContentPadding,
           onTap: (){},
-          title: Text(technique.title),
+          title: Text(
+              technique.title,
+              style: techniqueTitleStyle,
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -26,11 +37,19 @@ class TechniqueCard extends StatelessWidget {
                 technique.description,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: techniqueSubtitleStyle,
               ),
               Text(
-                  'Breathing Rhythm: ${technique.inhaleDuration}-${technique.firstHoldDuration}-${technique.exhaleDuration}-${technique.secondHoldDuration}'
+                'Breathing Rhythm: ${technique.inhaleDuration}-${technique.firstHoldDuration}-${technique.exhaleDuration}-${technique.secondHoldDuration}',
+                style: techniqueSubtitleStyle,
               )
             ],
+          ),
+          trailing: IconButton(
+            icon: Icon(
+                Icons.more_vert,
+                size: 32,
+            ),
           ),
         ),
       ),
