@@ -16,7 +16,19 @@ class _HomeState extends State<Home> {
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
   @override
   Widget build(BuildContext context) {
+    //styling
+    EdgeInsets homeMainTextPadding = EdgeInsets.fromLTRB(0, 28, 0, 0);
+    TextStyle homeMainTextStyle = TextStyle(
+        fontSize: 24
+    );
+    String amTechniqueHeadBgImg = 'assets/day.jpg';
+    String pmTechniqueHeadBgImg = 'assets/night.jpg';
+    String challengeTechniqueHeadBgImg = 'assets/day.jpg';
+    String customTechniqueHeadBgImg = 'assets/night.jpg';
+    String emergencyTechniqueHeadBgImg = 'assets/night.jpg';
+
     User curUser = Provider.of<User>(context);
+
     //main content to display in ListView
     List<Widget> mainContent = [
       SizedBox(height: 16),
@@ -25,25 +37,39 @@ class _HomeState extends State<Home> {
         bgImage: amTechniqueHeadBgImg,
         technique: curUser.amTechnique,
         textBgColor: Colors.black,
-        textColor: Colors.white
+        textColor: Colors.white,
+        startIcon: Icons.play_circle_fill,
       ),
       TechniqueSection(
         headerText: 'Late Session',
         bgImage: pmTechniqueHeadBgImg,
         technique: curUser.pmTechnique,
         textBgColor: Colors.grey[50],
-        textColor: Colors.grey[900]
+        textColor: Colors.grey[900],
+        startIcon: Icons.play_circle_fill,
       ),
       TechniqueSection(
-        headerText: 'Challenge',
-        bgImage: challengeTechniqueHeadBgImg,
-        technique: curUser.challengeTechnique,
-        textBgColor: Colors.black,
-        textColor: Colors.white
-      ),
+        headerText: 'Emergency',
+        bgImage: emergencyTechniqueHeadBgImg,
+        technique: curUser.emergencyTechnique,
+        textBgColor: Colors.red[400],
+        textColor: Colors.grey[50],
+        startIcon: Icons.add_circle,
+      )
     ];
     //check if user has paid version
     if(curUser.hasFullAccess){
+      //add challenge section
+      mainContent.add(
+        TechniqueSection(
+            headerText: 'Challenge',
+            bgImage: challengeTechniqueHeadBgImg,
+            technique: curUser.challengeTechnique,
+            textBgColor: Colors.black,
+            textColor: Colors.white,
+            startIcon: Icons.play_circle_fill,
+        )
+      );
       //format custom techniques into technique cards
       List<TechniqueSection> customTechniques = curUser.customTechniques.map(
               (customTechnique)=> TechniqueSection(
@@ -51,7 +77,8 @@ class _HomeState extends State<Home> {
                   bgImage: customTechniqueHeadBgImg,
                   technique: customTechnique,
                   textBgColor: Colors.white,
-                  textColor: Colors.black
+                  textColor: Colors.black,
+                  startIcon: Icons.play_circle_fill,
               )
       ).toList();
       //add formatted custom techniques

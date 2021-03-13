@@ -8,8 +8,9 @@ class TechniqueSection extends StatelessWidget {
   final Technique technique;
   final Color textBgColor;
   final Color textColor;
+  final IconData startIcon;
   TechniqueSection({this.headerText, this.bgImage, this.technique,
-    this.textBgColor, this.textColor});
+    this.textBgColor, this.textColor, this.startIcon});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,7 +80,7 @@ class TechniqueSection extends StatelessWidget {
                         ),
                     IconButton(
                         icon: Icon(
-                            Icons.play_circle_fill,
+                            startIcon,
                             color: textColor,
                             size: 32,
                         ),
