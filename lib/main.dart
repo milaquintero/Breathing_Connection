@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/pages/loading.dart';
 
+import 'models/technique.dart';
 import 'models/user.dart';
 
 void main() {
@@ -14,7 +15,8 @@ class BreathingConnection extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => User())
+        ChangeNotifierProvider(create: (context) => User()),
+        Provider<List<Technique>>(create: (context) => [])
       ],
       child: MaterialApp(
         routes: {

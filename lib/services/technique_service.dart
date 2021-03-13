@@ -5,7 +5,6 @@ import 'dart:convert';
 import '../constants.dart';
 
 class TechniqueService{
-  static List<Technique> techniques;
   static Future<List<Technique>> techniqueData() async{
     try{
       //PROD

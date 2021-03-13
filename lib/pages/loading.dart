@@ -24,7 +24,7 @@ class _LoadingState extends State<Loading> {
     //get list of available techniques
     List<Technique> techniques = await TechniqueService.techniqueData();
     //update techniques in shareable resource
-    TechniqueService.techniques = techniques;
+    Provider.of<List<Technique>>(context, listen: false).addAll(techniques);
   }
 
   Future <void> getRequiredResources() async{
