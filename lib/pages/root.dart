@@ -49,9 +49,7 @@ class _RootPageState extends State<RootPage> {
         )
         ).toList(),
         onTap: (index){
-          String currentRoute = navLinks[index].pageRoute;
-          CurrentPageHandler page = CurrentPageHandler(pageIndex: index, pageRoute: currentRoute);
-          Provider.of<CurrentPageHandler>(context, listen: false).setPage(page);
+          Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(index);
         },
       ),
     );

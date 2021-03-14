@@ -36,8 +36,7 @@ class _LoadingState extends State<Loading> {
     //update main data in shareable resource
     Provider.of<MainData>(context, listen: false).setMainData(mainData);
     //start bottom nav in home page
-    CurrentPageHandler homePage = CurrentPageHandler(pageIndex: 0, pageRoute: '/home');
-    Provider.of<CurrentPageHandler>(context, listen: false).setPage(homePage);
+    Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
   }
 
   Future <void> getRequiredResources() async{

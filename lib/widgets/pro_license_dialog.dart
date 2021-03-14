@@ -54,11 +54,7 @@ class ProLicenseDialog extends StatelessWidget {
                         //find pro page in main data page links
                         NavLink proLicensePage = availablePages.firstWhere((page) => page.pageRoute == '/pro');
                         //send to PRO page
-                        CurrentPageHandler proLicensePageHandler = CurrentPageHandler(
-                          pageIndex: proLicensePage.pageIndex,
-                          pageRoute: proLicensePage.pageRoute
-                        );
-                        Provider.of<CurrentPageHandler>(rootContext, listen: false).setPage(proLicensePageHandler);
+                        Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
                       },
                       child: Text(
                         'Purchase',
