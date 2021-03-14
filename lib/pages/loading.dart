@@ -1,6 +1,9 @@
+import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/nav_link.dart';
+import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/technique.dart';
-import 'package:breathing_connection/models/user_settings.dart';
+import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/styles.dart';
@@ -27,12 +30,24 @@ class _LoadingState extends State<Loading> {
     Provider.of<List<Technique>>(context, listen: false).addAll(techniques);
   }
 
+  Future <void> getMainData() async{
+    //get main data
+    MainData mainData = await MainDataService.mainData();
+    //update main data in shareable resource
+    Provider.of<MainData>(context, listen: false).setMainData(mainData);
+    //start bottom nav in home page
+    CurrentPageHandler homePage = CurrentPageHandler(pageIndex: 0, pageRoute: '/home');
+    Provider.of<CurrentPageHandler>(context, listen: false).setPage(homePage);
+  }
+
   Future <void> getRequiredResources() async{
     //get current user data
     await getUserData();
     //get available techniques
     await getTechniques();
-    Navigator.pushReplacementNamed(context, '/home');
+    //get main data
+    await getMainData();
+    Navigator.pushReplacementNamed(context, '/root');
   }
 
   @override

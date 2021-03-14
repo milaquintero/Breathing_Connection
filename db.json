@@ -66,6 +66,30 @@
       }
     }
   ],
+  "main-data": {
+    "pages": [
+      {
+        "pageIndex": 0,
+        "pageTitle": "Home",
+        "pageRoute": "/home"
+      },
+      {
+        "pageIndex": 1,
+        "pageTitle": "Technique List",
+        "pageRoute": "/technique-list"
+      },
+      {
+        "pageIndex": 2,
+        "pageTitle": "App Settings",
+        "pageRoute": "/settings"
+      },
+      {
+        "pageIndex": 3,
+        "pageTitle": "Pro License",
+        "pageRoute": "/pro"
+      }
+    ]
+  },
   "techniques": [
     {
       "isPaidVersionOnly": false,

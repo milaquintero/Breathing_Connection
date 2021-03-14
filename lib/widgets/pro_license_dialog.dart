@@ -1,9 +1,17 @@
+import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/nav_link.dart';
+import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../styles.dart';
 class ProLicenseDialog extends StatelessWidget {
+  final BuildContext rootContext;
+  ProLicenseDialog({this.rootContext});
   @override
   Widget build(BuildContext context) {
+    //page links from main data provider
+    List<NavLink> availablePages = Provider.of<MainData>(rootContext).pages;
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
@@ -41,7 +49,16 @@ class ProLicenseDialog extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: (){
-                        //TODO: 
+                        //close dialog
+                        Navigator.of(context).pop();
+                        //find pro page in main data page links
+                        NavLink proLicensePage = availablePages.firstWhere((page) => page.pageRoute == '/pro');
+                        //send to PRO page
+                        CurrentPageHandler proLicensePageHandler = CurrentPageHandler(
+                          pageIndex: proLicensePage.pageIndex,
+                          pageRoute: proLicensePage.pageRoute
+                        );
+                        Provider.of<CurrentPageHandler>(rootContext, listen: false).setPage(proLicensePageHandler);
                       },
                       child: Text(
                         'Purchase',
@@ -57,6 +74,7 @@ class ProLicenseDialog extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: (){
+                        //close dialog
                         Navigator.of(context).pop();
                       },
                       child: Text(

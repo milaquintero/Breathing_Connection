@@ -1,34 +1,33 @@
+import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/nav_link.dart';
+import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/pages/app_settings.dart';
 import 'package:breathing_connection/pages/technique_list.dart';
-import 'package:breathing_connection/widgets/nav_link.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/pages/home.dart';
+import 'package:provider/provider.dart';
 class RootPage extends StatefulWidget {
   @override
   _RootPageState createState() => _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    MainData mainData = Provider.of<MainData>(context);
+    CurrentPageHandler curPage = Provider.of<CurrentPageHandler>(context);
     //list of links for side nav
-    //TODO: receive this list from backend user service
-    List<NavLink> navLinks = [
-      NavLink(route: '/home', title: 'Home', icon: Icons.home),
-      NavLink(route: '/technique-list', title: 'Techniques', icon: Icons.article_rounded),
-      NavLink(route: '/settings', title: 'App Settings', icon: Icons.settings),
-      NavLink(route: '/pro', title: 'Pro License', icon: Icons.add_moderator),
-    ];
+    List<NavLink> navLinks = mainData.pages;
     return Scaffold(
       body: Builder(
         builder: (context){
-          String currentRoute = navLinks[_currentIndex].route;
+          int currentIndex = curPage.pageIndex;
+          String currentRoute = navLinks[currentIndex].pageRoute;
           if(currentRoute == '/home'){
             return Home();
           }
           else if(currentRoute == '/technique-list'){
-            return TechniqueList();
+            return TechniqueList(rootContext: context);
           }
           else if(currentRoute == '/settings'){
             return AppSettings();
@@ -41,18 +40,18 @@ class _RootPageState extends State<RootPage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: curPage.pageIndex,
         elevation: 0,
         type : BottomNavigationBarType.fixed,
         items: navLinks.map((link)=> BottomNavigationBarItem(
-            icon: Icon(link.icon),
-            label: link.title
+            icon: Icon(link.pageIcon),
+            label: link.pageTitle
         )
         ).toList(),
         onTap: (index){
-          setState(() {
-            _currentIndex = index;
-          });
+          String currentRoute = navLinks[index].pageRoute;
+          CurrentPageHandler page = CurrentPageHandler(pageIndex: index, pageRoute: currentRoute);
+          Provider.of<CurrentPageHandler>(context, listen: false).setPage(page);
         },
       ),
     );
