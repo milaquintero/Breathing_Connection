@@ -11,7 +11,9 @@ class ProLicenseDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //page links from main data provider
-    List<NavLink> availablePages = Provider.of<MainData>(rootContext).pages;
+    List<NavLink> navLinks = Provider.of<MainData>(rootContext).pages;
+    //find pro page in main data page links
+    NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
@@ -51,8 +53,6 @@ class ProLicenseDialog extends StatelessWidget {
                       onPressed: (){
                         //close dialog
                         Navigator.of(context).pop();
-                        //find pro page in main data page links
-                        NavLink proLicensePage = availablePages.firstWhere((page) => page.pageRoute == '/pro');
                         //send to PRO page
                         Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
                       },

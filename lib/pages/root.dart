@@ -2,6 +2,7 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/pages/app_settings.dart';
+import 'package:breathing_connection/pages/page_not_found.dart';
 import 'package:breathing_connection/pages/technique_list.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/pages/home.dart';
@@ -33,9 +34,7 @@ class _RootPageState extends State<RootPage> {
             return AppSettings();
           }
           else{
-            return Center(
-                child: Text('Error: $currentRoute is not a valid route.')
-            );
+            return PageNotFound(rootContext: context,);
           }
         },
       ),
