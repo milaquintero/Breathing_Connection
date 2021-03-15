@@ -6,13 +6,11 @@ class IconPage extends StatelessWidget {
   final Widget headerContent;
   final double mainContentHeight;
   final double headerPositionTop;
-  final double headerRadiusSize;
   final Color headerColor;
   final Color mainContentColor;
-  final Color emptySpaceColor;
   IconPage({this.mainContent, this.headerContent,
-  this.headerPositionTop, this.headerRadiusSize, this.mainContentHeight,
-  this.headerColor, this.mainContentColor, this.emptySpaceColor});
+  this.headerPositionTop, this.mainContentHeight,
+  this.headerColor, this.mainContentColor});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,7 +25,7 @@ class IconPage extends StatelessWidget {
             Expanded(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                      color: emptySpaceColor
+                      color: headerColor
                   ),
                 )
             ),
@@ -42,11 +40,7 @@ class IconPage extends StatelessWidget {
         //fixed position icon
         Positioned(
           top: headerPositionTop,
-          child: CircleAvatar(
-            backgroundColor: headerColor,
-            radius: headerRadiusSize,
-            child: headerContent,
-          ),
+          child: headerContent,
         )
       ],
     );

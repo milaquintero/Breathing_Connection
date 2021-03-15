@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 //Brand styles (across all pages)
 Color brandPrimary = Colors.lightBlue[900];
 Color wellSectionBg = Colors.white;
-BorderRadius roundedBorder = BorderRadius.all(Radius.circular(5));
+BorderRadius roundedBorder = BorderRadius.all(Radius.circular(10));
 double appBarHeight = 72;
 TextStyle appBarTextStyle = TextStyle(
     fontSize: 24

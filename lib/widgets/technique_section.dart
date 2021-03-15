@@ -5,93 +5,105 @@ import '../styles.dart';
 class TechniqueSection extends StatelessWidget {
   final String headerText;
   final String bgImage;
-  final Technique technique;
+  final List<Technique> techniques;
   final Color textBgColor;
   final Color textColor;
+  final Color headerColor;
+  final Color headerTextColor;
   final IconData startIcon;
-  TechniqueSection({this.headerText, this.bgImage, this.technique,
-    this.textBgColor, this.textColor, this.startIcon});
+  TechniqueSection({this.headerText, this.bgImage, this.techniques,
+    this.textBgColor, this.textColor, this.startIcon,
+    this.headerColor, this.headerTextColor});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-      width: 320,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(bgImage),
-          fit: BoxFit.fitHeight
-        )
-      ),
+      color: headerColor,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: roundedBorder,
-              color: textBgColor,
-            ),
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                    headerText,
-                    style: TextStyle(
-                      fontSize: 27,
-                      color: textColor
-                    ),
-                ),
-              ],
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Text(
+              headerText,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 28,
+                color: headerTextColor,
+              ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: roundedBorder,
-              color: textBgColor
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      technique.title,
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: textColor
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: techniques.length,
+                  itemBuilder: (context, index){
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 28, horizontal: 32),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(bgImage),
+                              fit: BoxFit.fitWidth
+                          )
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                            Icons.help,
-                            color: textColor,
-                            size: 32,
-                        ),
-                        onPressed: (){}
-                        ),
-                    IconButton(
-                        icon: Icon(
-                            startIcon,
-                            color: textColor,
-                            size: 32,
-                        ),
-                        onPressed: (){}
-                        ),
-                  ],
-                ),
-              ],
-            ),
+                      height: 240,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: roundedBorder,
+                                color: textBgColor
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 16),
+                                  child: Text(
+                                    techniques[index].title,
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: textColor
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(
+                                          Icons.help,
+                                          color: textColor,
+                                          size: 32,
+                                        ),
+                                        onPressed: (){}
+                                    ),
+                                    IconButton(
+                                        icon: Icon(
+                                          startIcon,
+                                          color: textColor,
+                                          size: 32,
+                                        ),
+                                        onPressed: (){}
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+              )
+            ],
           )
-        ],
+        ]
       ),
     );
   }

@@ -15,14 +15,16 @@ class PageNotFound extends StatelessWidget {
     //find home page in main data page links
     NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     return IconPage(
-      emptySpaceColor: Colors.grey,
-      headerColor: Colors.blue[50],
+      headerColor: Colors.grey,
       headerPositionTop: 80,
-      headerRadiusSize: 90,
-      headerContent: Icon(
-        Icons.cancel,
-        size: 90,
-        color: Colors.red,
+      headerContent: CircleAvatar(
+        backgroundColor: Colors.blue[50],
+        radius: 90,
+        child: Icon(
+          Icons.cancel,
+          size: 90,
+          color: Colors.red,
+        ),
       ),
       mainContentHeight: 600,
       mainContentColor: brandPrimary,

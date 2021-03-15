@@ -21,14 +21,16 @@ class _ProLicenseState extends State<ProLicense> {
     //find home page in main data page links
     NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     return IconPage(
-      emptySpaceColor: Colors.grey,
-      headerColor: Colors.blue[50],
+      headerColor: Colors.grey,
       headerPositionTop: 80,
-      headerRadiusSize: 90,
-      headerContent: Icon(
-        Icons.add_moderator,
-        size: 90,
-        color: brandPrimary,
+      headerContent: CircleAvatar(
+        backgroundColor: Colors.blue[50],
+        radius: 90,
+        child: Icon(
+          Icons.add_moderator,
+          size: 90,
+          color: brandPrimary,
+        ),
       ),
       mainContentHeight: 600,
       mainContentColor: brandPrimary,
