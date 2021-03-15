@@ -3,6 +3,7 @@ import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/pages/app_settings.dart';
 import 'package:breathing_connection/pages/page_not_found.dart';
+import 'package:breathing_connection/pages/pro_license.dart';
 import 'package:breathing_connection/pages/technique_list.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/pages/home.dart';
@@ -32,6 +33,9 @@ class _RootPageState extends State<RootPage> {
           }
           else if(currentRoute == '/settings'){
             return AppSettings();
+          }
+          else if(currentRoute == '/pro'){
+            return ProLicense(rootContext: context,);
           }
           else{
             return PageNotFound(rootContext: context,);
