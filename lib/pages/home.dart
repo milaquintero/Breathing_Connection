@@ -25,9 +25,9 @@ class _HomeState extends State<Home> {
     );
     String amTechniqueHeadBgImg = 'assets/day.jpg';
     String pmTechniqueHeadBgImg = 'assets/night.jpg';
-    String challengeTechniqueHeadBgImg = 'assets/day.jpg';
-    String customTechniqueHeadBgImg = 'assets/day.jpg';
-    String emergencyTechniqueHeadBgImg = 'assets/night.jpg';
+    String challengeTechniqueHeadBgImg = 'assets/challenge.jpg';
+    String customTechniqueHeadBgImg = 'assets/custom.jpg';
+    String emergencyTechniqueHeadBgImg = 'assets/emergency.jpg';
 
     User curUser = Provider.of<User>(context);
 
@@ -37,31 +37,34 @@ class _HomeState extends State<Home> {
         headerText: 'Early Session',
         bgImage: amTechniqueHeadBgImg,
         techniques: [curUser.amTechnique],
-        textBgColor: Colors.grey[900],
-        textColor: Colors.grey[50],
+        textBgColor: Colors.lightBlue[900],
+        textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
         headerColor: Colors.lightBlue[900],
-        headerTextColor: Colors.grey[50],
+        headerTextColor: Colors.white,
+        sectionIcon: Icons.wb_sunny,
       ),
       TechniqueSection(
         headerText: 'Late Session',
         bgImage: pmTechniqueHeadBgImg,
         techniques: [curUser.pmTechnique],
-        textBgColor: Colors.white,
-        textColor: Colors.black,
+        textBgColor: Colors.pinkAccent[700],
+        textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
-        headerColor: Colors.indigo[600],
-        headerTextColor: Colors.grey[50],
+        headerColor: Colors.pinkAccent[700],
+        headerTextColor: Colors.white,
+        sectionIcon: Icons.night_shelter,
       ),
       TechniqueSection(
         headerText: 'Emergency',
         bgImage: emergencyTechniqueHeadBgImg,
         techniques: [curUser.emergencyTechnique],
-        textBgColor: Colors.grey[600],
+        textBgColor: Colors.red[700],
         textColor: Colors.white,
         startIcon: Icons.add_circle,
-        headerColor: Colors.red,
+        headerColor: Colors.red[700],
         headerTextColor: Colors.white,
+        sectionIcon: Icons.healing,
       )
     ];
     //check if user has paid version
@@ -72,11 +75,12 @@ class _HomeState extends State<Home> {
           headerText: 'Challenge',
           bgImage: challengeTechniqueHeadBgImg,
           techniques: [curUser.challengeTechnique],
-          textBgColor: Colors.grey[600],
+          textBgColor: Colors.teal[800],
           textColor: Colors.white,
           startIcon: Icons.play_circle_fill,
-          headerColor: Colors.deepOrange,
-          headerTextColor: Colors.grey[50],
+          headerColor: Colors.teal[800],
+          headerTextColor: Colors.white,
+          sectionIcon: Icons.directions_run,
         )
       );
       //add formatted custom techniques
@@ -85,11 +89,12 @@ class _HomeState extends State<Home> {
           headerText: 'Custom Session',
           bgImage: customTechniqueHeadBgImg,
           techniques: curUser.customTechniques,
-          textBgColor: Colors.grey[600],
+          textBgColor: Colors.deepOrangeAccent[400],
           textColor: Colors.white,
           startIcon: Icons.play_circle_fill,
-          headerColor: Colors.grey[900],
-          headerTextColor: Colors.grey[50],
+          headerColor: Colors.deepOrangeAccent[400],
+          headerTextColor: Colors.white,
+          sectionIcon: Icons.dashboard_customize,
         )
       );
     }
