@@ -21,7 +21,8 @@ class TechniqueSection extends StatelessWidget {
       child: Container(
         color: headerColor,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             //Section Header
             Stack(
@@ -30,7 +31,7 @@ class TechniqueSection extends StatelessWidget {
               children: [
                 //fancy clipped circle in header background
                 Positioned(
-                    left: -160,
+                    left: -80,
                     top: -100,
                     child: Container(
                       height: 400,

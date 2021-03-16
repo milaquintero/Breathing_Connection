@@ -17,12 +17,6 @@ class _HomeState extends State<Home> {
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
   @override
   Widget build(BuildContext context) {
-    //styling
-    EdgeInsets homeMainTextPadding = EdgeInsets.fromLTRB(0, 28, 0, 0);
-    TextStyle homeMainTextStyle = TextStyle(
-      fontSize: 24,
-      color: Colors.black
-    );
     String amTechniqueHeadBgImg = 'assets/day.jpg';
     String pmTechniqueHeadBgImg = 'assets/night.jpg';
     String challengeTechniqueHeadBgImg = 'assets/challenge.jpg';
@@ -102,11 +96,11 @@ class _HomeState extends State<Home> {
       headerColor: Colors.white,
       headerPositionTop: 40,
       headerContent: Container(
-        height: 265,
+        height: 220,
         width: 300,
-        padding: EdgeInsets.only(top: 15),
+        padding: EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
-          color: Colors.white, 
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10)
         ),
         child: Column(
@@ -115,24 +109,32 @@ class _HomeState extends State<Home> {
           children: [
             Image.asset(
               'assets/logo_with_name.jpg',
-              height: 190,
+              height: 150,
             ),
             Padding(
-              padding: homeMainTextPadding,
+              padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: Text(
                 'Your breathing Journey',
-                style: homeMainTextStyle,
+                style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black
+                ),
                 textAlign: TextAlign.center,
               ),
             )
           ],
         ),
       ),
-      mainContentHeight: 430,
+      mainContentHeight: 360,
       mainContentColor: brandPrimary,
-      mainContent: ListView(
-        children: mainContent,
-      ),
+      //remove padding automatically added by ListView
+      mainContent: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: ListView(
+          children: mainContent,
+        ),
+      )
     );
   }
 }

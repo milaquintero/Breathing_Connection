@@ -22,17 +22,17 @@ class _ProLicenseState extends State<ProLicense> {
     NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     return IconPage(
       headerColor: Colors.grey,
-      headerPositionTop: 80,
+      headerPositionTop: 60,
       headerContent: CircleAvatar(
         backgroundColor: Colors.blue[50],
-        radius: 90,
+        radius: 60,
         child: Icon(
           Icons.add_moderator,
-          size: 90,
+          size: 60,
           color: brandPrimary,
         ),
       ),
-      mainContentHeight: 600,
+      mainContentHeight: 500,
       mainContentColor: brandPrimary,
       mainContent:  Row(
         mainAxisAlignment: MainAxisAlignment.center,

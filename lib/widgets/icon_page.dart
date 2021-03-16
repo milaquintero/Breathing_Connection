@@ -18,7 +18,8 @@ class IconPage extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             //left over space at the top
