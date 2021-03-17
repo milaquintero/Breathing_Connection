@@ -68,20 +68,31 @@ class TechniqueSection extends StatelessWidget {
                     itemCount: techniques.length,
                     itemBuilder: (context, index){
                       return Container(
-                        padding: EdgeInsets.only(left: 32, right: 32),
+                        padding: EdgeInsets.symmetric(horizontal: screenHeight / 20),
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(bgImage),
                                 fit: BoxFit.cover,
                             ),
                         ),
-                        height: screenHeight / 2.8,
+                        height: screenHeight / 2.7,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 8),
+                            Container(
+                              padding: EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3), // changes position of shadow
+                                  )
+                                ]
+                              ),
                               child: CircleAvatar(
                                 radius: screenHeight / 15,
                                 backgroundColor: textBgColor,
@@ -94,8 +105,16 @@ class TechniqueSection extends StatelessWidget {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  borderRadius: roundedBorder,
                                   color: textBgColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3), // changes position of shadow
+                                    )
+                                  ],
+                                  borderRadius: roundedBorder,
                                   gradient: RadialGradient(
                                     colors: [Colors.blueGrey, Color.lerp(textBgColor, Colors.blueGrey, 0.5), textBgColor],
                                     center: Alignment(0.6, -0.3),
@@ -103,7 +122,7 @@ class TechniqueSection extends StatelessWidget {
                                     focalRadius: 3.5,
                                   ),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                              padding: EdgeInsets.symmetric(horizontal: screenHeight / 16, vertical: screenHeight / 50),
                               child: Stack(
                                 alignment: Alignment.topCenter,
                                 clipBehavior: Clip.none,

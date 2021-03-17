@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     'Your breathing Journey',
                     style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 24,
                         color: Colors.black
                     ),
                     textAlign: TextAlign.center,
