@@ -34,16 +34,17 @@ class _ProLicenseState extends State<ProLicense> {
           color: brandPrimary,
         ),
       ),
-      mainContentHeight: screenHeight / 1.34,
+      mainContentHeight: screenHeight / 1.36,
       mainContentColor: brandPrimary,
       mainContent:  Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 260,
-            height: 320,
-            padding: EdgeInsets.all(20),
+            width: screenHeight / 2.3,
+            height: screenHeight / 2,
+            margin: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.white
@@ -51,13 +52,13 @@ class _ProLicenseState extends State<ProLicense> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 8),
+                  padding: EdgeInsets.only(top: 4),
                   child: Text(
                     'Breathe In',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 42,
-                        color: Colors.grey[850]
+                        fontSize: screenHeight / 15,
+                        color: Colors.lightBlue[900]
                     ),
                   ),
                 ),
@@ -67,7 +68,7 @@ class _ProLicenseState extends State<ProLicense> {
                     'Gain access to all of Breathing Connection\'s features to immerse yourself in our environment!',
                     style: TextStyle(
                         fontSize: 20,
-                        color: Colors.grey[600]
+                        color: Colors.grey[700]
                     ),
                     textAlign: TextAlign.center,
                   ),

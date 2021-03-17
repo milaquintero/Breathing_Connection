@@ -10,25 +10,35 @@ class TechniqueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User curUser = Provider.of<User>(context);
-    TextStyle techniqueTitleStyle = TextStyle(
-        fontSize: 22,
-        color: Colors.blueGrey[900]
-    );
-    TextStyle techniqueSubtitleStyle = TextStyle(
-        fontSize: 15,
-        color: Colors.grey[600]
-    );
-    EdgeInsets techniqueCardContentPadding = EdgeInsets.all(20);
+    bool shouldBeEnabled = curUser.hasFullAccess || (!curUser.hasFullAccess && !technique.isPaidVersionOnly);
+    Color listTileBg = shouldBeEnabled ? Colors.white : Colors.blueGrey[400];
+    Color titleColor = shouldBeEnabled ? Colors.blueGrey[900] : Colors.grey[400];
+    Color subtitleColor = shouldBeEnabled ? Colors.grey[600] : Colors.grey[400];
+    Color borderColor = shouldBeEnabled ? Colors.grey[300] : Colors.blueGrey[300];
     return Container(
+      decoration: BoxDecoration(
+        border: Border(
+            top: BorderSide(
+              color: borderColor,
+            )
+        ),
+      ),
       child: Card(
         margin: EdgeInsets.zero,
         child: ListTile(
-          enabled: curUser.hasFullAccess || (!curUser.hasFullAccess && !technique.isPaidVersionOnly),
-          contentPadding: techniqueCardContentPadding,
+          enabled: shouldBeEnabled,
+          contentPadding: EdgeInsets.all(20),
           onTap: (){},
-          title: Text(
-              technique.title,
-              style: techniqueTitleStyle,
+          tileColor: listTileBg,
+          title: Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(
+                technique.title,
+                style: TextStyle(
+                    fontSize: 22,
+                    color: titleColor
+                ),
+            ),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,18 +47,41 @@ class TechniqueCard extends StatelessWidget {
                 technique.description,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: techniqueSubtitleStyle,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: subtitleColor
+                ),
               ),
               Text(
                 'Breathing Rhythm: ${technique.inhaleDuration}-${technique.firstHoldDuration}-${technique.exhaleDuration}-${technique.secondHoldDuration}',
-                style: techniqueSubtitleStyle,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: subtitleColor
+                ),
               )
             ],
           ),
-          trailing: IconButton(
+          trailing: shouldBeEnabled ? IconButton(
             icon: Icon(
-                Icons.more_vert,
-                size: 32,
+              Icons.more_vert,
+              size: 32,
+            ),
+          ) : Container(
+            width: 60,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[300],
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Colors.blueGrey
+              )
+            ),
+            child: Text(
+                'PRO',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
             ),
           ),
         ),

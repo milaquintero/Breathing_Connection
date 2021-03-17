@@ -28,32 +28,36 @@ class PageNotFound extends StatelessWidget {
           color: Colors.red,
         ),
       ),
-      mainContentHeight: screenHeight / 1.34,
+      mainContentHeight: screenHeight / 1.36,
       mainContentColor: brandPrimary,
       mainContent: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 260,
-            height: 330,
-            padding: EdgeInsets.all(20),
+            width: screenHeight / 2.3,
+            height: screenHeight / 2,
+            margin: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.white
             ),
             child: Column(
               children: [
-                Text(
-                  '404',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 96,
-                      color: Colors.grey[850]
+                Padding(
+                  padding: EdgeInsets.only(top: 0),
+                  child: Text(
+                    'Error',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenHeight / 8.8,
+                        color: Colors.red
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 2),
+                  padding: EdgeInsets.only(top: 12),
                   child: Text(
                     'Whoops!',
                     style: TextStyle(
