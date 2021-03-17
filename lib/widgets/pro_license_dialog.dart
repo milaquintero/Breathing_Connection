@@ -14,6 +14,8 @@ class ProLicenseDialog extends StatelessWidget {
     List<NavLink> navLinks = Provider.of<MainData>(rootContext).pages;
     //find pro page in main data page links
     NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
@@ -23,7 +25,7 @@ class ProLicenseDialog extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: 260,
+            height: screenHeight / 2.1,
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
             child: Column(
               children: [
