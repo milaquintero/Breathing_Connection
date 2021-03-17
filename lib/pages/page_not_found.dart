@@ -14,19 +14,21 @@ class PageNotFound extends StatelessWidget {
     List<NavLink> navLinks = Provider.of<MainData>(rootContext).pages;
     //find home page in main data page links
     NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return IconPage(
       headerColor: Colors.grey,
-      headerPositionTop: 60,
+      headerPositionTop: screenHeight / 4,
       headerContent: CircleAvatar(
         backgroundColor: Colors.blue[50],
-        radius: 60,
+        radius: screenHeight - 543,
         child: Icon(
           Icons.cancel,
-          size: 60,
+          size: screenHeight - 543,
           color: Colors.red,
         ),
       ),
-      mainContentHeight: 500,
+      mainContentHeight: screenHeight - 172,
       mainContentColor: brandPrimary,
       mainContent: Row(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -92,40 +92,46 @@ class _HomeState extends State<Home> {
         )
       );
     }
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return IconPage(
       headerColor: Colors.white,
-      headerPositionTop: 40,
-      headerContent: Container(
-        height: 220,
-        width: 300,
-        padding: EdgeInsets.only(top: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.asset(
-              'assets/logo_with_name.jpg',
-              height: 150,
+      headerContent: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 42, bottom: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
-              child: Text(
-                'Your breathing Journey',
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/logo_with_name.jpg',
+                  height: screenHeight / 4.3,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
-        ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                  child: Text(
+                    'Your breathing Journey',
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
-      mainContentHeight: 360,
+      mainContentHeight: screenHeight / 2.05,
       mainContentColor: brandPrimary,
       //remove padding automatically added by ListView
       mainContent: MediaQuery.removePadding(

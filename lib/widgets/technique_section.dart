@@ -17,6 +17,8 @@ class TechniqueSection extends StatelessWidget {
     this.headerColor, this.headerTextColor});
   @override
   Widget build(BuildContext context) {
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return ClipRect(
       child: Container(
         color: headerColor,
@@ -44,12 +46,12 @@ class TechniqueSection extends StatelessWidget {
                 ),
                 //section header text
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 24),
+                  padding: EdgeInsets.symmetric(vertical: screenHeight / 36),
                   child: Text(
                     headerText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: screenHeight / 24,
                       color: headerTextColor,
                     ),
                   ),
@@ -66,18 +68,30 @@ class TechniqueSection extends StatelessWidget {
                     itemCount: techniques.length,
                     itemBuilder: (context, index){
                       return Container(
-                        padding: EdgeInsets.only(top: 106, bottom: 0, left: 32, right: 32),
+                        padding: EdgeInsets.only(left: 32, right: 32),
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(bgImage),
                                 fit: BoxFit.cover,
                             ),
                         ),
-                        height: 260,
+                        height: screenHeight / 2.8,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8),
+                              child: CircleAvatar(
+                                radius: screenHeight / 15,
+                                backgroundColor: textBgColor,
+                                child: Icon(
+                                  sectionIcon,
+                                  size: screenHeight / 15,
+                                  color: textColor,
+                                ),
+                              ),
+                            ),
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: roundedBorder,
@@ -94,25 +108,12 @@ class TechniqueSection extends StatelessWidget {
                                 alignment: Alignment.topCenter,
                                 clipBehavior: Clip.none,
                                 children: [
-                                  //section header icon
-                                  Positioned(
-                                    top: -120,
-                                    child: CircleAvatar(
-                                      radius: 45,
-                                      backgroundColor: textBgColor,
-                                      child: Icon(
-                                        sectionIcon,
-                                        size: 42,
-                                        color: textColor,
-                                      ),
-                                    ),
-                                  ),
                                   Column(
                                     children: [
                                       Text(
                                         techniques[index].title,
                                         style: TextStyle(
-                                            fontSize: 24,
+                                            fontSize: screenHeight / 26,
                                             color: textColor
                                         ),
                                       ),
@@ -123,7 +124,7 @@ class TechniqueSection extends StatelessWidget {
                                               icon: Icon(
                                                 Icons.help,
                                                 color: textColor,
-                                                size: 32,
+                                                size: screenHeight / 18,
                                               ),
                                               onPressed: (){}
                                           ),
@@ -131,7 +132,7 @@ class TechniqueSection extends StatelessWidget {
                                               icon: Icon(
                                                 startIcon,
                                                 color: textColor,
-                                                size: 32,
+                                                size: screenHeight / 18,
                                               ),
                                               onPressed: (){}
                                           ),

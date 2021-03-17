@@ -20,19 +20,21 @@ class _ProLicenseState extends State<ProLicense> {
     List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
     //find home page in main data page links
     NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return IconPage(
       headerColor: Colors.grey,
-      headerPositionTop: 60,
+      headerPositionTop: screenHeight / 15,
       headerContent: CircleAvatar(
         backgroundColor: Colors.blue[50],
-        radius: 60,
+        radius: screenHeight / 10,
         child: Icon(
           Icons.add_moderator,
-          size: 60,
+          size: screenHeight / 10,
           color: brandPrimary,
         ),
       ),
-      mainContentHeight: 500,
+      mainContentHeight: screenHeight / 1.34,
       mainContentColor: brandPrimary,
       mainContent:  Row(
         mainAxisAlignment: MainAxisAlignment.center,
