@@ -31,7 +31,7 @@ class _ProLicenseState extends State<ProLicense> {
         child: Icon(
           Icons.add_moderator,
           size: screenHeight / 10,
-          color: brandPrimary,
+          color: Colors.teal[600],
         ),
       ),
       mainContentHeight: screenHeight / 1.36,
@@ -47,7 +47,7 @@ class _ProLicenseState extends State<ProLicense> {
             padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.white
+                color: Colors.blue[50],
             ),
             child: Column(
               children: [
@@ -58,7 +58,7 @@ class _ProLicenseState extends State<ProLicense> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: screenHeight / 15,
-                        color: Colors.lightBlue[900]
+                        color: Colors.teal[600]
                     ),
                   ),
                 ),

@@ -41,7 +41,7 @@ class PageNotFound extends StatelessWidget {
             padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.white
+                color: Colors.blue[50],
             ),
             child: Column(
               children: [
