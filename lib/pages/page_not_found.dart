@@ -18,17 +18,17 @@ class PageNotFound extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     return IconPage(
       headerColor: Colors.grey,
-      headerPositionTop: screenHeight / 4,
+      headerPositionTop: screenHeight / 15,
       headerContent: CircleAvatar(
         backgroundColor: Colors.blue[50],
-        radius: screenHeight - 543,
+        radius: screenHeight / 10,
         child: Icon(
           Icons.cancel,
-          size: screenHeight - 543,
+          size: screenHeight / 10,
           color: Colors.red,
         ),
       ),
-      mainContentHeight: screenHeight - 172,
+      mainContentHeight: screenHeight / 1.34,
       mainContentColor: brandPrimary,
       mainContent: Row(
         mainAxisAlignment: MainAxisAlignment.center,
