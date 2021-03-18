@@ -1,13 +1,14 @@
 import 'dart:async';
-
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/styles.dart';
-import 'package:breathing_connection/widgets/pro_license_dialog.dart';
+import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/user.dart';
+import 'package:breathing_connection/models/nav_link.dart';
 class TechniqueList extends StatefulWidget {
   final BuildContext rootContext;
   TechniqueList({this.rootContext});
@@ -31,12 +32,29 @@ class _TechniqueListState extends State<TechniqueList> {
     User curUser = Provider.of<User>(context);
     //handle showing purchase pro license dialog if user doesn't have full version of app
     if(!curUser.hasFullAccess){
+      //page links from main data provider
+      List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
+      //find pro page in main data page links
+      NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
       proDialogTimer = Timer(Duration(seconds: 5), (){
         showDialog(
             barrierDismissible: false,
             context: context,
             builder: (context){
-              return ProLicenseDialog(rootContext: context);
+              return DialogPrompt(
+                headerIcon: Icons.add_moderator,
+                headerBgColor: brandPrimary,
+                approveButtonText: 'Purchase',
+                approveButtonColor: brandPrimary,
+                denyButtonText: 'Not Now',
+                denyButtonColor: Colors.red,
+                titleText: 'Show Your Love!',
+                subtitleText: 'Kindly consider purchasing a Pro License to contribute to our development efforts to help the world relax.',
+                cbFunction: (){
+                  //redirect to PRO page
+                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
+                },
+              );
             });
         }
       );

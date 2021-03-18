@@ -1,19 +1,21 @@
-import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/models/nav_link.dart';
-import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../styles.dart';
-class ProLicenseDialog extends StatelessWidget {
-  final BuildContext rootContext;
-  ProLicenseDialog({this.rootContext});
+
+class DialogPrompt extends StatelessWidget {
+  final Function cbFunction;
+  final String approveButtonText;
+  final String denyButtonText;
+  final String titleText;
+  final String subtitleText;
+  final IconData headerIcon;
+  final Color approveButtonColor;
+  final Color denyButtonColor;
+  final Color headerBgColor;
+  DialogPrompt({this.cbFunction, this.denyButtonText, this.approveButtonText,
+    this.titleText, this.subtitleText, this.headerIcon,
+    this.approveButtonColor, this.denyButtonColor, this.headerBgColor});
   @override
   Widget build(BuildContext context) {
-    //page links from main data provider
-    List<NavLink> navLinks = Provider.of<MainData>(rootContext).pages;
-    //find pro page in main data page links
-    NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
     return Dialog(
@@ -30,21 +32,24 @@ class ProLicenseDialog extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 4),
+                  padding: EdgeInsets.only(top: 12),
                   child: Text(
-                    'Show Your Love!',
+                    titleText,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32
+                        fontSize: 32,
+                        color: Colors.lightBlue[900]
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 20, left: 24, right: 24),
+                  padding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
                   child: Text(
-                    'Kindly consider purchasing a Pro License to contribute to our development efforts to help the world relax.',
+                    subtitleText,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 18
+                        fontSize: 18.5,
+                        color: Colors.grey[700]
                     ),
                   ),
                 ),
@@ -55,18 +60,18 @@ class ProLicenseDialog extends StatelessWidget {
                       onPressed: (){
                         //close dialog
                         Navigator.of(context).pop();
-                        //send to PRO page
-                        Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
+                        //run call back function
+                        cbFunction();
                       },
                       child: Text(
-                        'Purchase',
+                        approveButtonText,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18
                         ),
                       ),
                       style: TextButton.styleFrom(
-                          backgroundColor: brandPrimary,
+                          backgroundColor: approveButtonColor,
                           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24)
                       ),
                     ),
@@ -76,14 +81,14 @@ class ProLicenseDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Not Now',
+                        denyButtonText,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18
                         ),
                       ),
                       style: TextButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: denyButtonColor,
                           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24)
                       ),
                     )
@@ -95,10 +100,10 @@ class ProLicenseDialog extends StatelessWidget {
           Positioned(
             top: -60,
             child: CircleAvatar(
-              backgroundColor: brandPrimary,
+              backgroundColor: headerBgColor,
               radius: 40,
               child: Icon(
-                Icons.add_moderator,
+                headerIcon,
                 color: Colors.white,
                 size: 50,
               ),
