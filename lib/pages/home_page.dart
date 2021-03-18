@@ -109,8 +109,8 @@ class _HomePageState extends State<HomePage> {
     }
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
-    //handle showing email subscription dialog if user isn't signed up
-    if(!curUser.isSubscribedToEmails){
+    //handle showing email subscription dialog if user isn't signed up (only show if on home page)
+    if(!curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
       //screen height
       double screenHeight = MediaQuery.of(context).size.height;
       emailSubDialogTimer = Timer(Duration(seconds: 5), (){
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                 subtitleText: 'Sing up to our newsletter to get the latest news and updates.',
                 cbFunction: (){
                   //redirect to email subscription page
-                  Navigator.pushReplacementNamed(context, '/email-subscription');
+                  Navigator.pushNamed(context, '/email-subscription');
                 },
               );
             });

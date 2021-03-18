@@ -1,10 +1,6 @@
-import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/styles.dart';
 import 'package:breathing_connection/widgets/icon_page.dart';
 import 'package:flutter/material.dart';
-import 'package:breathing_connection/models/nav_link.dart';
-import 'package:provider/provider.dart';
 class EmailSubscriptionPage extends StatefulWidget {
   final BuildContext rootContext;
   EmailSubscriptionPage({this.rootContext});
@@ -14,88 +10,143 @@ class EmailSubscriptionPage extends StatefulWidget {
 }
 
 class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    //available nav links from provider
-    List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
-    //find home page in main data page links
-    NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
-    return IconPage(
-      headerColor: Colors.grey,
-      headerPositionTop: screenHeight / 15,
-      headerContent: CircleAvatar(
-        backgroundColor: Colors.blue[50],
-        radius: screenHeight / 10,
-        child: Icon(
-          Icons.add_moderator,
-          size: screenHeight / 10,
-          color: Colors.teal[600],
+    DateTime birthDate;
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        toolbarHeight: appBarHeight,
+        title: Text(
+            'Email Subscription',
+            style: appBarTextStyle,
         ),
+        centerTitle: true,
+        backgroundColor: brandPrimary,
       ),
-      mainContentHeight: screenHeight / 1.36,
-      mainContentColor: brandPrimary,
-      mainContent:  Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: screenHeight / 2.3,
-            height: screenHeight / 2,
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.blue[50],
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Breathe In',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenHeight / 14,
-                        color: Colors.teal[600]
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 28),
-                  child: Text(
-                    'Gain access to all of Breathing Connection\'s features to immerse yourself in our environment!',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey[700]
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TextButton(
-                  onPressed: (){
-                    //return to home page
-                    Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(homePage.pageIndex);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    child: Text(
-                      'Get Pro License',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24
-                      ),
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                      backgroundColor: brandPrimary
+      body: Container(
+        color: Colors.grey,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned(
+                top: screenHeight / 52,
+                child: CircleAvatar(
+                  backgroundColor: Colors.blue[50],
+                  radius: screenHeight / 12,
+                  child: Icon(
+                    Icons.email,
+                    size: screenHeight / 12,
+                    color: brandPrimary,
                   ),
                 )
-              ],
             ),
-          )
-        ],
+            Positioned(
+                bottom: screenHeight / 20,
+                child: Container(
+                  width: screenHeight / 2,
+                  height: screenHeight / 1.7,
+                  padding: EdgeInsets.only(top: 0, bottom: 0, left: 32, right: 32),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.blue[50],
+                  ),
+                  //form to get full name, email and birth date
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Full Name',
+                                  hintText: 'Full Name',
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter your full name';
+                                  }
+                                  return null;
+                                },
+                                autovalidateMode: AutovalidateMode.always,
+                                keyboardType: TextInputType.name,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 20),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Email',
+                                  hintText: 'Email',
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty || !RegExp(r'(?:[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])').hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                                autovalidateMode: AutovalidateMode.always,
+                                keyboardType: TextInputType.emailAddress,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 20),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Birth Date',
+                                  hintText: 'Birth Date',
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty || !RegExp(r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$').hasMatch(value)) {
+                                    return 'Invalid date format';
+                                  }
+                                  return null;
+                                },
+                                autovalidateMode: AutovalidateMode.always,
+                                keyboardType: TextInputType.datetime,
+                              ),
+                            )
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            //validate form
+                            if(_formKey.currentState.validate()){
+                              //TODO: sent request to add user to email list
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24
+                              ),
+                            ),
+                          ),
+                          style: TextButton.styleFrom(
+                              backgroundColor: brandPrimary
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+            )
+          ],
+        ),
       ),
     );
   }
