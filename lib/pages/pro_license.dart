@@ -52,12 +52,12 @@ class _ProLicenseState extends State<ProLicense> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 4, bottom: 2),
+                  padding: EdgeInsets.only(top: 4),
                   child: Text(
                     'Breathe In',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: screenHeight / 13.8,
+                        fontSize: screenHeight / 14,
                         color: Colors.teal[600]
                     ),
                   ),
