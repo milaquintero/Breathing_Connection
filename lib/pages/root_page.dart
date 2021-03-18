@@ -20,6 +20,8 @@ class _RootPageState extends State<RootPage> {
     CurrentPageHandler curPage = Provider.of<CurrentPageHandler>(context);
     //list of links for side nav
     List<NavLink> navLinks = mainData.pages;
+    //remove links from bottom nav that aren't home, settings or technique list
+    navLinks.removeWhere((link) => link.pageRoute == '/email-subscription' || link.pageRoute == '/user-entry');
     return Scaffold(
       body: Builder(
         builder: (context){
