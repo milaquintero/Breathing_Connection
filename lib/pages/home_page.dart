@@ -111,10 +111,6 @@ class _HomePageState extends State<HomePage> {
     double screenHeight = MediaQuery.of(context).size.height;
     //handle showing email subscription dialog if user isn't signed up
     if(!curUser.isSubscribedToEmails){
-      //page links from main data provider
-      List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
-      //find pro page in main data page links
-      NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
       //screen height
       double screenHeight = MediaQuery.of(context).size.height;
       emailSubDialogTimer = Timer(Duration(seconds: 5), (){
@@ -135,8 +131,8 @@ class _HomePageState extends State<HomePage> {
                 titleText: 'Stay In Touch',
                 subtitleText: 'Sing up to our newsletter to get the latest news and updates.',
                 cbFunction: (){
-                  //redirect to PRO page
-                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
+                  //redirect to email subscription page
+                  Navigator.pushReplacementNamed(context, '/email-subscription');
                 },
               );
             });

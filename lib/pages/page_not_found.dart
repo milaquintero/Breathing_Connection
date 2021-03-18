@@ -7,13 +7,18 @@ import 'package:breathing_connection/models/nav_link.dart';
 import 'package:provider/provider.dart';
 class PageNotFound extends StatelessWidget {
   final BuildContext rootContext;
-  PageNotFound({this.rootContext});
+  final bool hasBottomNav;
+  PageNotFound({this.rootContext, this.hasBottomNav});
   @override
   Widget build(BuildContext context) {
-    //available nav links from provider
-    List<NavLink> navLinks = Provider.of<MainData>(rootContext).pages;
-    //find home page in main data page links
-    NavLink homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
+    List<NavLink> navLinks;
+    NavLink homePage;
+    if(hasBottomNav){
+      //available nav links from provider
+      navLinks = Provider.of<MainData>(rootContext).pages;
+      //find home page in main data page links
+      homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
+    }
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
     return IconPage(
@@ -28,7 +33,7 @@ class PageNotFound extends StatelessWidget {
           color: Colors.red,
         ),
       ),
-      mainContentHeight: screenHeight / 1.36,
+      mainContentHeight: hasBottomNav ? screenHeight / 1.36 : screenHeight / 1.19,
       mainContentColor: brandPrimary,
       mainContent: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,8 +84,15 @@ class PageNotFound extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: (){
-                    //return to home page
-                    Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(homePage.pageIndex);
+                    //return to home page (bottom nav layout)
+                    if(hasBottomNav){
+                      Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(homePage.pageIndex);
+                    }
+                    //return to root (default home)
+                    else{
+                      Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(0);
+                      Navigator.pushReplacementNamed(rootContext, '/root');
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),

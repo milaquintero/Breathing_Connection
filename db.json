@@ -98,11 +98,6 @@
         "pageIndex": 3,
         "pageTitle": "Pro License",
         "pageRoute": "/pro"
-      },
-      {
-        "pageIndex": 4,
-        "pageTitle": "Newsletter",
-        "pageRoute": "/email-subscription"
       }
     ]
   },

@@ -19,9 +19,7 @@ class _RootPageState extends State<RootPage> {
     MainData mainData = Provider.of<MainData>(context);
     CurrentPageHandler curPage = Provider.of<CurrentPageHandler>(context);
     //list of links for side nav
-    List<NavLink> navLinks = mainData.pages;
-    //remove links from bottom nav that aren't home, settings or technique list
-    navLinks.removeWhere((link) => link.pageRoute == '/email-subscription' || link.pageRoute == '/user-entry');
+    List<NavLink> navLinks = List<NavLink>.from(mainData.pages);
     return Scaffold(
       body: Builder(
         builder: (context){
@@ -40,7 +38,7 @@ class _RootPageState extends State<RootPage> {
             return ProLicensePage(rootContext: context,);
           }
           else{
-            return PageNotFound(rootContext: context,);
+            return PageNotFound(rootContext: context, hasBottomNav: true,);
           }
         },
       ),
