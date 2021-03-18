@@ -33,6 +33,12 @@ class _LoadingState extends State<Loading> {
   Future <void> getMainData() async{
     //get main data
     MainData mainData = await MainDataService.mainData();
+    //user data
+    User curUser = Provider.of<User>(context, listen: false);
+    //if user has full access remove pro license page from nav links
+    if(curUser.hasFullAccess){
+      mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
+    }
     //update main data in shareable resource
     Provider.of<MainData>(context, listen: false).setMainData(mainData);
     //start bottom nav in home page
@@ -44,7 +50,7 @@ class _LoadingState extends State<Loading> {
     await getUserData();
     //get available techniques
     await getTechniques();
-    //get main data
+    //get main data only after user data is present
     await getMainData();
     Navigator.pushReplacementNamed(context, '/root');
   }
