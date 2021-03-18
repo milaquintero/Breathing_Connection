@@ -26,7 +26,7 @@ class _RootPageState extends State<RootPage> {
           int currentIndex = curPage.pageIndex;
           String currentRoute = navLinks[currentIndex].pageRoute;
           if(currentRoute == '/home'){
-            return Home();
+            return Home(rootContext: context,);
           }
           else if(currentRoute == '/technique-list'){
             return TechniqueList(rootContext: context);

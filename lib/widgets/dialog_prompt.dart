@@ -11,13 +11,15 @@ class DialogPrompt extends StatelessWidget {
   final Color approveButtonColor;
   final Color denyButtonColor;
   final Color headerBgColor;
+  final double dialogHeight;
+  final EdgeInsets titlePadding;
+  final EdgeInsets subtitlePadding;
   DialogPrompt({this.cbFunction, this.denyButtonText, this.approveButtonText,
     this.titleText, this.subtitleText, this.headerIcon,
-    this.approveButtonColor, this.denyButtonColor, this.headerBgColor});
+    this.approveButtonColor, this.denyButtonColor, this.headerBgColor,
+    this.dialogHeight, this.titlePadding, this.subtitlePadding});
   @override
   Widget build(BuildContext context) {
-    //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
@@ -27,12 +29,12 @@ class DialogPrompt extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: screenHeight / 2.1,
+            height: dialogHeight,
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: titlePadding,
                   child: Text(
                     titleText,
                     style: TextStyle(
@@ -43,7 +45,7 @@ class DialogPrompt extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
+                  padding: subtitlePadding,
                   child: Text(
                     subtitleText,
                     textAlign: TextAlign.center,

@@ -36,19 +36,24 @@ class _TechniqueListState extends State<TechniqueList> {
       List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
       //find pro page in main data page links
       NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
+      //screen height
+      double screenHeight = MediaQuery.of(context).size.height;
       proDialogTimer = Timer(Duration(seconds: 5), (){
         showDialog(
             barrierDismissible: false,
             context: context,
             builder: (context){
               return DialogPrompt(
+                dialogHeight: screenHeight / 2.13,
+                titlePadding: EdgeInsets.only(top: 12),
+                subtitlePadding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
                 headerIcon: Icons.add_moderator,
                 headerBgColor: brandPrimary,
                 approveButtonText: 'Purchase',
                 approveButtonColor: brandPrimary,
                 denyButtonText: 'Not Now',
                 denyButtonColor: Colors.red,
-                titleText: 'Show Your Love!',
+                titleText: 'Show Your Love',
                 subtitleText: 'Kindly consider purchasing a Pro License to contribute to our development efforts to help the world relax.',
                 cbFunction: (){
                   //redirect to PRO page

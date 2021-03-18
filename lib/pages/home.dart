@@ -1,4 +1,10 @@
+import 'dart:async';
+
+import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
+import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/icon_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +14,8 @@ import 'package:provider/provider.dart';
 import '../styles.dart';
 
 class Home extends StatefulWidget {
+  final BuildContext rootContext;
+  Home({this.rootContext});
   @override
   _HomeState createState() => _HomeState();
 }
@@ -15,6 +23,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   //image header for side nav
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
+  //timer for email subscription dialog
+  Timer emailSubDialogTimer;
+  @override
+  void dispose() {
+    super.dispose();
+    emailSubDialogTimer?.cancel();
+  }
   @override
   Widget build(BuildContext context) {
     String amTechniqueHeadBgImg = 'assets/day.jpg';
@@ -94,6 +109,40 @@ class _HomeState extends State<Home> {
     }
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
+    //handle showing email subscription dialog if user isn't signed up
+    if(!curUser.isSubscribedToEmails){
+      //page links from main data provider
+      List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
+      //find pro page in main data page links
+      NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
+      //screen height
+      double screenHeight = MediaQuery.of(context).size.height;
+      emailSubDialogTimer = Timer(Duration(seconds: 5), (){
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context){
+              return DialogPrompt(
+                dialogHeight: screenHeight / 2.5,
+                titlePadding: EdgeInsets.only(top: 12),
+                subtitlePadding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
+                headerIcon: Icons.email,
+                headerBgColor: brandPrimary,
+                approveButtonText: 'Sign Up',
+                approveButtonColor: brandPrimary,
+                denyButtonText: 'Not Now',
+                denyButtonColor: Colors.red,
+                titleText: 'Stay In Touch',
+                subtitleText: 'Sing up to our newsletter to get the latest news and updates.',
+                cbFunction: (){
+                  //redirect to PRO page
+                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);
+                },
+              );
+            });
+      }
+      );
+    }
     return IconPage(
       headerColor: Colors.white,
       headerContent: Column(
