@@ -6,13 +6,14 @@ class User extends ChangeNotifier{
   int userId;
   String username;
   bool hasFullAccess;
+  bool isSubscribedToEmails;
   UserSettings userSettings;
   Technique amTechnique;
   Technique pmTechnique;
   Technique challengeTechnique;
   Technique emergencyTechnique;
   List<Technique> customTechniques;
-  User({this.userId, this.username, this.userSettings, this.hasFullAccess,
+  User({this.userId, this.username, this.userSettings, this.hasFullAccess, this.isSubscribedToEmails,
     this.amTechnique, this.pmTechnique, this.challengeTechnique, this.emergencyTechnique,
     this.customTechniques});
   factory User.fromJson(Map<String, dynamic> json) {
@@ -21,6 +22,7 @@ class User extends ChangeNotifier{
       userId: json['id'],
       username: json['username'],
       hasFullAccess: json['hasFullAccess'],
+      isSubscribedToEmails: json['isSubscribedToEmails'],
       amTechnique: Technique.fromJson(json['amTechnique']),
       pmTechnique: Technique.fromJson(json['pmTechnique']),
       challengeTechnique: Technique.fromJson(json['challengeTechnique']),
@@ -33,6 +35,7 @@ class User extends ChangeNotifier{
     userId = user.userId;
     username = user.username;
     hasFullAccess = user.hasFullAccess;
+    isSubscribedToEmails = user.isSubscribedToEmails;
     amTechnique = user.amTechnique;
     pmTechnique = user.pmTechnique;
     challengeTechnique = user.challengeTechnique;
