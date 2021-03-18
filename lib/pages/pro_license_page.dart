@@ -5,15 +5,15 @@ import 'package:breathing_connection/widgets/icon_page.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:provider/provider.dart';
-class ProLicense extends StatefulWidget {
+class ProLicensePage extends StatefulWidget {
   final BuildContext rootContext;
-  ProLicense({this.rootContext});
+  ProLicensePage({this.rootContext});
 
   @override
-  _ProLicenseState createState() => _ProLicenseState();
+  _ProLicensePageState createState() => _ProLicensePageState();
 }
 
-class _ProLicenseState extends State<ProLicense> {
+class _ProLicensePageState extends State<ProLicensePage> {
   @override
   Widget build(BuildContext context) {
     //available nav links from provider

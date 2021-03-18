@@ -1,12 +1,12 @@
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/pages/app_settings.dart';
+import 'package:breathing_connection/pages/app_settings_page.dart';
 import 'package:breathing_connection/pages/page_not_found.dart';
-import 'package:breathing_connection/pages/pro_license.dart';
-import 'package:breathing_connection/pages/technique_list.dart';
+import 'package:breathing_connection/pages/pro_license_page.dart';
+import 'package:breathing_connection/pages/technique_list_page.dart';
 import 'package:flutter/material.dart';
-import 'package:breathing_connection/pages/home.dart';
+import 'package:breathing_connection/pages/home_page.dart';
 import 'package:provider/provider.dart';
 class RootPage extends StatefulWidget {
   @override
@@ -26,16 +26,16 @@ class _RootPageState extends State<RootPage> {
           int currentIndex = curPage.pageIndex;
           String currentRoute = navLinks[currentIndex].pageRoute;
           if(currentRoute == '/home'){
-            return Home(rootContext: context,);
+            return HomePage(rootContext: context,);
           }
           else if(currentRoute == '/technique-list'){
-            return TechniqueList(rootContext: context);
+            return TechniqueListPage(rootContext: context);
           }
           else if(currentRoute == '/settings'){
-            return AppSettings();
+            return AppSettingsPage();
           }
           else if(currentRoute == '/pro'){
-            return ProLicense(rootContext: context,);
+            return ProLicensePage(rootContext: context,);
           }
           else{
             return PageNotFound(rootContext: context,);

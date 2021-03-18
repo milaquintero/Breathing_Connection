@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/nav_link.dart';
-class TechniqueList extends StatefulWidget {
+class TechniqueListPage extends StatefulWidget {
   final BuildContext rootContext;
-  TechniqueList({this.rootContext});
+  TechniqueListPage({this.rootContext});
   @override
-  _TechniqueListState createState() => _TechniqueListState();
+  _TechniqueListPageState createState() => _TechniqueListPageState();
 }
 
-class _TechniqueListState extends State<TechniqueList> {
+class _TechniqueListPageState extends State<TechniqueListPage> {
   //timer for PRO dialog
   Timer proDialogTimer;
   @override

@@ -13,14 +13,14 @@ import 'package:provider/provider.dart';
 
 import '../styles.dart';
 
-class Home extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final BuildContext rootContext;
-  Home({this.rootContext});
+  HomePage({this.rootContext});
   @override
-  _HomeState createState() => _HomeState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
   //image header for side nav
   String sideNavHeaderImg = 'assets/logo_with_name.jpg';
   //timer for email subscription dialog

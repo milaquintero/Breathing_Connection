@@ -21,12 +21,12 @@ Iterable<MapEntry<String, dynamic>> filterSettings(Map<String, dynamic> allSetti
   );
 }
 
-class AppSettings extends StatefulWidget {
+class AppSettingsPage extends StatefulWidget {
   @override
-  _AppSettingsState createState() => _AppSettingsState();
+  _AppSettingsPageState createState() => _AppSettingsPageState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
+class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   Widget build(BuildContext context) {
     Map <String, dynamic> allSettings = Provider.of<User>(context).userSettings.toJson();

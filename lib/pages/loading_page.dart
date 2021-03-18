@@ -1,5 +1,4 @@
 import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/technique.dart';
@@ -11,12 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class Loading extends StatefulWidget {
+class LoadingPage extends StatefulWidget {
   @override
-  _LoadingState createState() => _LoadingState();
+  _LoadingPageState createState() => _LoadingPageState();
 }
 
-class _LoadingState extends State<Loading> {
+class _LoadingPageState extends State<LoadingPage> {
   Future<void> getUserData() async{
     //get user data from backend and update shareable resource with user data
     User curUser = await UserService.userData(1);
