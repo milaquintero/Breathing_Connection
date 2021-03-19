@@ -26,12 +26,12 @@ class _ProLicensePageState extends State<ProLicensePage> {
       headerColor: Colors.grey,
       headerPositionTop: screenHeight / 15,
       headerContent: CircleAvatar(
-        backgroundColor: Colors.blue[50],
+        backgroundColor: Colors.teal[600],
         radius: screenHeight / 10,
         child: Icon(
           Icons.add_moderator,
           size: screenHeight / 10,
-          color: Colors.teal[600],
+          color: Colors.grey[50],
         ),
       ),
       mainContentHeight: screenHeight / 1.36,
@@ -47,7 +47,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
             padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.blue[50],
+                color: Colors.grey[50],
             ),
             child: Column(
               children: [
@@ -58,7 +58,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: screenHeight / 14,
-                        color: Colors.teal[600]
+                        color: Colors.blueGrey[700]
                     ),
                   ),
                 ),
@@ -68,7 +68,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
                     'Gain access to all of Breathing Connection\'s features to immerse yourself in our environment!',
                     style: TextStyle(
                         fontSize: 20,
-                        color: Colors.grey[700]
+                        color: Colors.blueGrey[900],
                     ),
                     textAlign: TextAlign.center,
                   ),

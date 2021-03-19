@@ -25,12 +25,12 @@ class PageNotFound extends StatelessWidget {
       headerColor: Colors.grey,
       headerPositionTop: screenHeight / 15,
       headerContent: CircleAvatar(
-        backgroundColor: Colors.blue[50],
+        backgroundColor: Colors.red,
         radius: screenHeight / 10,
         child: Icon(
           Icons.cancel,
           size: screenHeight / 10,
-          color: Colors.red,
+          color: Colors.grey[50],
         ),
       ),
       mainContentHeight: hasBottomNav ? screenHeight / 1.36 : screenHeight / 1.19,
@@ -46,7 +46,7 @@ class PageNotFound extends StatelessWidget {
             padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.blue[50],
+                color: Colors.grey[50],
             ),
             child: Column(
               children: [
@@ -56,13 +56,13 @@ class PageNotFound extends StatelessWidget {
                     'Error',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: screenHeight / 8.8,
+                        fontSize: screenHeight / 10,
                         color: Colors.red
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.only(top: 24),
                   child: Text(
                     'Whoops!',
                     style: TextStyle(
