@@ -38,6 +38,30 @@ class _FancyFormPageState extends State<FancyFormPage> {
           children: [
             Positioned(
                 bottom: -200,
+                left: -240,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(300),
+                  child: Container(
+                    width: 400,
+                    height: 400,
+                    color: Colors.grey,
+                  ),
+                )
+            ),
+            Positioned(
+                bottom: -190,
+                left: -250,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(300),
+                  child: Container(
+                    width: 350,
+                    height: 350,
+                    color: Colors.blue[50],
+                  ),
+                )
+            ),
+            Positioned(
+                bottom: -200,
                 right: -240,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(300),

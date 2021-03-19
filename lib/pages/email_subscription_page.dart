@@ -54,7 +54,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                 }
             ),
             Padding(
-              padding: EdgeInsets.only(top: 36, bottom: 28),
+              padding: EdgeInsets.only(top: 42, bottom: 28),
               child: TextButton(
                 onPressed: (){
                   //validate form

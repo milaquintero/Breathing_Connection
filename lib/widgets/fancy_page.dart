@@ -32,7 +32,62 @@ class FancyPage extends StatelessWidget {
             Container(
               height: mainContentHeight,
               color: mainContentColor,
-              child: mainContent,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+
+                  Positioned(
+                      bottom: -200,
+                      left: -240,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(300),
+                        child: Container(
+                          width: 400,
+                          height: 400,
+                          color: Colors.grey,
+                        ),
+                      )
+                  ),
+                  Positioned(
+                      bottom: -190,
+                      left: -250,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(300),
+                        child: Container(
+                          width: 350,
+                          height: 350,
+                          color: mainContentColor,
+                        ),
+                      )
+                  ),
+                  Positioned(
+                      bottom: -200,
+                      right: -240,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(300),
+                        child: Container(
+                          width: 400,
+                          height: 400,
+                          color: Colors.grey,
+                        ),
+                      )
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: -280,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(300),
+                        child: Container(
+                          width: 400,
+                          height: 400,
+                          color: Colors.blue[200].withOpacity(0.4),
+                        ),
+                      )
+                  ),
+                  mainContent,
+                ],
+              ),
             ),
           ],
         ),
@@ -40,7 +95,7 @@ class FancyPage extends StatelessWidget {
         Positioned(
           top: headerPositionTop,
           child: headerContent,
-        )
+        ),
       ],
     );
   }
