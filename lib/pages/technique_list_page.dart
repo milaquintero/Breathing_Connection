@@ -6,6 +6,7 @@ import 'package:breathing_connection/styles.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/nav_link.dart';
@@ -84,6 +85,25 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                 technique: availableTechniques[index]
             );
           },
+        ),
+      ),
+      floatingActionButton: Container(
+        width: 70,
+        height: 70,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: (){
+              //send to create custom technique page
+              Navigator.pushNamed(context, 'create-custom-technique');
+            },
+            child: Icon(
+              Icons.add_to_photos,
+              size: 32,
+            ),
+            backgroundColor: Colors.deepOrangeAccent[400],
+            elevation: 6,
+            tooltip: "Create a Custom Technique",
+          ),
         ),
       ),
     );

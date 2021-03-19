@@ -66,6 +66,7 @@ class TechniqueCard extends StatelessWidget {
               Icons.more_vert,
               size: 32,
             ),
+            tooltip: technique.title + ' Technique Options',
           ) : Container(
             width: 60,
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
