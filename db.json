@@ -14,7 +14,8 @@
         "inhaleDuration": 4,
         "firstHoldDuration": 7,
         "exhaleDuration": 8,
-        "secondHoldDuration": 0
+        "secondHoldDuration": 0,
+        "assetImage": "assets/day.jpg"
       },
       "pmTechnique": {
         "isPaidVersionOnly": false,
@@ -24,7 +25,8 @@
         "inhaleDuration": 4,
         "firstHoldDuration": 0,
         "exhaleDuration": 6,
-        "secondHoldDuration": 0
+        "secondHoldDuration": 0,
+        "assetImage": "assets/night.jpg"
       },
       "challengeTechnique": {
         "isPaidVersionOnly": false,
@@ -34,7 +36,8 @@
         "inhaleDuration": 2,
         "firstHoldDuration": 0,
         "exhaleDuration": 6,
-        "secondHoldDuration": 0
+        "secondHoldDuration": 0,
+        "assetImage": "assets/challenge.jpg"
       },
       "emergencyTechnique": {
         "isPaidVersionOnly": false,
@@ -44,7 +47,8 @@
         "inhaleDuration": 2,
         "firstHoldDuration": 0,
         "exhaleDuration": 6,
-        "secondHoldDuration": 0
+        "secondHoldDuration": 0,
+        "assetImage": "assets/emergency.jpg"
       },
       "customTechniques": [
         {
@@ -55,7 +59,8 @@
           "inhaleDuration": 2,
           "firstHoldDuration": 2,
           "exhaleDuration": 2,
-          "secondHoldDuration": 2
+          "secondHoldDuration": 2,
+          "assetImage": "assets/custom.jpg"
         },
         {
           "isPaidVersionOnly": true,
@@ -65,7 +70,8 @@
           "inhaleDuration": 2,
           "firstHoldDuration": 2,
           "exhaleDuration": 2,
-          "secondHoldDuration": 2
+          "secondHoldDuration": 2,
+          "assetImage": "assets/custom.jpg"
         }
       ],
       "userSettings": {
@@ -110,7 +116,8 @@
       "inhaleDuration": 4,
       "firstHoldDuration": 7,
       "exhaleDuration": 8,
-      "secondHoldDuration": 0
+      "secondHoldDuration": 0,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": false,
@@ -120,7 +127,8 @@
       "inhaleDuration": 4,
       "firstHoldDuration": 0,
       "exhaleDuration": 6,
-      "secondHoldDuration": 0
+      "secondHoldDuration": 0,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": false,
@@ -130,7 +138,8 @@
       "inhaleDuration": 2,
       "firstHoldDuration": 0,
       "exhaleDuration": 6,
-      "secondHoldDuration": 0
+      "secondHoldDuration": 0,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": true,
@@ -140,7 +149,8 @@
       "inhaleDuration": 2,
       "firstHoldDuration": 2,
       "exhaleDuration": 2,
-      "secondHoldDuration": 2
+      "secondHoldDuration": 2,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": true,
@@ -150,7 +160,8 @@
       "inhaleDuration": 2,
       "firstHoldDuration": 2,
       "exhaleDuration": 2,
-      "secondHoldDuration": 2
+      "secondHoldDuration": 2,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": true,
@@ -160,7 +171,8 @@
       "inhaleDuration": 2,
       "firstHoldDuration": 2,
       "exhaleDuration": 2,
-      "secondHoldDuration": 2
+      "secondHoldDuration": 2,
+      "assetImage": ""
     },
     {
       "isPaidVersionOnly": true,
@@ -170,7 +182,8 @@
       "inhaleDuration": 2,
       "firstHoldDuration": 2,
       "exhaleDuration": 2,
-      "secondHoldDuration": 2
+      "secondHoldDuration": 2,
+      "assetImage": ""
     }
   ]
 }

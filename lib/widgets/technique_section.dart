@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../styles.dart';
 class TechniqueSection extends StatelessWidget {
   final String headerText;
-  final String bgImage;
   final List<Technique> techniques;
   final Color textBgColor;
   final Color textColor;
@@ -12,7 +11,7 @@ class TechniqueSection extends StatelessWidget {
   final Color headerTextColor;
   final IconData startIcon;
   final IconData sectionIcon;
-  TechniqueSection({this.headerText, this.bgImage, this.techniques,
+  TechniqueSection({this.headerText, this.techniques,
     this.textBgColor, this.textColor, this.startIcon, this.sectionIcon,
     this.headerColor, this.headerTextColor});
   @override
@@ -71,7 +70,7 @@ class TechniqueSection extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: screenHeight / 20),
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(bgImage),
+                                image: AssetImage(techniques[index].assetImage),
                                 fit: BoxFit.cover,
                             ),
                         ),

@@ -7,9 +7,10 @@ class Technique{
   int exhaleDuration;
   int secondHoldDuration;
   bool isPaidVersionOnly;
+  String assetImage;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
-    this.exhaleDuration, this.secondHoldDuration});
+    this.exhaleDuration, this.secondHoldDuration, this.assetImage});
   factory Technique.fromJson(Map<String, dynamic> json){
     return Technique(
       techniqueID: json['id'],
@@ -20,6 +21,7 @@ class Technique{
       firstHoldDuration: json['firstHoldDuration'],
       exhaleDuration: json['exhaleDuration'],
       secondHoldDuration: json['secondHoldDuration'],
+      assetImage: json['assetImage']
     );
   }
 }

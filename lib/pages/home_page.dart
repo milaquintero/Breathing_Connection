@@ -1,8 +1,4 @@
 import 'dart:async';
-
-import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_page.dart';
@@ -32,19 +28,12 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    String amTechniqueHeadBgImg = 'assets/day.jpg';
-    String pmTechniqueHeadBgImg = 'assets/night.jpg';
-    String challengeTechniqueHeadBgImg = 'assets/challenge.jpg';
-    String customTechniqueHeadBgImg = 'assets/custom.jpg';
-    String emergencyTechniqueHeadBgImg = 'assets/emergency.jpg';
-
     User curUser = Provider.of<User>(context);
 
     //main content to display in ListView
     List<Widget> mainContent = [
       TechniqueSection(
         headerText: 'Early Session',
-        bgImage: amTechniqueHeadBgImg,
         techniques: [curUser.amTechnique],
         textBgColor: Colors.lightBlue[900],
         textColor: Colors.white,
@@ -55,7 +44,6 @@ class _HomePageState extends State<HomePage> {
       ),
       TechniqueSection(
         headerText: 'Late Session',
-        bgImage: pmTechniqueHeadBgImg,
         techniques: [curUser.pmTechnique],
         textBgColor: Colors.pinkAccent[700],
         textColor: Colors.white,
@@ -66,7 +54,6 @@ class _HomePageState extends State<HomePage> {
       ),
       TechniqueSection(
         headerText: 'Emergency',
-        bgImage: emergencyTechniqueHeadBgImg,
         techniques: [curUser.emergencyTechnique],
         textBgColor: Colors.red[700],
         textColor: Colors.white,
@@ -82,7 +69,6 @@ class _HomePageState extends State<HomePage> {
       mainContent.add(
         TechniqueSection(
           headerText: 'Challenge',
-          bgImage: challengeTechniqueHeadBgImg,
           techniques: [curUser.challengeTechnique],
           textBgColor: Colors.teal[800],
           textColor: Colors.white,
@@ -96,7 +82,6 @@ class _HomePageState extends State<HomePage> {
       mainContent.add(
         TechniqueSection(
           headerText: 'Custom Session',
-          bgImage: customTechniqueHeadBgImg,
           techniques: curUser.customTechniques,
           textBgColor: Colors.deepOrangeAccent[400],
           textColor: Colors.white,
