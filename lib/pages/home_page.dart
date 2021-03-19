@@ -5,7 +5,7 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
-import 'package:breathing_connection/widgets/icon_page.dart';
+import 'package:breathing_connection/widgets/fancy_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
       }
       );
     }
-    return IconPage(
+    return FancyPage(
       headerColor: Colors.white,
       headerContent: Column(
         mainAxisSize: MainAxisSize.min,

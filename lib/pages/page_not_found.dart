@@ -1,7 +1,7 @@
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/styles.dart';
-import 'package:breathing_connection/widgets/icon_page.dart';
+import 'package:breathing_connection/widgets/fancy_page.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class PageNotFound extends StatelessWidget {
     }
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
-    return IconPage(
+    return FancyPage(
       headerColor: Colors.grey,
       headerPositionTop: screenHeight / 15,
       headerContent: CircleAvatar(

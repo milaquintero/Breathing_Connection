@@ -1,5 +1,6 @@
+import 'package:breathing_connection/models/email_form_model.dart';
 import 'package:breathing_connection/styles.dart';
-import 'package:breathing_connection/widgets/icon_page.dart';
+import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
 class EmailSubscriptionPage extends StatefulWidget {
   final BuildContext rootContext;
@@ -11,13 +12,13 @@ class EmailSubscriptionPage extends StatefulWidget {
 
 class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   final _formKey = GlobalKey<FormState>();
+  final EmailFormModel emailFormModel = EmailFormModel();
   @override
   Widget build(BuildContext context) {
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
-    DateTime birthDate;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: appBarHeight,
         title: Text(
@@ -28,102 +29,90 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
         backgroundColor: brandPrimary,
       ),
       body: Container(
-        color: Colors.grey,
+        color: Colors.blue[50],
+        padding: EdgeInsets.symmetric(horizontal: 36),
         child: Stack(
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Positioned(
-                top: screenHeight / 52,
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue[50],
-                  radius: screenHeight / 12,
-                  child: Icon(
-                    Icons.email,
-                    size: screenHeight / 12,
-                    color: brandPrimary,
+                bottom: -200,
+                right: -240,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(300),
+                  child: Container(
+                    width: 400,
+                    height: 400,
+                    color: Colors.grey,
                   ),
                 )
             ),
             Positioned(
-                bottom: screenHeight / 20,
-                child: Container(
-                  width: screenHeight / 2,
-                  height: screenHeight / 1.7,
-                  padding: EdgeInsets.only(top: 0, bottom: 0, left: 32, right: 32),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.blue[50],
+                bottom: 0,
+                right: -280,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(300),
+                  child: Container(
+                    width: 400,
+                    height: 400,
+                    color: Colors.blue[200].withOpacity(0.4),
                   ),
-                  //form to get full name, email and birth date
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Enter Full Name',
-                                  hintText: 'Full Name',
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please enter your full name';
-                                  }
-                                  return null;
-                                },
-                                autovalidateMode: AutovalidateMode.always,
-                                keyboardType: TextInputType.name,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Enter Email',
-                                  hintText: 'Email',
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty || !RegExp(r'(?:[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])').hasMatch(value)) {
-                                    return 'Please enter a valid email';
-                                  }
-                                  return null;
-                                },
-                                autovalidateMode: AutovalidateMode.always,
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Enter Birth Date',
-                                  hintText: 'Birth Date',
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty || !RegExp(r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$').hasMatch(value)) {
-                                    return 'Invalid date format';
-                                  }
-                                  return null;
-                                },
-                                autovalidateMode: AutovalidateMode.always,
-                                keyboardType: TextInputType.datetime,
-                              ),
-                            )
-                          ],
-                        ),
-                        TextButton(
+                )
+            ),
+            ListView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 12),
+                  child: CircleAvatar(
+                    backgroundColor: brandPrimary,
+                    radius: screenHeight / 12,
+                    child: Icon(
+                      Icons.email,
+                      size: screenHeight / 12,
+                      color: Colors.grey[50],
+                    ),
+                  ),
+                ),
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FancyTextFormField(
+                        fieldLabel: 'Enter Name',
+                        fieldType: 'name',
+                        keyboardType: TextInputType.name,
+                        onSaved: (name){
+                          emailFormModel.name = name;
+                        },
+                      ),
+                      FancyTextFormField(
+                        fieldLabel: 'Enter Email',
+                        fieldType: 'email',
+                        keyboardType: TextInputType.emailAddress,
+                        onSaved: (email){
+                          emailFormModel.email = email;
+                        }
+                      ),
+                      FancyTextFormField(
+                        fieldLabel: 'Enter Birth Date',
+                        fieldType: 'date',
+                        keyboardType: TextInputType.datetime,
+                        onSaved: (birthDate){
+                          emailFormModel.birthDate = birthDate;
+                        }
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 36, bottom: 28),
+                        child: TextButton(
                           onPressed: (){
                             //validate form
                             if(_formKey.currentState.validate()){
-                              //TODO: sent request to add user to email list
+                              //store valid entries into model
+                              _formKey.currentState.save();
+                              //TODO: send request to add user to email list
                             }
                           },
                           child: Padding(
@@ -139,12 +128,13 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                           style: TextButton.styleFrom(
                               backgroundColor: brandPrimary
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-            )
+                ),
+              ],
+            ),
           ],
         ),
       ),

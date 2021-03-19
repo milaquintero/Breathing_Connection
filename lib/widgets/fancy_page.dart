@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-
-import '../styles.dart';
-class IconPage extends StatelessWidget {
+class FancyPage extends StatelessWidget {
   final Widget mainContent;
   final Widget headerContent;
   final double mainContentHeight;
   final double headerPositionTop;
   final Color headerColor;
   final Color mainContentColor;
-  IconPage({this.mainContent, this.headerContent,
+  FancyPage({this.mainContent, this.headerContent,
   this.headerPositionTop, this.mainContentHeight,
   this.headerColor, this.mainContentColor});
   @override
