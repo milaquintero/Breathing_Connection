@@ -4,7 +4,8 @@ class SettingCard extends StatefulWidget {
   final String settingName;
   final dynamic settingValue;
   final Function callbackFn;
-  SettingCard({this.settingName, this.settingValue, this.callbackFn});
+  final bool isLast;
+  SettingCard({this.settingName, this.settingValue, this.callbackFn, this.isLast});
   @override
   _SettingCardState createState() => _SettingCardState();
 }
@@ -23,22 +24,32 @@ class _SettingCardState extends State<SettingCard> {
     //if setting type is boolean
     if(type.toString() == "bool"){
       settingDisplay = [
-        Card(
-          margin: EdgeInsets.zero,
-          child: ListTile(
-              contentPadding: cardPadding,
-              leading: Icon(
-                  Icons.multitrack_audio_rounded,
-                  size: 32,),
-              title: Text(
-                widget.settingName,
-                style: settingTextStyle,
+        Container(
+          decoration: BoxDecoration(
+            border: widget.isLast ? Border() : Border(
+                bottom: BorderSide(
+                    color: Colors.grey[300],
+                    width: widget.isLast ? 0 : 1
+                )
+            )
+          ),
+          child: Card(
+            margin: EdgeInsets.zero,
+            child: ListTile(
+                contentPadding: cardPadding,
+                leading: Icon(
+                    Icons.multitrack_audio_rounded,
+                    size: 32,),
+                title: Text(
+                  widget.settingName,
+                  style: settingTextStyle,
+                ),
+                trailing: Switch(
+                  value: widget.settingValue,
+                  onChanged: (newVal){
+                    widget.callbackFn(newVal);
+                },
               ),
-              trailing: Switch(
-                value: widget.settingValue,
-                onChanged: (newVal){
-                  widget.callbackFn(newVal);
-              },
             ),
           ),
         )

@@ -12,11 +12,7 @@ class SettingSection extends StatefulWidget {
 class _SettingSectionState extends State<SettingSection> {
   @override
   Widget build(BuildContext context) {
-    TextStyle headerTextStyle = TextStyle(
-        fontSize: 22,
-        color: Colors.blueGrey[800]
-    );
-    EdgeInsets cardPadding = EdgeInsets.all(20);
+    //format setting cards
     List<Widget> settingCards = widget.settingsMap.map((setting){
       String name = setting.key;
       //remove ID from displayed name if present
@@ -33,21 +29,46 @@ class _SettingSectionState extends State<SettingSection> {
         callbackFn: (newVal){
           widget.rootCallback(setting.key, newVal);
         },
+        isLast: (widget.settingsMap.last.toString() == setting.toString())
       );
     }).toList();
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Card(
-          margin: EdgeInsets.zero,
-          child: ListTile(
-            contentPadding: cardPadding,
-            tileColor: Colors.blue[50],
-            title: Center(
-              child: Text(
-                widget.headerTitle,
-                style: headerTextStyle,
-              ),
+        ClipRect(
+          child: Container(
+            color: Colors.teal[600],
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                    left: -80,
+                    top: -100,
+                    child: Container(
+                      height: 400,
+                      width: 400,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(300),
+                        color: Colors.blueGrey[400],
+                      ),
+                    )
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: screenHeight / 36),
+                  child: Center(
+                    child: Text(
+                      widget.headerTitle,
+                      style: TextStyle(
+                          fontSize: screenHeight / 24,
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
