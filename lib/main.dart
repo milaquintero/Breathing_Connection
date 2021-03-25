@@ -1,5 +1,6 @@
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/pages/create_custom_technique_page.dart';
 import 'package:breathing_connection/pages/email_subscription_page.dart';
 import 'package:breathing_connection/pages/page_not_found.dart';
 import 'package:breathing_connection/pages/root_page.dart';
@@ -36,7 +37,8 @@ class BreathingConnection extends StatelessWidget {
         routes: {
           '/': (context)=>LoadingPage(),
           '/root': (context)=>RootPage(),
-          '/email-subscription': (context)=>EmailSubscriptionPage()
+          '/email-subscription': (context)=>EmailSubscriptionPage(),
+          '/create-custom-technique': (context)=>CreateCustomTechniquePage()
         },
       )
     );

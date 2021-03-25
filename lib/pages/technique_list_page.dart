@@ -6,7 +6,6 @@ import 'package:breathing_connection/styles.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/nav_link.dart';
@@ -87,14 +86,14 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
           },
         ),
       ),
-      floatingActionButton: Container(
+      floatingActionButton: curUser.hasFullAccess ? Container(
         width: 70,
         height: 70,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: (){
               //send to create custom technique page
-              Navigator.pushNamed(context, 'create-custom-technique');
+              Navigator.pushNamed(context, '/create-custom-technique');
             },
             child: Icon(
               Icons.add_to_photos,
@@ -105,7 +104,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
             tooltip: "Create a Custom Technique",
           ),
         ),
-      ),
+      ) : Container(),
     );
   }
 }

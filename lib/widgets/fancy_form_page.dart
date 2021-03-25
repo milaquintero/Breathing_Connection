@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../styles.dart';
-import 'fancy_text_form_field.dart';
 
 class FancyFormPage extends StatefulWidget {
+  final String pageTitle;
   final Form form;
   final Color headerColor;
   final Color headerIconColor;
   final IconData headerIcon;
-  FancyFormPage({this.form, this.headerIcon, this.headerColor, this.headerIconColor});
+  FancyFormPage({this.form, this.headerIcon, this.headerColor, this.headerIconColor,
+  this.pageTitle});
   @override
   _FancyFormPageState createState() => _FancyFormPageState();
 }
@@ -17,13 +18,12 @@ class _FancyFormPageState extends State<FancyFormPage> {
   @override
   Widget build(BuildContext context) {
     //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: appBarHeight,
         title: Text(
-          'Email Subscription',
+          widget.pageTitle,
           style: appBarTextStyle,
         ),
         centerTitle: true,

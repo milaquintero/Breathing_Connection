@@ -4,9 +4,6 @@ import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
 class EmailSubscriptionPage extends StatefulWidget {
-  final BuildContext rootContext;
-  EmailSubscriptionPage({this.rootContext});
-
   @override
   _EmailSubscriptionPageState createState() => _EmailSubscriptionPageState();
 }
@@ -16,9 +13,8 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   final EmailFormModel emailFormModel = EmailFormModel();
   @override
   Widget build(BuildContext context) {
-    //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     return FancyFormPage(
+      pageTitle: 'Email Subscription',
       headerIcon: Icons.email,
       headerColor: brandPrimary,
       headerIconColor: Colors.grey[50],
@@ -31,7 +27,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
           children: [
             FancyTextFormField(
               fieldLabel: 'Enter Name',
-              fieldType: 'name',
+              fieldType: 'text',
               keyboardType: TextInputType.name,
               onSaved: (name){
                 emailFormModel.name = name;
