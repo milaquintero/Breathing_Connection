@@ -40,6 +40,6 @@ class CustomTechniqueFormModel{
   }
   @override
   String toString() {
-    return 'Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}';
+    return 'Title: ${this.title}, Description: ${this.description}, Asset Image: ${this.assetImage}, Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}';
   }
 }

@@ -105,6 +105,13 @@
         "pageTitle": "Pro License",
         "pageRoute": "/pro"
       }
+    ],
+    "images": [
+      "assets/day.jpg",
+      "assets/night.jpg",
+      "assets/custom.jpg",
+      "assets/emergency.jpg",
+      "assets/challenge.jpg"
     ]
   },
   "techniques": [

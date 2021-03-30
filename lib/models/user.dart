@@ -47,6 +47,17 @@ class User extends ChangeNotifier{
     userSettings = newSettings;
     notifyListeners();
   }
+  handleCustomTechnique(String op, Technique selectedTechnique){
+    if(op == 'add'){
+      customTechniques.add(selectedTechnique);
+    }
+    else if(op == 'remove'){
+      customTechniques.removeWhere((technique){
+        return technique.techniqueID == selectedTechnique.techniqueID;
+      });
+    }
+    notifyListeners();
+  }
   @override
   String toString() {
     return 'UserID: $userId, Username: $username';

@@ -8,8 +8,10 @@ class FancyFormPage extends StatefulWidget {
   final Color headerColor;
   final Color headerIconColor;
   final IconData headerIcon;
+  final Color appBarColor;
+  final Color bgColor;
   FancyFormPage({this.form, this.headerIcon, this.headerColor, this.headerIconColor,
-  this.pageTitle});
+  this.pageTitle, this.appBarColor, this.bgColor});
   @override
   _FancyFormPageState createState() => _FancyFormPageState();
 }
@@ -17,6 +19,8 @@ class FancyFormPage extends StatefulWidget {
 class _FancyFormPageState extends State<FancyFormPage> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    print(screenHeight);
     //screen height
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -27,11 +31,11 @@ class _FancyFormPageState extends State<FancyFormPage> {
           style: appBarTextStyle,
         ),
         centerTitle: true,
-        backgroundColor: brandPrimary,
+        backgroundColor: widget.appBarColor ?? brandPrimary,
       ),
       body: Container(
-        color: Colors.blue[50],
-        padding: EdgeInsets.symmetric(horizontal: 36),
+        color: widget.bgColor ?? Colors.blue[50],
+        padding: EdgeInsets.symmetric(horizontal: 32),
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
@@ -56,7 +60,7 @@ class _FancyFormPageState extends State<FancyFormPage> {
                   child: Container(
                     width: 350,
                     height: 350,
-                    color: Colors.blue[50],
+                    color: widget.bgColor ?? Colors.blue[50],
                   ),
                 )
             ),
@@ -88,13 +92,13 @@ class _FancyFormPageState extends State<FancyFormPage> {
               children: [
                 //icon header
                 Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 12),
+                  padding: EdgeInsets.only(top: 36, bottom: 16),
                   child: CircleAvatar(
                     backgroundColor: widget.headerColor,
-                    radius: 49.34,
+                    radius: screenHeight / 10.25,
                     child: Icon(
                       widget.headerIcon,
-                      size: 49.34,
+                      size: screenHeight / 10.25,
                       color: widget.headerIconColor,
                     ),
                   ),

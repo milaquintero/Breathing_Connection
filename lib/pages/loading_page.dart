@@ -1,5 +1,6 @@
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/services/main_data_service.dart';
@@ -41,7 +42,10 @@ class _LoadingPageState extends State<LoadingPage> {
     //update main data in shareable resource
     Provider.of<MainData>(context, listen: false).setMainData(mainData);
     //start bottom nav in home page
-    Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
+    NavLink homePageLink = mainData.pages.firstWhere((link){
+      return link.pageRoute == '/home';
+    });
+    Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(homePageLink.pageIndex);
   }
 
   Future <void> getRequiredResources() async{
