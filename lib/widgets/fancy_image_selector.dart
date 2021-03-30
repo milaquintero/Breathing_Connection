@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 class FancyImageSelector extends StatefulWidget {
   final List<String> images;
   final Function onChange;
-  FancyImageSelector({this.images, this.onChange});
+  final Color btnColorSelected;
+  final Color btnColorUnselected;
+  final Color btnTextColorSelected;
+  final Color btnTextColorUnselected;
+  FancyImageSelector({this.images, this.onChange,
+    this.btnColorSelected, this.btnColorUnselected,
+    this.btnTextColorSelected, this.btnTextColorUnselected});
 
   @override
   _FancyImageSelectorState createState() => _FancyImageSelectorState();
@@ -51,7 +57,7 @@ class _FancyImageSelectorState extends State<FancyImageSelector> {
                 child: Text(
                     'Select',
                     style: TextStyle(
-                      color: selectedImage == image ? Colors.white : Colors.grey[50],
+                      color: selectedImage == image ? widget.btnTextColorSelected : widget.btnTextColorUnselected,
                       fontSize: 24
                     ),
                 ),
@@ -64,7 +70,7 @@ class _FancyImageSelectorState extends State<FancyImageSelector> {
                   });
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: selectedImage == image ? Colors.deepOrange : brandPrimary,
+                  backgroundColor: selectedImage == image ? widget.btnColorSelected : widget.btnColorUnselected,
                   shadowColor: Colors.black,
                   shape: ContinuousRectangleBorder(),
                   elevation: 12

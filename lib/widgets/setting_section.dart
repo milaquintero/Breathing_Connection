@@ -39,7 +39,7 @@ class _SettingSectionState extends State<SettingSection> {
       children: [
         ClipRect(
           child: Container(
-            color: Colors.teal[600],
+            color: Colors.cyan[800],
             child: Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,

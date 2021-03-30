@@ -44,7 +44,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
       headerIcon: Icons.web_rounded,
       headerColor: Colors.grey[850],
       headerIconColor: Colors.grey[200],
-      bgColor: Colors.teal[50],
+      bgColor: Colors.cyan[50],
       form: Form(
         key: _formKey,
         child: Column(
@@ -135,6 +135,10 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
               margin: EdgeInsets.only(top: 20),
               child: FancyImageSelector(
                   images: mainData.images,
+                  btnColorSelected: Colors.cyan[800],
+                  btnColorUnselected: brandPrimary,
+                  btnTextColorSelected: Colors.grey[50],
+                  btnTextColorUnselected: Colors.grey[50],
                   onChange: (assetImage){
                     customTechniqueFormModel.assetImage = assetImage;
                   }
@@ -174,7 +178,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   ),
                 ),
                 style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepOrange
+                    backgroundColor: Colors.cyan[700]
                 ),
               ),
             )
