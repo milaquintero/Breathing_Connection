@@ -18,6 +18,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       headerIcon: Icons.email,
       headerColor: brandPrimary,
       headerIconColor: Colors.grey[50],
+      bgColor: Colors.teal[50],
       form: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
