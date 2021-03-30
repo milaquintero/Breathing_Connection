@@ -5,6 +5,7 @@ import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_image_selector.dart';
 import 'package:breathing_connection/widgets/fancy_instructional_text.dart';
@@ -23,14 +24,34 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   final _formKey = GlobalKey<FormState>();
   final CustomTechniqueFormModel customTechniqueFormModel = CustomTechniqueFormModel();
 
-  Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink) async{
+  Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight) async{
     //add technique in service first which returns it with techniqueID
     Technique updatedNewTechnique = await UserService.handleCustomTechnique('add', newTechnique);
     //add technique to user
     Provider.of<User>(context, listen: false).handleCustomTechnique('add', updatedNewTechnique);
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
-    Navigator.of(context).pushReplacementNamed('/root');
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context){
+          return DialogAlert(
+            dialogHeight: screenHeight / 1.98,
+            titlePadding: EdgeInsets.only(top: 12),
+            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+            headerIcon: Icons.fact_check,
+            headerBgColor: brandPrimary,
+            buttonText: 'Back to Home',
+            buttonColor: brandPrimary,
+            titleText: 'Success',
+            subtitleText: 'Click the Back to Home button to view your Breathing Technique under the Custom Techniques section.',
+            cbFunction: (){
+              //redirect to home page
+              Navigator.of(context).pushReplacementNamed('/root');
+            },
+          );
+        }
+    );
   }
 
   @override
@@ -39,12 +60,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     NavLink homePageLink = mainData.pages.firstWhere((link){
       return link.pageRoute == '/home';
     });
+    double screenHeight = MediaQuery.of(context).size.height;
     return FancyFormPage(
       pageTitle: 'Custom Technique',
-      headerIcon: Icons.web_rounded,
-      headerColor: Colors.grey[850],
-      headerIconColor: Colors.grey[200],
-      bgColor: Colors.cyan[50],
+      headerIcon: Icons.add_circle,
+      headerColor: brandPrimary,
+      headerIconColor: Colors.grey[50],
+      bgColor: Colors.teal[50],
       form: Form(
         key: _formKey,
         child: Column(
@@ -149,7 +171,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
               child: TextButton(
                 onPressed: (){
                   //validate form
-                  if(_formKey.currentState.validate()){
+                  if(_formKey.currentState.validate() && customTechniqueFormModel.assetImage != null){
                     //store valid entries into model
                     _formKey.currentState.save();
                     //custom techniques are always paid version only
@@ -164,7 +186,29 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       isPaidVersionOnly: true
                     );
                     //add new technique to user in backend and reflect in app
-                    addCustomTechnique(newTechnique, homePageLink);
+                    addCustomTechnique(newTechnique, homePageLink, screenHeight);
+                  }
+                  //show alert if asset image wasn't selected
+                  else if(customTechniqueFormModel.assetImage == null){
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context){
+                          return DialogAlert(
+                            dialogHeight: screenHeight / 2.53,
+                            titlePadding: EdgeInsets.only(top: 12),
+                            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                            headerIcon: Icons.cancel,
+                            headerBgColor: Colors.red,
+                            buttonText: 'Back to Form',
+                            buttonColor: brandPrimary,
+                            titleText: 'Invalid Form',
+                            titleTextColor: Colors.red[600],
+                            subtitleText: 'Please select a Background Image.',
+                            cbFunction: (){},
+                          );
+                        }
+                    );
                   }
                 },
                 child: Padding(

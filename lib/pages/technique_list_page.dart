@@ -87,8 +87,8 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
         ),
       ),
       floatingActionButton: curUser.hasFullAccess ? Container(
-        width: 76,
-        height: 76,
+        width: 72,
+        height: 72,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: (){
@@ -96,8 +96,8 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
               Navigator.pushNamed(context, '/create-custom-technique');
             },
             child: Icon(
-              Icons.web_rounded,
-              size: 32,
+              Icons.add_circle,
+              size: 36,
             ),
             backgroundColor: Colors.cyan[800],
             elevation: 6,

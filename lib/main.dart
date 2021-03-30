@@ -7,8 +7,6 @@ import 'package:breathing_connection/pages/root_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/pages/loading_page.dart';
-
-import 'models/nav_link.dart';
 import 'models/technique.dart';
 import 'models/user.dart';
 

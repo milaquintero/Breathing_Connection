@@ -20,7 +20,6 @@ class _FancyFormPageState extends State<FancyFormPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    print(screenHeight);
     //screen height
     return Scaffold(
       resizeToAvoidBottomInset: true,

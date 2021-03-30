@@ -1,22 +1,21 @@
+import 'package:breathing_connection/styles.dart';
 import 'package:flutter/material.dart';
-import '../styles.dart';
 
-class DialogPrompt extends StatelessWidget {
+class DialogAlert extends StatelessWidget {
   final Function cbFunction;
-  final String approveButtonText;
-  final String denyButtonText;
+  final String buttonText;
   final String titleText;
   final String subtitleText;
   final IconData headerIcon;
-  final Color approveButtonColor;
-  final Color denyButtonColor;
+  final Color buttonColor;
   final Color headerBgColor;
+  final Color titleTextColor;
   final double dialogHeight;
   final EdgeInsets titlePadding;
   final EdgeInsets subtitlePadding;
-  DialogPrompt({this.cbFunction, this.denyButtonText, this.approveButtonText,
+  DialogAlert({this.buttonText, this.cbFunction,
     this.titleText, this.subtitleText, this.headerIcon,
-    this.approveButtonColor, this.denyButtonColor, this.headerBgColor,
+    this.buttonColor, this.headerBgColor, this.titleTextColor,
     this.dialogHeight, this.titlePadding, this.subtitlePadding});
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class DialogPrompt extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 32,
-                        color: Colors.lightBlue[900]
+                        color: titleTextColor ?? Colors.lightBlue[900]
                     ),
                   ),
                 ),
@@ -63,38 +62,21 @@ class DialogPrompt extends StatelessWidget {
                       onPressed: (){
                         //close dialog
                         Navigator.of(context).pop();
-                        //run call back function
+                        //run callback function
                         cbFunction();
                       },
                       child: Text(
-                        approveButtonText,
+                        buttonText,
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18
+                            fontSize: 24
                         ),
                       ),
                       style: TextButton.styleFrom(
-                          backgroundColor: approveButtonColor,
-                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24)
+                          backgroundColor: buttonColor,
+                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 32)
                       ),
                     ),
-                    TextButton(
-                      onPressed: (){
-                        //close dialog
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        denyButtonText,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                          backgroundColor: denyButtonColor,
-                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24)
-                      ),
-                    )
                   ],
                 )
               ],
