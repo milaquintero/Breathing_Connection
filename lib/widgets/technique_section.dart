@@ -93,11 +93,11 @@ class TechniqueSection extends StatelessWidget {
                                 ]
                               ),
                               child: CircleAvatar(
-                                radius: screenHeight / 15,
+                                radius: screenHeight / 16,
                                 backgroundColor: textBgColor,
                                 child: Icon(
                                   sectionIcon,
-                                  size: screenHeight / 15,
+                                  size: screenHeight / 16,
                                   color: textColor,
                                 ),
                               ),
@@ -128,11 +128,14 @@ class TechniqueSection extends StatelessWidget {
                                 children: [
                                   Column(
                                     children: [
-                                      Text(
-                                        techniques[index].title,
-                                        style: TextStyle(
-                                            fontSize: screenHeight / 26,
-                                            color: textColor
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 4),
+                                        child: Text(
+                                          techniques[index].title,
+                                          style: TextStyle(
+                                              fontSize: screenHeight / 28,
+                                              color: textColor
+                                          ),
                                         ),
                                       ),
                                       Row(
