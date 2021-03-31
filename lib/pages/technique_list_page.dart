@@ -88,7 +88,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                   //get list of asset images for technique change method to determine appropriate image selection
                   List<String> assetImages = Provider.of<MainData>(widget.rootContext, listen: false).images;
                   //change technique for user
-                  Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique, assetImages);
+                  Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique.techniqueID, assetImages);
                 },
             );
           },

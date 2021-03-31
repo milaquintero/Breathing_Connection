@@ -1,5 +1,4 @@
 import 'package:breathing_connection/models/user_settings.dart';
-import 'package:breathing_connection/models/technique.dart';
 import 'package:flutter/cupertino.dart';
 
 class User extends ChangeNotifier{
@@ -8,14 +7,14 @@ class User extends ChangeNotifier{
   bool hasFullAccess;
   bool isSubscribedToEmails;
   UserSettings userSettings;
-  Technique amTechnique;
-  Technique pmTechnique;
-  Technique challengeTechnique;
-  Technique emergencyTechnique;
-  List<Technique> customTechniques;
+  int amTechniqueID;
+  int pmTechniqueID;
+  int challengeTechniqueID;
+  int emergencyTechniqueID;
+  List<int> customTechniqueIDs;
   User({this.userId, this.username, this.userSettings, this.hasFullAccess, this.isSubscribedToEmails,
-    this.amTechnique, this.pmTechnique, this.challengeTechnique, this.emergencyTechnique,
-    this.customTechniques});
+    this.amTechniqueID, this.pmTechniqueID, this.challengeTechniqueID, this.emergencyTechniqueID,
+    this.customTechniqueIDs});
   factory User.fromJson(Map<String, dynamic> json) {
     Iterable jsonCustomTechniques = json['customTechniques'] ?? [];
     return User(
@@ -23,11 +22,11 @@ class User extends ChangeNotifier{
       username: json['username'],
       hasFullAccess: json['hasFullAccess'],
       isSubscribedToEmails: json['isSubscribedToEmails'],
-      amTechnique: Technique.fromJson(json['amTechnique']),
-      pmTechnique: Technique.fromJson(json['pmTechnique']),
-      challengeTechnique: Technique.fromJson(json['challengeTechnique']),
-      emergencyTechnique: Technique.fromJson(json['emergencyTechnique']),
-      customTechniques: jsonCustomTechniques.map((jsonTechnique) => Technique.fromJson(jsonTechnique)).toList(),
+      amTechniqueID: json['amTechniqueID'],
+      pmTechniqueID: json['pmTechniqueID'],
+      challengeTechniqueID: json['challengeTechniqueID'],
+      emergencyTechniqueID: json['emergencyTechniqueID'],
+      customTechniqueIDs: jsonCustomTechniques.map((jsonTechnique) => int.parse(jsonTechnique)).toList(),
       userSettings: UserSettings.fromJson(json['userSettings'])
     );
   }
@@ -36,39 +35,36 @@ class User extends ChangeNotifier{
     username = user.username;
     hasFullAccess = user.hasFullAccess;
     isSubscribedToEmails = user.isSubscribedToEmails;
-    amTechnique = user.amTechnique;
-    pmTechnique = user.pmTechnique;
-    challengeTechnique = user.challengeTechnique;
-    emergencyTechnique = user.emergencyTechnique;
-    customTechniques = user.customTechniques;
+    amTechniqueID = user.amTechniqueID;
+    pmTechniqueID = user.pmTechniqueID;
+    challengeTechniqueID = user.challengeTechniqueID;
+    emergencyTechniqueID = user.emergencyTechniqueID;
+    customTechniqueIDs = user.customTechniqueIDs;
     userSettings = user.userSettings;
   }
   updateSettings(UserSettings newSettings){
     userSettings = newSettings;
     notifyListeners();
   }
-  handleChangeTechnique(String op, Technique selectedTechnique, List<String> assetImages){
+  handleChangeTechnique(String op, int selectedTechniqueID, List<String> assetImages){
     if(op == 'Morning'){
-      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('day'));
-      amTechnique = selectedTechnique;
+      amTechniqueID = selectedTechniqueID;
     }
     else if(op == 'Evening'){
-      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('night'));
-      pmTechnique = selectedTechnique;
+      pmTechniqueID = selectedTechniqueID;
     }
     else if(op == 'Emergency'){
-      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('emergency'));
-      emergencyTechnique = selectedTechnique;
+      emergencyTechniqueID = selectedTechniqueID;
     }
     notifyListeners();
   }
-  handleCustomTechnique(String op, Technique selectedTechnique){
+  handleCustomTechnique(String op, int selectedTechniqueID){
     if(op == 'add'){
-      customTechniques.add(selectedTechnique);
+      customTechniqueIDs.add(selectedTechniqueID);
     }
     else if(op == 'remove'){
-      customTechniques.removeWhere((technique){
-        return technique.techniqueID == selectedTechnique.techniqueID;
+      customTechniqueIDs.removeWhere((techniqueID){
+        return techniqueID == selectedTechniqueID;
       });
     }
     notifyListeners();

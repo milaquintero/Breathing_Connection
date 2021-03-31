@@ -27,8 +27,10 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight) async{
     //add technique in service first which returns it with techniqueID
     Technique updatedNewTechnique = await UserService.handleCustomTechnique('add', newTechnique);
+    //TODO: add to techniques list
     //add technique to user
-    Provider.of<User>(context, listen: false).handleCustomTechnique('add', updatedNewTechnique);
+    //TODO: pass actual new technique id
+    Provider.of<User>(context, listen: false).handleCustomTechnique('add', 11);
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
     showDialog(

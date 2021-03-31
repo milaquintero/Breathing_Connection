@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_page.dart';
@@ -6,8 +7,26 @@ import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:breathing_connection/models/main_data.dart';
 
 import '../styles.dart';
+
+List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableTechniques, String op, List<String> availableImages){
+  List<Technique> techniqueMatches = [];
+  for(int techniqueID in techniqueIDs){
+    Technique techniqueMatch = availableTechniques.firstWhere((technique) => technique.techniqueID == techniqueID);
+    //only get default image if technique isn't custom
+    if(op != 'custom'){
+      techniqueMatch.assetImage = getAssetImage(op, availableImages);
+    }
+    techniqueMatches.add(techniqueMatch);
+  }
+  return techniqueMatches;
+}
+
+String getAssetImage(String patternToMatch, List<String> availableImages){
+  return availableImages.firstWhere((imageUrl)=>imageUrl.contains(patternToMatch));
+}
 
 class HomePage extends StatefulWidget {
   final BuildContext rootContext;
@@ -28,13 +47,14 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    User curUser = Provider.of<User>(context);
-
+    User curUser = Provider.of<User>(widget.rootContext);
+    List<Technique> availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
+    MainData mainData = Provider.of<MainData>(widget.rootContext);
     //main content to display in ListView
     List<Widget> mainContent = [
       TechniqueSection(
         headerText: 'Early Session',
-        techniques: [curUser.amTechnique],
+        techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
         textBgColor: Colors.lightBlue[900],
         textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
@@ -44,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       ),
       TechniqueSection(
         headerText: 'Late Session',
-        techniques: [curUser.pmTechnique],
+        techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
         textBgColor: Colors.pinkAccent[700],
         textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
@@ -54,7 +74,7 @@ class _HomePageState extends State<HomePage> {
       ),
       TechniqueSection(
         headerText: 'Emergency',
-        techniques: [curUser.emergencyTechnique],
+        techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
         textBgColor: Colors.red[700],
         textColor: Colors.white,
         startIcon: Icons.add_circle,
@@ -69,7 +89,7 @@ class _HomePageState extends State<HomePage> {
       mainContent.add(
         TechniqueSection(
           headerText: 'Challenge',
-          techniques: [curUser.challengeTechnique],
+          techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
           textBgColor: Colors.teal[800],
           textColor: Colors.white,
           startIcon: Icons.play_circle_fill,
@@ -78,19 +98,21 @@ class _HomePageState extends State<HomePage> {
           sectionIcon: Icons.directions_run,
         )
       );
-      //add formatted custom techniques
-      mainContent.add(
-        TechniqueSection(
-          headerText: 'Custom Session',
-          techniques: curUser.customTechniques,
-          textBgColor: Colors.deepOrangeAccent[400],
-          textColor: Colors.white,
-          startIcon: Icons.play_circle_fill,
-          headerColor: Colors.deepOrangeAccent[400],
-          headerTextColor: Colors.white,
-          sectionIcon: Icons.dashboard_customize,
-        )
-      );
+      if(curUser.customTechniqueIDs.isNotEmpty){
+        //add formatted custom techniques
+        mainContent.add(
+            TechniqueSection(
+              headerText: 'Custom Session',
+              techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
+              textBgColor: Colors.deepOrangeAccent[400],
+              textColor: Colors.white,
+              startIcon: Icons.play_circle_fill,
+              headerColor: Colors.deepOrangeAccent[400],
+              headerTextColor: Colors.white,
+              sectionIcon: Icons.dashboard_customize,
+            )
+        );
+      }
     }
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
