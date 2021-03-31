@@ -47,6 +47,21 @@ class User extends ChangeNotifier{
     userSettings = newSettings;
     notifyListeners();
   }
+  handleChangeTechnique(String op, Technique selectedTechnique, List<String> assetImages){
+    if(op == 'Morning'){
+      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('day'));
+      amTechnique = selectedTechnique;
+    }
+    else if(op == 'Evening'){
+      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('night'));
+      pmTechnique = selectedTechnique;
+    }
+    else if(op == 'Emergency'){
+      selectedTechnique.assetImage = assetImages.firstWhere((image) => image.contains('emergency'));
+      emergencyTechnique = selectedTechnique;
+    }
+    notifyListeners();
+  }
   handleCustomTechnique(String op, Technique selectedTechnique){
     if(op == 'add'){
       customTechniques.add(selectedTechnique);

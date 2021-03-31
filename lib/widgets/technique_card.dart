@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import '../styles.dart';
 class TechniqueCard extends StatelessWidget {
   final Technique technique;
-  TechniqueCard({this.technique});
+  final Function(String, Technique) changeTechnique;
+  TechniqueCard({this.technique, this.changeTechnique});
   @override
   Widget build(BuildContext context) {
     User curUser = Provider.of<User>(context);
@@ -61,12 +62,25 @@ class TechniqueCard extends StatelessWidget {
               )
             ],
           ),
-          trailing: shouldBeEnabled ? IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              size: 32,
+          trailing: shouldBeEnabled ? PopupMenuButton(
+            child: IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                size: 32,
+              ),
+              tooltip: technique.title + ' Technique Options',
             ),
-            tooltip: technique.title + ' Technique Options',
+            itemBuilder: (context) => <PopupMenuItem<String>>[
+              PopupMenuItem<String>(
+                  child: Text('Set as Morning Technique'), value: 'Morning'),
+              PopupMenuItem<String>(
+                  child: Text('Set as Evening Technique'), value: 'Evening'),
+              PopupMenuItem<String>(
+                  child: Text('Set as Emergency Technique'), value: 'Emergency'),
+            ],
+            onSelected: (op){
+              changeTechnique(op, technique);
+            },
           ) : Container(
             width: 60,
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),

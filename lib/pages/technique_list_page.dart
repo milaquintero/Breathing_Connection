@@ -81,7 +81,15 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
           itemCount: availableTechniques.length,
           itemBuilder: (context, index){
             return TechniqueCard(
-                technique: availableTechniques[index]
+                technique: availableTechniques[index],
+                changeTechnique: (String op, Technique selectedTechnique){
+                  //new technique object needed to avoid original technique obj from being mutated
+                  Technique mutableTechnique = Technique.clone(selectedTechnique);
+                  //get list of asset images for technique change method to determine appropriate image selection
+                  List<String> assetImages = Provider.of<MainData>(widget.rootContext, listen: false).images;
+                  //change technique for user
+                  Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique, assetImages);
+                },
             );
           },
         ),

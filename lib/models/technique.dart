@@ -24,6 +24,19 @@ class Technique{
       assetImage: json['assetImage']
     );
   }
+  factory Technique.clone(Technique immutableTechnique){
+    return Technique(
+        title: immutableTechnique.title,
+        techniqueID: immutableTechnique.techniqueID,
+        description: immutableTechnique.description,
+        isPaidVersionOnly: immutableTechnique.isPaidVersionOnly,
+        firstHoldDuration: immutableTechnique.firstHoldDuration,
+        inhaleDuration: immutableTechnique.inhaleDuration,
+        secondHoldDuration: immutableTechnique.secondHoldDuration,
+        exhaleDuration: immutableTechnique.exhaleDuration,
+        assetImage: immutableTechnique.assetImage
+    );
+  }
   static Map<String, dynamic> toJson(Technique selectedTechnique){
     Map<String, dynamic> techniqueMap;
     techniqueMap['techniqueID'] = selectedTechnique.techniqueID;
