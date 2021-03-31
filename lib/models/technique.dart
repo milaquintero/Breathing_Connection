@@ -1,3 +1,5 @@
+import 'package:breathing_connection/models/inhale_exhale_type.dart';
+
 class Technique{
   int techniqueID;
   String title;
@@ -8,10 +10,17 @@ class Technique{
   int secondHoldDuration;
   bool isPaidVersionOnly;
   String assetImage;
+  int inhaleTypeID;
+  int exhaleTypeID;
+  List<String> tags;
+  List<String> categoryDependencies;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
-    this.exhaleDuration, this.secondHoldDuration, this.assetImage});
+    this.exhaleDuration, this.secondHoldDuration, this.assetImage,
+    this.exhaleTypeID, this.inhaleTypeID, this.tags, this.categoryDependencies});
   factory Technique.fromJson(Map<String, dynamic> json){
+    Iterable jsonTags = json['tags'] ?? [];
+    Iterable jsonCategoryDependencies = json['categoryAvailabilities'] ?? [];
     return Technique(
       techniqueID: json['techniqueID'],
       title: json['title'],
@@ -21,7 +30,11 @@ class Technique{
       firstHoldDuration: json['firstHoldDuration'],
       exhaleDuration: json['exhaleDuration'],
       secondHoldDuration: json['secondHoldDuration'],
-      assetImage: json['assetImage']
+      assetImage: json['assetImage'],
+      inhaleTypeID: json['inhaleTypeID'],
+      exhaleTypeID: json['exhaleTypeID'],
+      tags: jsonTags.map((jsonTag) => jsonTag.toString()).toList(),
+      categoryDependencies: jsonCategoryDependencies.map((jsonCategory) => jsonCategory.toString()).toList()
     );
   }
   factory Technique.clone(Technique immutableTechnique){
@@ -34,7 +47,11 @@ class Technique{
         inhaleDuration: immutableTechnique.inhaleDuration,
         secondHoldDuration: immutableTechnique.secondHoldDuration,
         exhaleDuration: immutableTechnique.exhaleDuration,
-        assetImage: immutableTechnique.assetImage
+        assetImage: immutableTechnique.assetImage,
+        inhaleTypeID: immutableTechnique.inhaleTypeID,
+        exhaleTypeID: immutableTechnique.exhaleTypeID,
+        tags: immutableTechnique.tags,
+        categoryDependencies: immutableTechnique.categoryDependencies
     );
   }
   static Map<String, dynamic> toJson(Technique selectedTechnique){
@@ -47,6 +64,10 @@ class Technique{
     techniqueMap['exhaleDuration'] = selectedTechnique.exhaleDuration;
     techniqueMap['secondHoldDuration'] = selectedTechnique.secondHoldDuration;
     techniqueMap['assetImage'] = selectedTechnique.assetImage;
+    techniqueMap['exhaleType'] = selectedTechnique.exhaleTypeID;
+    techniqueMap['inhaleType'] = selectedTechnique.inhaleTypeID;
+    techniqueMap['tags'] = selectedTechnique.tags;
+    techniqueMap['categoryDependencies'] = selectedTechnique.categoryDependencies;
     return techniqueMap;
   }
 

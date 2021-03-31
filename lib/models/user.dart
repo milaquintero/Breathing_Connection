@@ -17,7 +17,7 @@ class User extends ChangeNotifier{
     this.amTechnique, this.pmTechnique, this.challengeTechnique, this.emergencyTechnique,
     this.customTechniques});
   factory User.fromJson(Map<String, dynamic> json) {
-    Iterable jsonCustomTechniques = json['customTechniques'];
+    Iterable jsonCustomTechniques = json['customTechniques'] ?? [];
     return User(
       userId: json['id'],
       username: json['username'],

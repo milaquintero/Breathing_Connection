@@ -16,6 +16,21 @@ class TechniqueCard extends StatelessWidget {
     Color titleColor = shouldBeEnabled ? Colors.blueGrey[900] : Colors.grey[400];
     Color subtitleColor = shouldBeEnabled ? Colors.grey[600] : Colors.grey[400];
     Color borderColor = shouldBeEnabled ? Colors.grey[300] : Colors.blueGrey[300];
+    //dynamic display for popup menu options based on category dependencies for technique
+    List<PopupMenuItem<String>> techniqueMenuOptions = [];
+    if(technique.categoryDependencies.contains('AM')){
+      techniqueMenuOptions.add(PopupMenuItem<String>(
+          child: Text('Set as Morning Technique'), value: 'Morning'));
+    }
+    if(technique.categoryDependencies.contains('PM')){
+      techniqueMenuOptions.add(PopupMenuItem<String>(
+      child: Text('Set as Evening Technique'), value: 'Evening'));
+    }
+    if(technique.categoryDependencies.contains('Emergency')){
+      techniqueMenuOptions.add(PopupMenuItem<String>(
+          child: Text('Set as Emergency Technique'), value: 'Emergency'));
+    }
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -70,14 +85,7 @@ class TechniqueCard extends StatelessWidget {
               ),
               tooltip: technique.title + ' Technique Options',
             ),
-            itemBuilder: (context) => <PopupMenuItem<String>>[
-              PopupMenuItem<String>(
-                  child: Text('Set as Morning Technique'), value: 'Morning'),
-              PopupMenuItem<String>(
-                  child: Text('Set as Evening Technique'), value: 'Evening'),
-              PopupMenuItem<String>(
-                  child: Text('Set as Emergency Technique'), value: 'Emergency'),
-            ],
+            itemBuilder: (context) => techniqueMenuOptions,
             onSelected: (op){
               changeTechnique(op, technique);
             },
