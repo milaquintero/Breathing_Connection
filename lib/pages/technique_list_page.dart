@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:breathing_connection/main.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/technique.dart';
@@ -30,6 +31,23 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     List<Technique> availableTechniques = Provider.of<List<Technique>>(context);
     //current user data
     User curUser = Provider.of<User>(context);
+    //screen height
+    double screenHeight = MediaQuery.of(context).size.height;
+    //main content for list view (always show technique list)
+    List<Widget> mainContent = [];
+    availableTechniques.forEach((technique){
+      mainContent.add(TechniqueCard(
+        technique: technique,
+        changeTechnique: (String op, Technique selectedTechnique){
+          //new technique object needed to avoid original technique obj from being mutated
+          Technique mutableTechnique = Technique.clone(selectedTechnique);
+          //get list of asset images for technique change method to determine appropriate image selection
+          List<String> assetImages = Provider.of<MainData>(widget.rootContext, listen: false).images;
+          //change technique for user
+          Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique.techniqueID, assetImages);
+        },
+      ));
+    });
     //handle showing purchase pro license dialog if user doesn't have full version of app
     if(!curUser.hasFullAccess){
       //page links from main data provider
@@ -64,6 +82,57 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
         }
       );
     }
+    //user has full access add custom technique button
+    else{
+      mainContent.insert(0, Card(
+        margin: EdgeInsets.zero,
+        child: ListTile(
+          contentPadding: EdgeInsets.all(20),
+          onTap: (){
+            //top card should take user to custom technique form
+            Navigator.of(context).pushNamed('/create-custom-technique');
+          },
+          tileColor: Colors.cyan[800],
+          title: Stack(
+            alignment: Alignment.topCenter,
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                  left: -80,
+                  top: -100,
+                  child: Container(
+                    height: 400,
+                    width: 400,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(300),
+                      color: Colors.blueGrey[400],
+                    ),
+                  )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Add Technique',
+                    style: TextStyle(
+                      fontSize: screenHeight / 23,
+                      color: Colors.white
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Icon(
+                    Icons.add_circle,
+                    size: screenHeight / 19,
+                    color: Colors.white,
+                  )
+                ],
+              )
+            ]
+          ),
+        ),
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: brandPrimary,
@@ -77,42 +146,10 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
       ),
       body: Container(
         color: wellSectionBg,
-        child: ListView.builder(
-          itemCount: availableTechniques.length,
-          itemBuilder: (context, index){
-            return TechniqueCard(
-                technique: availableTechniques[index],
-                changeTechnique: (String op, Technique selectedTechnique){
-                  //new technique object needed to avoid original technique obj from being mutated
-                  Technique mutableTechnique = Technique.clone(selectedTechnique);
-                  //get list of asset images for technique change method to determine appropriate image selection
-                  List<String> assetImages = Provider.of<MainData>(widget.rootContext, listen: false).images;
-                  //change technique for user
-                  Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique.techniqueID, assetImages);
-                },
-            );
-          },
+        child: ListView(
+          children: mainContent,
         ),
       ),
-      floatingActionButton: curUser.hasFullAccess ? Container(
-        width: 72,
-        height: 72,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: (){
-              //send to create custom technique page
-              Navigator.pushNamed(context, '/create-custom-technique');
-            },
-            child: Icon(
-              Icons.add_circle,
-              size: 36,
-            ),
-            backgroundColor: Colors.cyan[800],
-            elevation: 6,
-            tooltip: "Create a Custom Technique",
-          ),
-        ),
-      ) : Container(),
     );
   }
 }
