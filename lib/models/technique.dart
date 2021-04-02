@@ -73,6 +73,6 @@ class Technique{
 
   @override
   String toString() {
-    return 'ID: ${this.techniqueID}, Title: ${this.title}, Description: ${this.description}, Inhale: ${this.inhaleDuration}, First Hold: ${this.firstHoldDuration}, Exhale: ${this.exhaleDuration}, Second Hold: ${this.secondHoldDuration}, Image: ${this.assetImage}';
+    return 'ID: ${this.techniqueID}, Title: ${this.title}, Description: ${this.description}, Inhale: ${this.inhaleDuration}, Inhale Type ID: ${this.inhaleTypeID}, First Hold: ${this.firstHoldDuration}, Exhale: ${this.exhaleDuration}, Exhale Type ID: ${this.exhaleTypeID}, Second Hold: ${this.secondHoldDuration}, Image: ${this.assetImage}';
   }
 }

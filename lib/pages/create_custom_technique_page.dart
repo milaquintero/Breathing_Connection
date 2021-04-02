@@ -69,6 +69,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
       headerColor: brandPrimary,
       headerIconColor: Colors.grey[50],
       bgColor: Colors.teal[50],
+      withIconHeader: true,
       form: Form(
         key: _formKey,
         child: Column(

@@ -4,8 +4,12 @@ class InhaleExhaleType{
   InhaleExhaleType({this.inhaleExhaleTypeID, this.description});
   factory InhaleExhaleType.fromJson(Map<String, dynamic> json){
     return InhaleExhaleType(
-      inhaleExhaleTypeID: json['inhaleExhaleTypeID'],
+      inhaleExhaleTypeID: json['id'],
       description: json['description']
     );
+  }
+  @override
+  String toString() {
+    return 'ID: ${this.inhaleExhaleTypeID}, Description: ${this.description}';
   }
 }

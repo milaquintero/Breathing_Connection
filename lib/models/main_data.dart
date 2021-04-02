@@ -20,5 +20,6 @@ class MainData{
   setMainData(MainData mainData){
     this.pages = mainData.pages;
     this.images = mainData.images;
+    this.inhaleExhaleTypes = mainData.inhaleExhaleTypes;
   }
 }

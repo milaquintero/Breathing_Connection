@@ -7,7 +7,8 @@ import '../styles.dart';
 class TechniqueCard extends StatelessWidget {
   final Technique technique;
   final Function(String, Technique) changeTechnique;
-  TechniqueCard({this.technique, this.changeTechnique});
+  final Function(Technique) viewTechniqueDetails;
+  TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails});
   @override
   Widget build(BuildContext context) {
     User curUser = Provider.of<User>(context);
@@ -45,6 +46,37 @@ class TechniqueCard extends StatelessWidget {
           enabled: shouldBeEnabled,
           contentPadding: EdgeInsets.all(20),
           onTap: (){},
+          leading: shouldBeEnabled ? PopupMenuButton(
+            child: IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                size: 32,
+                color: brandPrimary,
+              ),
+              tooltip: technique.title + ' Technique Options',
+            ),
+            itemBuilder: (context) => techniqueMenuOptions,
+            onSelected: (op){
+              changeTechnique(op, technique);
+            },
+          ) : Container(
+            width: 60,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            decoration: BoxDecoration(
+                color: Colors.blueGrey[300],
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                    color: Colors.blueGrey
+                )
+            ),
+            child: Text(
+              'PRO',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
           tileColor: listTileBg,
           title: Padding(
             padding: EdgeInsets.only(bottom: 8),
@@ -77,35 +109,15 @@ class TechniqueCard extends StatelessWidget {
               )
             ],
           ),
-          trailing: shouldBeEnabled ? PopupMenuButton(
-            child: IconButton(
-              icon: Icon(
-                Icons.more_vert,
-                size: 32,
-              ),
-              tooltip: technique.title + ' Technique Options',
+          trailing: IconButton(
+            icon: Icon(
+              Icons.help,
+              size: 32,
+              color: brandPrimary,
             ),
-            itemBuilder: (context) => techniqueMenuOptions,
-            onSelected: (op){
-              changeTechnique(op, technique);
+            onPressed: (){
+              viewTechniqueDetails(technique);
             },
-          ) : Container(
-            width: 60,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[300],
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(
-                color: Colors.blueGrey
-              )
-            ),
-            child: Text(
-                'PRO',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-            ),
           ),
         ),
       ),

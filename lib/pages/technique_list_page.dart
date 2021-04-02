@@ -3,6 +3,7 @@ import 'package:breathing_connection/main.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/technique.dart';
+import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/styles.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
@@ -33,8 +34,9 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     User curUser = Provider.of<User>(context);
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
-    //main content for list view (always show technique list)
+    //main content for list view
     List<Widget> mainContent = [];
+    //always show technique list in main content (with conditional rendering for PRO techniques)
     availableTechniques.forEach((technique){
       mainContent.add(TechniqueCard(
         technique: technique,
@@ -46,6 +48,12 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
           //change technique for user
           Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique.techniqueID, assetImages);
         },
+        viewTechniqueDetails: (Technique selectedTechnique){
+          //set technique being viewed in handler provider
+          Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+          //send to technique details page
+          Navigator.of(context).pushNamed('/technique-details');
+        }
       ));
     });
     //handle showing purchase pro license dialog if user doesn't have full version of app

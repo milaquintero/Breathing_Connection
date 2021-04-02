@@ -10,10 +10,10 @@ class TechniqueSection extends StatelessWidget {
   final Color headerColor;
   final Color headerTextColor;
   final IconData startIcon;
-  final IconData sectionIcon;
+  final Function(Technique) viewTechniqueDetails;
   TechniqueSection({this.headerText, this.techniques,
-    this.textBgColor, this.textColor, this.startIcon, this.sectionIcon,
-    this.headerColor, this.headerTextColor});
+    this.textBgColor, this.textColor, this.startIcon,
+    this.headerColor, this.headerTextColor, this.viewTechniqueDetails});
   @override
   Widget build(BuildContext context) {
     //screen height
@@ -67,41 +67,18 @@ class TechniqueSection extends StatelessWidget {
                     itemCount: techniques.length,
                     itemBuilder: (context, index){
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: screenHeight / 20),
+                        padding: EdgeInsets.symmetric(horizontal: screenHeight / 18.5),
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(techniques[index].assetImage),
                                 fit: BoxFit.cover,
                             ),
                         ),
-                        height: screenHeight / 2.7,
+                        height: screenHeight / 3,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
-                              padding: EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 2,
-                                    blurRadius: 7,
-                                    offset: Offset(0, 3), // changes position of shadow
-                                  )
-                                ]
-                              ),
-                              child: CircleAvatar(
-                                radius: screenHeight / 16,
-                                backgroundColor: textBgColor,
-                                child: Icon(
-                                  sectionIcon,
-                                  size: screenHeight / 16,
-                                  color: textColor,
-                                ),
-                              ),
-                            ),
                             Container(
                               decoration: BoxDecoration(
                                   color: textBgColor,
@@ -147,7 +124,9 @@ class TechniqueSection extends StatelessWidget {
                                                 color: textColor,
                                                 size: screenHeight / 18,
                                               ),
-                                              onPressed: (){}
+                                              onPressed: (){
+                                                viewTechniqueDetails(techniques[index]);
+                                              }
                                           ),
                                           IconButton(
                                               icon: Icon(

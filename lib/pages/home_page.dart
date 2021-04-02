@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
+import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
@@ -22,6 +23,13 @@ List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableT
     techniqueMatches.add(techniqueMatch);
   }
   return techniqueMatches;
+}
+
+void handleViewTechniqueDetails(Technique selectedTechnique, BuildContext rootContext){
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(rootContext).pushNamed('/technique-details');
 }
 
 String getAssetImage(String patternToMatch, List<String> availableImages){
@@ -53,24 +61,28 @@ class _HomePageState extends State<HomePage> {
     //main content to display in ListView
     List<Widget> mainContent = [
       TechniqueSection(
-        headerText: 'Early Session',
+        headerText: 'Day Session',
         techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
         textBgColor: Colors.lightBlue[900],
         textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
         headerColor: Colors.lightBlue[900],
         headerTextColor: Colors.white,
-        sectionIcon: Icons.wb_sunny,
+        viewTechniqueDetails: (Technique selectedTechnique){
+          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+        },
       ),
       TechniqueSection(
-        headerText: 'Late Session',
+        headerText: 'Night Session',
         techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
         textBgColor: Colors.pinkAccent[700],
         textColor: Colors.white,
         startIcon: Icons.play_circle_fill,
         headerColor: Colors.pinkAccent[700],
         headerTextColor: Colors.white,
-        sectionIcon: Icons.night_shelter,
+        viewTechniqueDetails: (Technique selectedTechnique){
+          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+        },
       ),
       TechniqueSection(
         headerText: 'Emergency',
@@ -80,7 +92,9 @@ class _HomePageState extends State<HomePage> {
         startIcon: Icons.add_circle,
         headerColor: Colors.red[700],
         headerTextColor: Colors.white,
-        sectionIcon: Icons.healing,
+        viewTechniqueDetails: (Technique selectedTechnique){
+          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+        },
       )
     ];
     //check if user has paid version
@@ -95,7 +109,9 @@ class _HomePageState extends State<HomePage> {
           startIcon: Icons.play_circle_fill,
           headerColor: Colors.teal[800],
           headerTextColor: Colors.white,
-          sectionIcon: Icons.directions_run,
+          viewTechniqueDetails: (Technique selectedTechnique){
+            handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+          },
         )
       );
       if(curUser.customTechniqueIDs.isNotEmpty){
@@ -109,7 +125,9 @@ class _HomePageState extends State<HomePage> {
               startIcon: Icons.play_circle_fill,
               headerColor: Colors.deepOrangeAccent[400],
               headerTextColor: Colors.white,
-              sectionIcon: Icons.dashboard_customize,
+              viewTechniqueDetails: (Technique selectedTechnique){
+                handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+              },
             )
         );
       }
