@@ -104,10 +104,10 @@ class _HomePageState extends State<HomePage> {
         TechniqueSection(
           headerText: 'Challenge',
           techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
-          textBgColor: Colors.teal[800],
+          textBgColor: Colors.cyan[800],
           textColor: Colors.white,
           startIcon: Icons.play_circle_fill,
-          headerColor: Colors.teal[800],
+          headerColor: Colors.cyan[800],
           headerTextColor: Colors.white,
           viewTechniqueDetails: (Technique selectedTechnique){
             handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
@@ -144,17 +144,17 @@ class _HomePageState extends State<HomePage> {
             context: context,
             builder: (context){
               return DialogPrompt(
-                dialogHeight: screenHeight / 2.5,
+                dialogHeight: screenHeight / 2.05,
                 titlePadding: EdgeInsets.only(top: 12),
-                subtitlePadding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
+                subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 28, right: 28),
                 headerIcon: Icons.email,
                 headerBgColor: brandPrimary,
-                approveButtonText: 'Sign Up',
+                approveButtonText: 'Subscribe',
                 approveButtonColor: brandPrimary,
-                denyButtonText: 'Not Now',
+                denyButtonText: 'Close',
                 denyButtonColor: Colors.red,
                 titleText: 'Stay In Touch',
-                subtitleText: 'Sing up to our newsletter to get the latest news and updates.',
+                subtitleText: 'Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!',
                 cbFunction: (){
                   //redirect to email subscription page
                   Navigator.pushNamed(context, '/email-subscription');

@@ -49,7 +49,7 @@ class DialogPrompt extends StatelessWidget {
                   padding: subtitlePadding,
                   child: Text(
                     subtitleText,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                         fontSize: 18.5,
                         color: Colors.grey[700]

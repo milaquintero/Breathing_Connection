@@ -70,17 +70,17 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
             context: context,
             builder: (context){
               return DialogPrompt(
-                dialogHeight: screenHeight / 2.13,
+                dialogHeight: screenHeight / 2.25,
                 titlePadding: EdgeInsets.only(top: 12),
-                subtitlePadding: EdgeInsets.only(top: 8, bottom: 20, left: 24, right: 24),
+                subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 22, right: 22),
                 headerIcon: Icons.add_moderator,
                 headerBgColor: brandPrimary,
-                approveButtonText: 'Purchase',
+                approveButtonText: 'Try It Now',
                 approveButtonColor: brandPrimary,
-                denyButtonText: 'Not Now',
+                denyButtonText: 'Close',
                 denyButtonColor: Colors.red,
-                titleText: 'Show Your Love',
-                subtitleText: 'Kindly consider purchasing a Pro License to contribute to our development efforts to help the world relax.',
+                titleText: 'Breathe Easy',
+                subtitleText: 'Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!',
                 cbFunction: (){
                   //redirect to PRO page
                   Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(proLicensePage.pageIndex);

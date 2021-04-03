@@ -11,7 +11,7 @@ class UserService {
       //Response userResponse = await get('$BASE_URL/users/$userID');
       //TEST
       Response userResponse = await Future.delayed(Duration(seconds: 1), (){
-        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":true,"isSubscribedToEmails":true,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":1}}', 200);
+        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":true,"isSubscribedToEmails":false,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":1}}', 200);
       });
       return User.fromJson(jsonDecode(userResponse.body));
     }
