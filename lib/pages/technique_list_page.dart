@@ -30,6 +30,8 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
   Widget build(BuildContext context) {
     //available techniques
     List<Technique> availableTechniques = Provider.of<List<Technique>>(context);
+    //app main data
+    MainData mainData = Provider.of<MainData>(widget.rootContext);
     //current user data
     User curUser = Provider.of<User>(context);
     //screen height
@@ -64,7 +66,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
       NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
       //screen height
       double screenHeight = MediaQuery.of(context).size.height;
-      proDialogTimer = Timer(Duration(seconds: 5), (){
+      proDialogTimer = Timer(Duration(seconds: mainData.popupWaitTime), (){
         showDialog(
             barrierDismissible: false,
             context: context,

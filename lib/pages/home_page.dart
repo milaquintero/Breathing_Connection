@@ -55,8 +55,11 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
+    //current user data
     User curUser = Provider.of<User>(widget.rootContext);
+    //list of available techniques
     List<Technique> availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
+    //app main data
     MainData mainData = Provider.of<MainData>(widget.rootContext);
     //main content to display in ListView
     List<Widget> mainContent = [
@@ -138,7 +141,7 @@ class _HomePageState extends State<HomePage> {
     if(!curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
       //screen height
       double screenHeight = MediaQuery.of(context).size.height;
-      emailSubDialogTimer = Timer(Duration(seconds: 5), (){
+      emailSubDialogTimer = Timer(Duration(seconds: mainData.popupWaitTime), (){
         showDialog(
             barrierDismissible: false,
             context: context,

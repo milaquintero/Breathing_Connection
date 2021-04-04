@@ -67,7 +67,8 @@
         "id": 4,
         "description": "Force Abdomen"
       }
-    ]
+    ],
+    "popupWaitTime": 30
   },
   "techniques": [
     {
