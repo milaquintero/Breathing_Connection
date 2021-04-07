@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../styles.dart';
 
 class DialogPrompt extends StatelessWidget {
   final Function cbFunction;
@@ -8,23 +7,27 @@ class DialogPrompt extends StatelessWidget {
   final String titleText;
   final String subtitleText;
   final IconData headerIcon;
+  final Color bgColor;
   final Color approveButtonColor;
   final Color denyButtonColor;
   final Color headerBgColor;
+  final Color titleColor;
+  final Color subtitleColor;
   final double dialogHeight;
   final EdgeInsets titlePadding;
   final EdgeInsets subtitlePadding;
   DialogPrompt({this.cbFunction, this.denyButtonText, this.approveButtonText,
     this.titleText, this.subtitleText, this.headerIcon,
     this.approveButtonColor, this.denyButtonColor, this.headerBgColor,
-    this.dialogHeight, this.titlePadding, this.subtitlePadding});
+    this.dialogHeight, this.titlePadding, this.subtitlePadding,
+    this.subtitleColor, this.titleColor, this.bgColor});
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
       ),
-      backgroundColor: Colors.grey[50],
+      backgroundColor: bgColor,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
@@ -41,7 +44,7 @@ class DialogPrompt extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 32,
-                        color: Colors.lightBlue[900]
+                        color: titleColor
                     ),
                   ),
                 ),
@@ -52,7 +55,7 @@ class DialogPrompt extends StatelessWidget {
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         fontSize: 18.5,
-                        color: Colors.grey[700]
+                        color: subtitleColor
                     ),
                   ),
                 ),

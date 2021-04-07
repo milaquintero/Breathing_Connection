@@ -1,4 +1,3 @@
-import 'package:breathing_connection/styles.dart';
 import 'package:flutter/material.dart';
 
 class DialogAlert extends StatelessWidget {

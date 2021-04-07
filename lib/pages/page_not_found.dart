@@ -1,117 +1,116 @@
+import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/styles.dart';
-import 'package:breathing_connection/widgets/fancy_page.dart';
+import 'package:breathing_connection/widgets/fancy_scrollable_page.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:provider/provider.dart';
-class PageNotFound extends StatelessWidget {
+class PageNotFound extends StatefulWidget {
   final BuildContext rootContext;
   final bool hasBottomNav;
   PageNotFound({this.rootContext, this.hasBottomNav});
   @override
-  Widget build(BuildContext context) {
-    List<NavLink> navLinks;
-    NavLink homePage;
-    if(hasBottomNav){
+  _PageNotFoundState createState() => _PageNotFoundState();
+}
+
+class _PageNotFoundState extends State<PageNotFound> {
+  List<NavLink> navLinks;
+  NavLink homePage;
+  double screenHeight;
+  AppTheme appTheme;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(widget.hasBottomNav){
       //available nav links from provider
-      navLinks = Provider.of<MainData>(rootContext).pages;
+      navLinks = Provider.of<MainData>(widget.rootContext).pages;
       //find home page in main data page links
       homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     }
     //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
-    return FancyPage(
-      headerColor: Colors.grey,
-      headerPositionTop: screenHeight / 15,
-      headerContent: CircleAvatar(
-        backgroundColor: Colors.red,
-        radius: screenHeight / 10,
-        child: Icon(
-          Icons.cancel,
-          size: screenHeight / 10,
-          color: Colors.grey[50],
+    screenHeight = MediaQuery.of(context).size.height;
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return FancyScrollablePage(
+      pageTitle: 'Page Not Found',
+      appBarColor: appTheme.bgAccentColor,
+      bgColor: appTheme.errorColor,
+      decorationPrimaryColor: appTheme.decorationPrimaryColor,
+      decorationSecondaryColor: appTheme.errorColor,
+      child: Container(
+        height: screenHeight / 1.95,
+        margin: EdgeInsets.only(top: screenHeight / 8, left: 16, right: 16),
+        padding: EdgeInsets.only(top: 16, bottom: 20, left: 20, right: 20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: appTheme.bgAccentColor,
         ),
-      ),
-      mainContentHeight: hasBottomNav ? screenHeight / 1.36 : screenHeight / 1.19,
-      mainContentColor: brandPrimary,
-      mainContent: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: screenHeight / 2.3,
-            height: screenHeight / 2,
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.only(top: 15, bottom: 20, left: 20, right: 20),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.grey[50],
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(
+                'Error',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenHeight / 11,
+                    color: appTheme.textPrimaryColor
+                ),
+              ),
             ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 0),
-                  child: Text(
-                    'Error',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenHeight / 10,
-                        color: Colors.red
-                    ),
-                  ),
+            Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(
+                'Whoops!',
+                style: TextStyle(
+                    fontSize: 28,
+                    fontStyle: FontStyle.italic,
+                    color: appTheme.textPrimaryColor
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 24),
-                  child: Text(
-                    'Whoops!',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[850]
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 28),
-                  child: Text(
-                    'Page not found',
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.grey[600]
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: (){
-                    //return to home page (bottom nav layout)
-                    if(hasBottomNav){
-                      Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(homePage.pageIndex);
-                    }
-                    //return to root (default home)
-                    else{
-                      Provider.of<CurrentPageHandler>(rootContext, listen: false).setPageIndex(0);
-                      Navigator.pushReplacementNamed(rootContext, '/root');
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    child: Text(
-                      'Back to Home',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24
-                      ),
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                      backgroundColor: brandPrimary
-                  ),
-                )
-              ],
+              ),
             ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(top: 12, bottom: 28),
+              child: Text(
+                'Page not found',
+                style: TextStyle(
+                    fontSize: 24,
+                    color: appTheme.textPrimaryColor
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: (){
+                //return to home page (bottom nav layout)
+                if(widget.hasBottomNav){
+                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(homePage.pageIndex);
+                }
+                //return to root (default home)
+                else{
+                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(0);
+                  Navigator.pushReplacementNamed(widget.rootContext, '/root');
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                child: Text(
+                  'Back to Home',
+                  style: TextStyle(
+                      color: appTheme.textPrimaryColor,
+                      fontSize: 24
+                  ),
+                ),
+              ),
+              style: TextButton.styleFrom(
+                  backgroundColor: appTheme.brandPrimaryColor
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
+import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/custom_technique_form_model.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
@@ -13,8 +15,6 @@ import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../styles.dart';
-
 class CreateCustomTechniquePage extends StatefulWidget {
   @override
   _CreateCustomTechniquePageState createState() => _CreateCustomTechniquePageState();
@@ -23,52 +23,36 @@ class CreateCustomTechniquePage extends StatefulWidget {
 class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   final _formKey = GlobalKey<FormState>();
   final CustomTechniqueFormModel customTechniqueFormModel = CustomTechniqueFormModel();
-
-  Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight) async{
-    //add technique in service first which returns it with techniqueID
-    Technique updatedNewTechnique = await UserService.handleCustomTechnique('add', newTechnique);
-    //TODO: add to techniques list
-    //add technique to user
-    //TODO: pass actual new technique id
-    Provider.of<User>(context, listen: false).handleCustomTechnique('add', 11);
-    //redirect to home page
-    Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context){
-          return DialogAlert(
-            dialogHeight: screenHeight / 1.98,
-            titlePadding: EdgeInsets.only(top: 12),
-            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
-            headerIcon: Icons.fact_check,
-            headerBgColor: brandPrimary,
-            buttonText: 'Back to Home',
-            buttonColor: brandPrimary,
-            titleText: 'Success',
-            subtitleText: 'Click the Back to Home button to view your Breathing Technique under the Custom Techniques section.',
-            cbFunction: (){
-              //redirect to home page
-              Navigator.of(context).pushReplacementNamed('/root');
-            },
-          );
-        }
-    );
+  //app main data
+  MainData mainData;
+  //home page link from main data
+  NavLink homePageLink;
+  //screen height
+  double screenHeight;
+  //selected theme data
+  AppTheme appTheme;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    mainData = Provider.of<MainData>(context);
+    homePageLink = mainData.pages.firstWhere((link){
+      return link.pageRoute == '/home';
+    });
+    screenHeight = MediaQuery.of(context).size.height;
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
   }
 
   @override
   Widget build(BuildContext context) {
-    MainData mainData = Provider.of<MainData>(context);
-    NavLink homePageLink = mainData.pages.firstWhere((link){
-      return link.pageRoute == '/home';
-    });
-    double screenHeight = MediaQuery.of(context).size.height;
     return FancyFormPage(
       pageTitle: 'Custom Technique',
       headerIcon: Icons.add_circle,
-      headerColor: brandPrimary,
-      headerIconColor: Colors.grey[50],
-      bgColor: Colors.teal[50],
+      headerColor: appTheme.brandPrimaryColor,
+      headerIconColor: appTheme.textPrimaryColor,
+      bgColor: appTheme.bgSecondaryColor,
+      decorationPrimaryColor: appTheme.decorationPrimaryColor,
+      decorationSecondaryColor: appTheme.decorationSecondaryColor,
       withIconHeader: true,
       form: Form(
         key: _formKey,
@@ -96,12 +80,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             //Breathing Rhythm
             FancyInstructionalText(
               icon: Icons.nature,
-              iconColor: Colors.grey[50],
-              iconBgColor: Colors.grey[850],
-              bgColor: brandPrimary,
+              iconColor: appTheme.textPrimaryColor,
+              iconBgColor: appTheme.brandAccentColor,
+              bgColor: appTheme.brandPrimaryColor,
               title: 'Breathing Rhythm',
               subtitle: 'Enter the Breathing Rhythm for your custom technique.',
-              textColor: Colors.white,
+              textColor: appTheme.textPrimaryColor,
+              bgGradientComparisonColor: appTheme.bgAccentColor,
             ),
             FancyTextFormField(
                 fieldLabel: 'Inhale Duration',
@@ -149,21 +134,23 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             ),
             FancyInstructionalText(
               icon: Icons.image,
-              iconColor: Colors.grey[50],
-              iconBgColor: Colors.grey[850],
-              bgColor: brandPrimary,
+              iconColor: appTheme.textPrimaryColor,
+              iconBgColor: appTheme.brandAccentColor,
+              bgColor: appTheme.brandPrimaryColor,
               title: 'Technique Image',
               subtitle: 'Select a background image.',
-              textColor: Colors.white,
+              textColor: appTheme.textPrimaryColor,
+              bgGradientComparisonColor: appTheme.bgAccentColor,
             ),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: FancyImageSelector(
                   images: mainData.images,
-                  btnColorSelected: Colors.cyan[800],
-                  btnColorUnselected: brandPrimary,
-                  btnTextColorSelected: Colors.grey[50],
-                  btnTextColorUnselected: Colors.grey[50],
+                  btnColorSelected: appTheme.brandSecondaryColor,
+                  btnColorUnselected: appTheme.brandPrimaryColor,
+                  btnTextColorSelected: appTheme.textPrimaryColor,
+                  btnTextColorUnselected: appTheme.textPrimaryColor,
+                  bgGradientComparisonColor: appTheme.bgAccentColor,
                   onChange: (assetImage){
                     customTechniqueFormModel.assetImage = assetImage;
                   }
@@ -189,7 +176,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       isPaidVersionOnly: true
                     );
                     //add new technique to user in backend and reflect in app
-                    addCustomTechnique(newTechnique, homePageLink, screenHeight);
+                    addCustomTechnique(newTechnique, homePageLink, screenHeight, context);
                   }
                   //show alert if asset image wasn't selected
                   else if(customTechniqueFormModel.assetImage == null){
@@ -202,11 +189,11 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                             titlePadding: EdgeInsets.only(top: 12),
                             subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
                             headerIcon: Icons.cancel,
-                            headerBgColor: Colors.red,
+                            headerBgColor: appTheme.errorColor,
                             buttonText: 'Back to Form',
-                            buttonColor: brandPrimary,
+                            buttonColor: appTheme.brandPrimaryColor,
                             titleText: 'Invalid Form',
-                            titleTextColor: Colors.red[600],
+                            titleTextColor: appTheme.errorColor,
                             subtitleText: 'Please select a Background Image.',
                             cbFunction: (){},
                           );
@@ -219,19 +206,51 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   child: Text(
                     'Create Technique',
                     style: TextStyle(
-                        color: Colors.white,
+                        color: appTheme.textPrimaryColor,
                         fontSize: 24
                     ),
                   ),
                 ),
                 style: TextButton.styleFrom(
-                    backgroundColor: Colors.cyan[700]
+                    backgroundColor: appTheme.brandSecondaryColor
                 ),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
+    //add technique in service first which returns it with techniqueID
+    Technique updatedNewTechnique = await UserService.handleCustomTechnique('add', newTechnique);
+    //TODO: add to techniques list
+    //add technique to user
+    //TODO: pass actual new technique id
+    Provider.of<User>(context, listen: false).handleCustomTechnique('add', 11);
+    //redirect to home page
+    Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context){
+          return DialogAlert(
+            dialogHeight: screenHeight / 1.98,
+            titlePadding: EdgeInsets.only(top: 12),
+            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+            headerIcon: Icons.fact_check,
+            headerBgColor: appTheme.brandPrimaryColor,
+            buttonText: 'Back to Home',
+            buttonColor: appTheme.brandPrimaryColor,
+            titleText: 'Success',
+            subtitleText: 'Click the Back to Home button to view your Breathing Technique under the Custom Techniques section.',
+            cbFunction: (){
+              //redirect to home page
+              Navigator.of(context).pushReplacementNamed('/root');
+            },
+          );
+        }
     );
   }
 }

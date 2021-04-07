@@ -1,8 +1,6 @@
 import 'package:breathing_connection/widgets/fancy_scrollable_page.dart';
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
-
 class FancyFormPage extends StatefulWidget {
   final String pageTitle;
   final Form form;
@@ -12,8 +10,11 @@ class FancyFormPage extends StatefulWidget {
   final Color appBarColor;
   final Color bgColor;
   final bool withIconHeader;
+  final Color decorationPrimaryColor;
+  final Color decorationSecondaryColor;
   FancyFormPage({this.form, this.headerIcon, this.headerColor, this.headerIconColor,
-  this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false});
+  this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
+  this.decorationSecondaryColor, this.decorationPrimaryColor});
   @override
   _FancyFormPageState createState() => _FancyFormPageState();
 }
@@ -31,6 +32,8 @@ class _FancyFormPageState extends State<FancyFormPage> {
       appBarColor: widget.appBarColor,
       bgColor: widget.bgColor,
       withIconHeader: widget.withIconHeader,
+      decorationPrimaryColor: widget.decorationPrimaryColor,
+      decorationSecondaryColor: widget.decorationSecondaryColor,
     );
   }
 }

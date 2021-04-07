@@ -1,4 +1,3 @@
-import 'package:breathing_connection/styles.dart';
 import 'package:flutter/material.dart';
 
 class FancyImageSelector extends StatefulWidget {
@@ -8,9 +7,11 @@ class FancyImageSelector extends StatefulWidget {
   final Color btnColorUnselected;
   final Color btnTextColorSelected;
   final Color btnTextColorUnselected;
+  final Color bgGradientComparisonColor;
   FancyImageSelector({this.images, this.onChange,
     this.btnColorSelected, this.btnColorUnselected,
-    this.btnTextColorSelected, this.btnTextColorUnselected});
+    this.btnTextColorSelected, this.btnTextColorUnselected,
+    this.bgGradientComparisonColor});
 
   @override
   _FancyImageSelectorState createState() => _FancyImageSelectorState();
@@ -27,7 +28,11 @@ class _FancyImageSelectorState extends State<FancyImageSelector> {
         width: screenWidth / 1.5,
         decoration: BoxDecoration(
           gradient: RadialGradient(
-            colors: [Colors.blueGrey, Color.lerp(Colors.grey[700], Colors.blueGrey, 0.5), Colors.grey[850]],
+            colors: [
+              widget.bgGradientComparisonColor,
+              Color.lerp(Colors.grey[700], widget.bgGradientComparisonColor, 0.5),
+              Colors.grey[850]
+            ],
             center: Alignment(0.6, -0.3),
             focal: Alignment(0.3, -0.1),
             focalRadius: 3.5,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-class FancyPage extends StatelessWidget {
+class FancySplitPage extends StatelessWidget {
   final Widget mainContent;
   final Widget headerContent;
   final double mainContentHeight;
   final double headerPositionTop;
   final Color headerColor;
   final Color mainContentColor;
-  FancyPage({this.mainContent, this.headerContent,
+  FancySplitPage({this.mainContent, this.headerContent,
   this.headerPositionTop, this.mainContentHeight,
   this.headerColor, this.mainContentColor});
   @override

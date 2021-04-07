@@ -10,8 +10,10 @@ class FancyTextContainer extends StatelessWidget {
   final Color textColor;
   final EdgeInsets margin;
   final TextAlign subtitleAlignment;
+  final Color bgGradientComparisonColor;
   FancyTextContainer({this.iconColor, this.icon, this.bgColor, this.iconBgColor,
-    this.title, this.child, this.textColor, this.margin, this.subtitleAlignment});
+    this.title, this.child, this.textColor, this.margin, this.subtitleAlignment,
+    this.bgGradientComparisonColor});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +23,11 @@ class FancyTextContainer extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(10),
           gradient: RadialGradient(
-            colors: [Colors.blueGrey, Color.lerp(bgColor, Colors.blueGrey, 0.5), bgColor],
+            colors: [
+              bgGradientComparisonColor,
+              Color.lerp(bgColor, bgGradientComparisonColor, 0.5),
+              bgColor
+            ],
             center: Alignment(0.6, -0.3),
             focal: Alignment(0.3, -0.1),
             focalRadius: 3.5,

@@ -1,3 +1,4 @@
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/pages/create_custom_technique_page.dart';
@@ -25,6 +26,7 @@ class BreathingConnection extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => User()),
         ChangeNotifierProvider(create: (context) => CurrentPageHandler()),
         ChangeNotifierProvider(create: (context)=> ViewTechniqueDetailsHandler()),
+        ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
         Provider<List<Technique>>(create: (context) => []),
       ],
       child: MaterialApp(

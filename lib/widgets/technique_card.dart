@@ -3,40 +3,67 @@ import 'package:breathing_connection/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../styles.dart';
-class TechniqueCard extends StatelessWidget {
+class TechniqueCard extends StatefulWidget {
   final Technique technique;
   final Function(String, Technique) changeTechnique;
   final Function(Technique) viewTechniqueDetails;
-  TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails});
+  final Color disabledCardBgColor;
+  final Color disabledCardBgAccentColor;
+  final Color disabledCardTextColor;
+  final Color disabledCardBorderColor;
+  final Color cardBorderColor;
+  final Color cardTitleColor;
+  final Color cardSubtitleColor;
+  final Color cardBgColor;
+  final Color cardActionColor;
+  TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails,
+  this.disabledCardTextColor, this.disabledCardBorderColor, this.disabledCardBgColor,
+  this.disabledCardBgAccentColor, this.cardTitleColor, this.cardSubtitleColor,
+  this.cardBorderColor, this.cardBgColor, this.cardActionColor});
+
   @override
-  Widget build(BuildContext context) {
-    User curUser = Provider.of<User>(context);
-    bool shouldBeEnabled = curUser.hasFullAccess || (!curUser.hasFullAccess && !technique.isPaidVersionOnly);
-    Color listTileBg = shouldBeEnabled ? Colors.white : Colors.blueGrey[400];
-    Color titleColor = shouldBeEnabled ? Colors.blueGrey[900] : Colors.grey[400];
-    Color subtitleColor = shouldBeEnabled ? Colors.grey[600] : Colors.grey[400];
-    Color borderColor = shouldBeEnabled ? Colors.grey[300] : Colors.blueGrey[300];
-    //dynamic display for popup menu options based on category dependencies for technique
-    List<PopupMenuItem<String>> techniqueMenuOptions = [];
-    if(technique.categoryDependencies.contains('AM')){
+  _TechniqueCardState createState() => _TechniqueCardState();
+}
+
+class _TechniqueCardState extends State<TechniqueCard> {
+  User curUser;
+  bool shouldBeEnabled;
+  Color listTileBg;
+  Color titleColor;
+  Color subtitleColor;
+  Color borderColor;
+  //dynamic display for popup menu options based on category dependencies for technique
+  List<PopupMenuItem<String>> techniqueMenuOptions = [];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    curUser = Provider.of<User>(context);
+    shouldBeEnabled = curUser.hasFullAccess || (!curUser.hasFullAccess && !widget.technique.isPaidVersionOnly);
+    listTileBg = shouldBeEnabled ? widget.cardBgColor : widget.disabledCardBgColor;
+    titleColor = shouldBeEnabled ? widget.cardTitleColor : widget.disabledCardTextColor;
+    subtitleColor = shouldBeEnabled ? widget.cardSubtitleColor : widget.disabledCardTextColor;
+    borderColor = shouldBeEnabled ? widget.cardBorderColor : widget.disabledCardBorderColor;
+    if(widget.technique.categoryDependencies.contains('AM')){
       techniqueMenuOptions.add(PopupMenuItem<String>(
           child: Text('Set as Morning Technique'), value: 'Morning'));
     }
-    if(technique.categoryDependencies.contains('PM')){
+    if(widget.technique.categoryDependencies.contains('PM')){
       techniqueMenuOptions.add(PopupMenuItem<String>(
-      child: Text('Set as Evening Technique'), value: 'Evening'));
+          child: Text('Set as Evening Technique'), value: 'Evening'));
     }
-    if(technique.categoryDependencies.contains('Emergency')){
+    if(widget.technique.categoryDependencies.contains('Emergency')){
       techniqueMenuOptions.add(PopupMenuItem<String>(
           child: Text('Set as Emergency Technique'), value: 'Emergency'));
     }
-
+  }
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
             top: BorderSide(
               color: borderColor,
+              width: 1.5
             )
         ),
       ),
@@ -51,19 +78,61 @@ class TechniqueCard extends StatelessWidget {
               icon: Icon(
                 Icons.more_vert,
                 size: 32,
-                color: brandPrimary,
+                color: widget.cardActionColor,
               ),
-              tooltip: technique.title + ' Technique Options',
+              tooltip: widget.technique.title + ' Technique Options',
             ),
             itemBuilder: (context) => techniqueMenuOptions,
             onSelected: (op){
-              changeTechnique(op, technique);
+              widget.changeTechnique(op, widget.technique);
+            },
+          ) : null,
+          tileColor: listTileBg,
+          title: Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text(
+                widget.technique.title,
+                style: TextStyle(
+                    fontSize: 22,
+                    color: titleColor
+                ),
+            ),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.technique.description,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: subtitleColor
+                ),
+              ),
+              Text(
+                'Breathing Rhythm: ${widget.technique.inhaleDuration}-${widget.technique.firstHoldDuration}-${widget.technique.exhaleDuration}-${widget.technique.secondHoldDuration}',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: subtitleColor
+                ),
+              )
+            ],
+          ),
+          trailing: shouldBeEnabled ? IconButton(
+            icon: Icon(
+              Icons.help,
+              size: 32,
+              color: widget.cardActionColor,
+            ),
+            onPressed: (){
+              widget.viewTechniqueDetails(widget.technique);
             },
           ) : Container(
             width: 60,
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             decoration: BoxDecoration(
-                color: Colors.blueGrey[300],
+                color: widget.disabledCardBgAccentColor,
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
                     color: Colors.blueGrey
@@ -76,48 +145,6 @@ class TechniqueCard extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-          ),
-          tileColor: listTileBg,
-          title: Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Text(
-                technique.title,
-                style: TextStyle(
-                    fontSize: 22,
-                    color: titleColor
-                ),
-            ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                technique.description,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: subtitleColor
-                ),
-              ),
-              Text(
-                'Breathing Rhythm: ${technique.inhaleDuration}-${technique.firstHoldDuration}-${technique.exhaleDuration}-${technique.secondHoldDuration}',
-                style: TextStyle(
-                    fontSize: 15,
-                    color: subtitleColor
-                ),
-              )
-            ],
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.help,
-              size: 32,
-              color: brandPrimary,
-            ),
-            onPressed: (){
-              viewTechniqueDetails(technique);
-            },
           ),
         ),
       ),

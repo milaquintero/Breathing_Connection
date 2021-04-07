@@ -1,16 +1,16 @@
 import 'dart:async';
+import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
-import 'package:breathing_connection/widgets/fancy_page.dart';
+import 'package:breathing_connection/widgets/fancy_split_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/main_data.dart';
-
-import '../styles.dart';
 
 List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableTechniques, String op, List<String> availableImages){
   List<Technique> techniqueMatches = [];
@@ -44,78 +44,103 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //image header for side nav
-  String sideNavHeaderImg = 'assets/logo_with_name.jpg';
   //timer for email subscription dialog
   Timer emailSubDialogTimer;
+  //main content
+  List<Widget> mainContent = [];
+  //screen height
+  double screenHeight;
+  //app theme data
+  AppTheme appTheme;
+  //app main data
+  MainData mainData;
+  //list of available techniques
+  List<Technique> availableTechniques;
+  //current user data
+  User curUser;
   @override
   void dispose() {
     super.dispose();
     emailSubDialogTimer?.cancel();
   }
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //current user data
-    User curUser = Provider.of<User>(widget.rootContext);
+    curUser = Provider.of<User>(widget.rootContext);
     //list of available techniques
-    List<Technique> availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
+    availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
     //app main data
-    MainData mainData = Provider.of<MainData>(widget.rootContext);
-    //main content to display in ListView
-    List<Widget> mainContent = [
-      TechniqueSection(
-        headerText: 'Day Session',
-        techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
-        textBgColor: Colors.lightBlue[900],
-        textColor: Colors.white,
-        startIcon: Icons.play_circle_fill,
-        headerColor: Colors.lightBlue[900],
-        headerTextColor: Colors.white,
-        viewTechniqueDetails: (Technique selectedTechnique){
-          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-        },
-      ),
-      TechniqueSection(
-        headerText: 'Night Session',
-        techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
-        textBgColor: Colors.pinkAccent[700],
-        textColor: Colors.white,
-        startIcon: Icons.play_circle_fill,
-        headerColor: Colors.pinkAccent[700],
-        headerTextColor: Colors.white,
-        viewTechniqueDetails: (Technique selectedTechnique){
-          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-        },
-      ),
-      TechniqueSection(
-        headerText: 'Emergency',
-        techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
-        textBgColor: Colors.red[700],
-        textColor: Colors.white,
-        startIcon: Icons.add_circle,
-        headerColor: Colors.red[700],
-        headerTextColor: Colors.white,
-        viewTechniqueDetails: (Technique selectedTechnique){
-          handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-        },
-      )
-    ];
-    //check if user has paid version
-    if(curUser.hasFullAccess){
-      //add challenge section
-      mainContent.add(
+    mainData = Provider.of<MainData>(widget.rootContext);
+    //screen height
+    screenHeight = MediaQuery.of(context).size.height;
+    //add morning section to main content
+    mainContent.add(
         TechniqueSection(
-          headerText: 'Challenge',
-          techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
-          textBgColor: Colors.cyan[800],
-          textColor: Colors.white,
+            headerText: 'Day Session',
+            techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
+            textBgColor: appTheme.amTechniqueSectionColor,
+            textColor: appTheme.amTechniqueTextColor,
+            startIcon: Icons.play_circle_fill,
+            headerColor: appTheme.amTechniqueSectionColor,
+            headerTextColor: appTheme.amTechniqueTextColor,
+            decorationColor: appTheme.bgAccentColor,
+            viewTechniqueDetails: (Technique selectedTechnique){
+              handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+            }
+        )
+    );
+    //add night section to main content
+    mainContent.add(
+        TechniqueSection(
+          headerText: 'Night Session',
+          techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
+          textBgColor: appTheme.pmTechniqueSectionColor,
+          textColor: appTheme.pmTechniqueTextColor,
           startIcon: Icons.play_circle_fill,
-          headerColor: Colors.cyan[800],
-          headerTextColor: Colors.white,
+          headerColor: appTheme.pmTechniqueSectionColor,
+          headerTextColor: appTheme.pmTechniqueTextColor,
+          decorationColor: appTheme.bgAccentColor,
           viewTechniqueDetails: (Technique selectedTechnique){
             handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
           },
         )
+    );
+    //add emergency section to main content
+    mainContent.add(
+        TechniqueSection(
+          headerText: 'Emergency',
+          techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
+          textBgColor: appTheme.emergencyTechniqueSectionColor,
+          textColor: appTheme.emergencyTechniqueTextColor,
+          startIcon: Icons.add_circle,
+          headerColor: appTheme.emergencyTechniqueSectionColor,
+          headerTextColor: appTheme.emergencyTechniqueTextColor,
+          decorationColor: appTheme.bgAccentColor,
+          viewTechniqueDetails: (Technique selectedTechnique){
+            handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+          },
+        )
+    );
+    //check if user has paid version
+    if(curUser.hasFullAccess){
+      //add challenge section
+      mainContent.add(
+          TechniqueSection(
+            headerText: 'Challenge',
+            techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
+            textBgColor: appTheme.challengeTechniqueSectionColor,
+            textColor: appTheme.challengeTechniqueTextColor,
+            startIcon: Icons.play_circle_fill,
+            headerColor: appTheme.challengeTechniqueSectionColor,
+            headerTextColor: appTheme.challengeTechniqueTextColor,
+            decorationColor: appTheme.bgAccentColor,
+            viewTechniqueDetails: (Technique selectedTechnique){
+              handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+            },
+          )
       );
       if(curUser.customTechniqueIDs.isNotEmpty){
         //add formatted custom techniques
@@ -123,11 +148,12 @@ class _HomePageState extends State<HomePage> {
             TechniqueSection(
               headerText: 'Custom Session',
               techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
-              textBgColor: Colors.deepOrangeAccent[400],
-              textColor: Colors.white,
+              textBgColor: appTheme.customTechniqueSectionColor,
+              textColor: appTheme.customTechniqueTextColor,
               startIcon: Icons.play_circle_fill,
-              headerColor: Colors.deepOrangeAccent[400],
-              headerTextColor: Colors.white,
+              headerColor: appTheme.customTechniqueSectionColor,
+              headerTextColor: appTheme.customTechniqueTextColor,
+              decorationColor: appTheme.bgAccentColor,
               viewTechniqueDetails: (Technique selectedTechnique){
                 handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
               },
@@ -135,8 +161,6 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }
-    //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     //handle showing email subscription dialog if user isn't signed up (only show if on home page)
     if(!curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
       //screen height
@@ -148,27 +172,33 @@ class _HomePageState extends State<HomePage> {
             builder: (context){
               return DialogPrompt(
                 dialogHeight: screenHeight / 2.05,
+                bgColor: appTheme.bgPrimaryColor,
                 titlePadding: EdgeInsets.only(top: 12),
                 subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 28, right: 28),
                 headerIcon: Icons.email,
-                headerBgColor: brandPrimary,
+                headerBgColor: appTheme.brandPrimaryColor,
                 approveButtonText: 'Subscribe',
-                approveButtonColor: brandPrimary,
+                approveButtonColor: appTheme.brandPrimaryColor,
                 denyButtonText: 'Close',
-                denyButtonColor: Colors.red,
+                denyButtonColor: appTheme.errorColor,
                 titleText: 'Stay In Touch',
+                titleColor: appTheme.cardTitleColor,
                 subtitleText: 'Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!',
+                subtitleColor: appTheme.cardSubtitleColor,
                 cbFunction: (){
                   //redirect to email subscription page
                   Navigator.pushNamed(context, '/email-subscription');
                 },
               );
             });
-      }
+        }
       );
     }
-    return FancyPage(
-      headerColor: Colors.white,
+  }
+  @override
+  Widget build(BuildContext context) {
+    return FancySplitPage(
+      headerColor: appTheme.bgPrimaryColor,
       headerContent: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +206,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             padding: EdgeInsets.only(top: 44, bottom: 12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: appTheme.bgPrimaryColor,
             ),
             height: screenHeight / 2.40,
             child: Column(
@@ -194,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                     'Your breathing Journey',
                     style: TextStyle(
                         fontSize: 24,
-                        color: Colors.black
+                        color: appTheme.textAccentColor
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -205,7 +235,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       mainContentHeight: screenHeight / 2.05,
-      mainContentColor: brandPrimary,
+      mainContentColor: appTheme.brandPrimaryColor,
       //remove padding automatically added by ListView
       mainContent: MediaQuery.removePadding(
         context: context,

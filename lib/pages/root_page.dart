@@ -1,3 +1,5 @@
+import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
@@ -14,12 +16,28 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
+  //app main data
+  MainData mainData;
+  //handler for current page (used by bottom nav)
+  CurrentPageHandler curPage;
+  //list of links for side nav
+  List<NavLink> navLinks;
+  //app theme data
+  AppTheme appTheme;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //app main data
+    mainData = Provider.of<MainData>(context);
+    //handler for current page (used by bottom nav)
+    curPage = Provider.of<CurrentPageHandler>(context);
+    //list of links for side nav
+    navLinks = List<NavLink>.from(mainData.pages);
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+  }
   @override
   Widget build(BuildContext context) {
-    MainData mainData = Provider.of<MainData>(context);
-    CurrentPageHandler curPage = Provider.of<CurrentPageHandler>(context);
-    //list of links for side nav
-    List<NavLink> navLinks = List<NavLink>.from(mainData.pages);
     return Scaffold(
       body: Builder(
         builder: (context){
@@ -32,7 +50,7 @@ class _RootPageState extends State<RootPage> {
             return TechniqueListPage(rootContext: context);
           }
           else if(currentRoute == '/settings'){
-            return AppSettingsPage();
+            return AppSettingsPage(rootContext: context,);
           }
           else if(currentRoute == '/pro'){
             return ProLicensePage(rootContext: context,);
@@ -45,7 +63,10 @@ class _RootPageState extends State<RootPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: curPage.pageIndex,
         elevation: 0,
+        backgroundColor: appTheme.bottomNavBgColor,
         type : BottomNavigationBarType.fixed,
+        selectedItemColor: appTheme.textSecondaryColor,
+        unselectedItemColor: appTheme.disabledCardBorderColor,
         items: navLinks.map((link)=> BottomNavigationBarItem(
             icon: Icon(link.pageIcon),
             label: link.pageTitle

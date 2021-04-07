@@ -1,8 +1,10 @@
+import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/email_form_model.dart';
-import 'package:breathing_connection/styles.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 class EmailSubscriptionPage extends StatefulWidget {
   @override
   _EmailSubscriptionPageState createState() => _EmailSubscriptionPageState();
@@ -11,14 +13,24 @@ class EmailSubscriptionPage extends StatefulWidget {
 class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   final _formKey = GlobalKey<FormState>();
   final EmailFormModel emailFormModel = EmailFormModel();
+  //app theme data
+  AppTheme appTheme;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+  }
   @override
   Widget build(BuildContext context) {
     return FancyFormPage(
       pageTitle: 'Email Subscription',
       headerIcon: Icons.email,
-      headerColor: brandPrimary,
-      headerIconColor: Colors.grey[50],
-      bgColor: Colors.teal[50],
+      headerColor: appTheme.brandPrimaryColor,
+      headerIconColor: appTheme.textPrimaryColor,
+      bgColor: appTheme.bgSecondaryColor,
+      decorationPrimaryColor: appTheme.decorationPrimaryColor,
+      decorationSecondaryColor: appTheme.decorationSecondaryColor,
       withIconHeader: true,
       form: Form(
         key: _formKey,
@@ -67,13 +79,13 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                   child: Text(
                     'Sign Up',
                     style: TextStyle(
-                        color: Colors.white,
+                        color: appTheme.textPrimaryColor,
                         fontSize: 24
                     ),
                   ),
                 ),
                 style: TextButton.styleFrom(
-                    backgroundColor: brandPrimary
+                    backgroundColor: appTheme.brandPrimaryColor
                 ),
               ),
             )

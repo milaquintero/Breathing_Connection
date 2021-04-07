@@ -1,8 +1,7 @@
 import 'package:breathing_connection/models/technique.dart';
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
-class TechniqueSection extends StatelessWidget {
+class TechniqueSection extends StatefulWidget {
   final String headerText;
   final List<Technique> techniques;
   final Color textBgColor;
@@ -11,16 +10,30 @@ class TechniqueSection extends StatelessWidget {
   final Color headerTextColor;
   final IconData startIcon;
   final Function(Technique) viewTechniqueDetails;
+  final Color decorationColor;
   TechniqueSection({this.headerText, this.techniques,
     this.textBgColor, this.textColor, this.startIcon,
-    this.headerColor, this.headerTextColor, this.viewTechniqueDetails});
+    this.headerColor, this.headerTextColor, this.viewTechniqueDetails,
+    this.decorationColor});
+
+  @override
+  _TechniqueSectionState createState() => _TechniqueSectionState();
+}
+
+class _TechniqueSectionState extends State<TechniqueSection> {
+  //screen height
+  double screenHeight;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //screen height
+    screenHeight = MediaQuery.of(context).size.height;
+  }
   @override
   Widget build(BuildContext context) {
-    //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     return ClipRect(
       child: Container(
-        color: headerColor,
+        color: widget.headerColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,7 +52,7 @@ class TechniqueSection extends StatelessWidget {
                       width: 400,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
-                        color: Colors.blueGrey[400],
+                        color: widget.decorationColor,
                       ),
                     )
                 ),
@@ -47,11 +60,11 @@ class TechniqueSection extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: screenHeight / 36),
                   child: Text(
-                    headerText,
+                    widget.headerText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: screenHeight / 24,
-                      color: headerTextColor,
+                      color: widget.headerTextColor,
                     ),
                   ),
                 )
@@ -64,13 +77,13 @@ class TechniqueSection extends StatelessWidget {
                 ListView.builder(
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
-                    itemCount: techniques.length,
+                    itemCount: widget.techniques.length,
                     itemBuilder: (context, index){
                       return Container(
                         padding: EdgeInsets.symmetric(horizontal: screenHeight / 18.5),
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(techniques[index].assetImage),
+                                image: AssetImage(widget.techniques[index].assetImage),
                                 fit: BoxFit.cover,
                             ),
                         ),
@@ -81,7 +94,7 @@ class TechniqueSection extends StatelessWidget {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: textBgColor,
+                                  color: widget.textBgColor,
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.3),
@@ -90,9 +103,9 @@ class TechniqueSection extends StatelessWidget {
                                       offset: Offset(0, 3), // changes position of shadow
                                     )
                                   ],
-                                  borderRadius: roundedBorder,
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
                                   gradient: RadialGradient(
-                                    colors: [Colors.blueGrey, Color.lerp(textBgColor, Colors.blueGrey, 0.5), textBgColor],
+                                    colors: [Colors.blueGrey, Color.lerp(widget.textBgColor, Colors.blueGrey, 0.5), widget.textBgColor],
                                     center: Alignment(0.6, -0.3),
                                     focal: Alignment(0.3, -0.1),
                                     focalRadius: 3.5,
@@ -108,10 +121,10 @@ class TechniqueSection extends StatelessWidget {
                                       Padding(
                                         padding: EdgeInsets.symmetric(vertical: 4),
                                         child: Text(
-                                          techniques[index].title,
+                                          widget.techniques[index].title,
                                           style: TextStyle(
                                               fontSize: screenHeight / 28,
-                                              color: textColor
+                                              color: widget.textColor
                                           ),
                                         ),
                                       ),
@@ -121,17 +134,17 @@ class TechniqueSection extends StatelessWidget {
                                           IconButton(
                                               icon: Icon(
                                                 Icons.help,
-                                                color: textColor,
+                                                color: widget.textColor,
                                                 size: screenHeight / 18,
                                               ),
                                               onPressed: (){
-                                                viewTechniqueDetails(techniques[index]);
+                                                widget.viewTechniqueDetails(widget.techniques[index]);
                                               }
                                           ),
                                           IconButton(
                                               icon: Icon(
-                                                startIcon,
-                                                color: textColor,
+                                                widget.startIcon,
+                                                color: widget.textColor,
                                                 size: screenHeight / 18,
                                               ),
                                               onPressed: (){}

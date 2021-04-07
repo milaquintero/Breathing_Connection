@@ -4,42 +4,50 @@ class SettingSection extends StatefulWidget {
   final String headerTitle;
   final Iterable<MapEntry<String, dynamic>> settingsMap;
   final Function rootCallback;
-  SettingSection({this.headerTitle, this.settingsMap, this.rootCallback});
+  final Color headerBgColor;
+  final Color headerTextColor;
+  final Color cardTextColor;
+  final Color headerDecorationColor;
+  final Color cardBgColor;
+  final Color cardBorderColor;
+  final Color cardIconColor;
+  final Color cardActionColor;
+  final Color curThemePrimaryColor;
+  final List<dynamic> selectionList;
+  SettingSection({this.headerTitle, this.settingsMap, this.rootCallback,
+    this.headerBgColor, this.headerTextColor, this.cardTextColor,
+    this.headerDecorationColor, this.cardBgColor, this.cardBorderColor,
+    this.cardIconColor, this.cardActionColor, this.selectionList,
+    this.curThemePrimaryColor});
   @override
   _SettingSectionState createState() => _SettingSectionState();
 }
 
 class _SettingSectionState extends State<SettingSection> {
+  double screenHeight;
+  List<Widget> settingCards;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //screen height
+    screenHeight = MediaQuery.of(context).size.height;
+    //format setting cards on init
+    buildSectionCards();
+  }
+  @override
+  void didUpdateWidget(covariant SettingSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    //format setting cards when setting changes
+    buildSectionCards();
+  }
   @override
   Widget build(BuildContext context) {
-    //format setting cards
-    List<Widget> settingCards = widget.settingsMap.map((setting){
-      String name = setting.key;
-      //remove ID from displayed name if present
-      if(name.indexOf('ID') != -1){
-        name = name.substring(0, name.indexOf('ID'));
-      }
-      //camel case to title case
-      name = name.split(new RegExp(r"(?=[A-Z])")).join(" ");
-      name = '${name[0].toUpperCase()}${name.substring(1)}';
-      //add setting card to list
-      return SettingCard(
-        settingName: name,
-        settingValue: setting.value,
-        callbackFn: (newVal){
-          widget.rootCallback(setting.key, newVal);
-        },
-        isLast: (widget.settingsMap.last.toString() == setting.toString())
-      );
-    }).toList();
-    //screen height
-    double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRect(
           child: Container(
-            color: Colors.cyan[800],
+            color: widget.headerBgColor,
             child: Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
@@ -52,7 +60,7 @@ class _SettingSectionState extends State<SettingSection> {
                       width: 400,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
-                        color: Colors.blueGrey[400],
+                        color: widget.headerDecorationColor,
                       ),
                     )
                 ),
@@ -63,7 +71,7 @@ class _SettingSectionState extends State<SettingSection> {
                       widget.headerTitle,
                       style: TextStyle(
                           fontSize: screenHeight / 24,
-                          color: Colors.white
+                          color: widget.headerTextColor
                       ),
                     ),
                   ),
@@ -78,5 +86,34 @@ class _SettingSectionState extends State<SettingSection> {
         )
       ],
     );
+  }
+  void buildSectionCards(){
+    //format setting cards
+    settingCards = widget.settingsMap.map((setting){
+      String name = setting.key;
+      //remove ID from displayed name if present
+      if(name.indexOf('ID') != -1){
+        name = name.substring(0, name.indexOf('ID'));
+      }
+      //camel case to title case
+      name = name.split(new RegExp(r"(?=[A-Z])")).join(" ");
+      name = '${name[0].toUpperCase()}${name.substring(1)}';
+      //add setting card to list
+      return SettingCard(
+          settingName: name,
+          settingValue: setting.value,
+          textColor: widget.cardTextColor,
+          cardBgColor: widget.cardBgColor,
+          cardBorderColor: widget.cardBorderColor,
+          cardIconColor: widget.cardIconColor,
+          cardActionColor: widget.cardActionColor,
+          selectionList: widget.selectionList,
+          curThemePrimaryColor: widget.curThemePrimaryColor,
+          callbackFn: (newVal){
+            widget.rootCallback(setting.key, newVal);
+          },
+          isLast: (widget.settingsMap.last.toString() == setting.toString())
+      );
+    }).toList();
   }
 }

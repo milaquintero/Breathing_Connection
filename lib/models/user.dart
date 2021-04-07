@@ -1,7 +1,7 @@
 import 'package:breathing_connection/models/user_settings.dart';
 import 'package:flutter/cupertino.dart';
 
-class User extends ChangeNotifier{
+class User with ChangeNotifier{
   int userId;
   String username;
   bool hasFullAccess;

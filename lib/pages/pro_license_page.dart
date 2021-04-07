@@ -1,13 +1,10 @@
-import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/styles.dart';
+import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/widgets/fancy_bullet_list.dart';
-import 'package:breathing_connection/widgets/fancy_page.dart';
 import 'package:breathing_connection/widgets/fancy_scrollable_page.dart';
 import 'package:breathing_connection/widgets/fancy_tag.dart';
 import 'package:breathing_connection/widgets/fancy_text_container.dart';
 import 'package:flutter/material.dart';
-import 'package:breathing_connection/models/nav_link.dart';
 import 'package:provider/provider.dart';
 class ProLicensePage extends StatefulWidget {
   final BuildContext rootContext;
@@ -18,12 +15,22 @@ class ProLicensePage extends StatefulWidget {
 }
 
 class _ProLicensePageState extends State<ProLicensePage> {
+  AppTheme appTheme;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //selected theme data
+    appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
+  }
   @override
   Widget build(BuildContext context) {
     return FancyScrollablePage(
       withIconHeader: false,
-      headerColor: brandPrimary,
       pageTitle: 'Pro License',
+      bgColor: appTheme.bgSecondaryColor,
+      appBarColor: appTheme.brandPrimaryColor,
+      decorationPrimaryColor: appTheme.decorationPrimaryColor,
+      decorationSecondaryColor: appTheme.decorationSecondaryColor,
       child: Column(
         children: [
           Padding(
@@ -34,24 +41,25 @@ class _ProLicensePageState extends State<ProLicensePage> {
               style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
-                  color: Colors.lightBlue[900]
+                  color: appTheme.textSecondaryColor
               ),
             ),
           ),
           FancyTextContainer(
             icon: Icons.add_moderator,
-            iconColor: Colors.grey[50],
-            iconBgColor: Colors.grey[850],
+            iconColor: appTheme.textPrimaryColor,
+            iconBgColor: appTheme.brandAccentColor,
             title: "Additional Features",
-            textColor: Colors.grey[50],
-            bgColor: brandPrimary,
+            textColor: appTheme.textPrimaryColor,
+            bgColor: appTheme.brandPrimaryColor,
+            bgGradientComparisonColor: appTheme.bgAccentColor,
             margin: EdgeInsets.only(top: 72, bottom: 36),
             child: Padding(
               padding: EdgeInsets.only(top: 16, bottom: 0, left: 20, right: 20),
               child: FancyBulletList(
                 bulletIcon: Icons.check_circle,
-                bulletIconColor: Colors.teal[300],
-                textColor: Colors.grey[50],
+                bulletIconColor: appTheme.bulletListIconColor,
+                textColor: appTheme.textPrimaryColor,
                 listItems: [
                   "Unlock all Breathing Techniques",
                   "Gain ability to create Custom Techniques",
@@ -63,11 +71,12 @@ class _ProLicensePageState extends State<ProLicensePage> {
           ),
           FancyTextContainer(
             icon: Icons.account_balance,
-            iconColor: Colors.grey[50],
-            iconBgColor: Colors.grey[850],
+            iconColor: appTheme.textPrimaryColor,
+            iconBgColor: appTheme.brandAccentColor,
             title: "Pricing",
-            textColor: Colors.grey[50],
-            bgColor: brandPrimary,
+            textColor: appTheme.textPrimaryColor,
+            bgColor: appTheme.brandPrimaryColor,
+            bgGradientComparisonColor: appTheme.bgAccentColor,
             margin: EdgeInsets.only(top: 52, bottom: 36),
             child: Padding(
               padding: EdgeInsets.only(top: 12, bottom: 0, left: 20, right: 20),
@@ -100,13 +109,13 @@ class _ProLicensePageState extends State<ProLicensePage> {
                 child: Text(
                   'Get It Now',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: appTheme.textPrimaryColor,
                       fontSize: 24
                   ),
                 ),
               ),
               style: TextButton.styleFrom(
-                  backgroundColor: brandPrimary
+                  backgroundColor: appTheme.brandPrimaryColor
               ),
             ),
           )

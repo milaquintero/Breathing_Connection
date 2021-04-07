@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:breathing_connection/models/technique.dart';
+import 'package:breathing_connection/models/user_settings.dart';
 import 'package:http/http.dart';
 import 'package:breathing_connection/models/user.dart';
 //shareable user resource with GET method to retrieve user data
@@ -33,5 +34,9 @@ class UserService {
     catch(error){
       throw new Exception(error);
     }
+  }
+
+  static Future<void> handleUpdateSettings(UserSettings newSettings){
+    //TODO: persist changes to settings
   }
 }

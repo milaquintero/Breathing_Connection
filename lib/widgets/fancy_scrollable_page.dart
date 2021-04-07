@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
-
 class FancyScrollablePage extends StatefulWidget {
   final String pageTitle;
   final Widget child;
@@ -11,8 +9,12 @@ class FancyScrollablePage extends StatefulWidget {
   final Color appBarColor;
   final Color bgColor;
   final bool withIconHeader;
+  final Color decorationPrimaryColor;
+  final Color decorationSecondaryColor;
+  final double appBarHeight;
   FancyScrollablePage({this.child, this.headerIcon, this.headerColor, this.headerIconColor,
-    this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false});
+    this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
+    this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight});
   @override
   _FancyScrollablePageState createState() => _FancyScrollablePageState();
 }
@@ -25,13 +27,15 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        toolbarHeight: appBarHeight,
+        toolbarHeight: widget.appBarHeight,
         title: Text(
           widget.pageTitle,
-          style: appBarTextStyle,
+          style: TextStyle(
+              fontSize: 24
+          ),
         ),
         centerTitle: true,
-        backgroundColor: widget.appBarColor ?? brandPrimary,
+        backgroundColor: widget.appBarColor,
       ),
       body: Container(
         color: widget.bgColor ?? Colors.blue[50],
@@ -48,7 +52,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
                   child: Container(
                     width: 400,
                     height: 400,
-                    color: Colors.grey,
+                    color: widget.decorationPrimaryColor,
                   ),
                 )
             ),
@@ -72,7 +76,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
                   child: Container(
                     width: 400,
                     height: 400,
-                    color: Colors.grey,
+                    color: widget.decorationPrimaryColor,
                   ),
                 )
             ),
@@ -84,7 +88,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
                   child: Container(
                     width: 400,
                     height: 400,
-                    color: Colors.blue[200].withOpacity(0.4),
+                    color: widget.decorationSecondaryColor.withOpacity(0.4),
                   ),
                 )
             ),

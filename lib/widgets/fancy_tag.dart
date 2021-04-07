@@ -37,7 +37,7 @@ class FancyTag extends StatelessWidget {
                 fontWeight: FontWeight.bold
             ),
             textAlign: TextAlign.center,
-          ) : Container()
+          ) : null
         ],
       ),
     );
