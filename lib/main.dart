@@ -1,3 +1,6 @@
+import 'dart:isolate';
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
@@ -13,7 +16,15 @@ import 'models/technique.dart';
 import 'models/user.dart';
 import 'models/view_technique_details_handler.dart';
 
-void main() {
+void printHello() {
+  final DateTime now = DateTime.now();
+  final int isolateId = Isolate.current.hashCode;
+  print("[$now] Hello, world! isolate=$isolateId function='$printHello'");
+}
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   runApp(BreathingConnection());
 }
 

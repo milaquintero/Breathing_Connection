@@ -168,7 +168,6 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
   }
   @override
   Widget build(BuildContext context) {
-    print(mainData.appBarHeight);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appTheme.brandPrimaryColor,

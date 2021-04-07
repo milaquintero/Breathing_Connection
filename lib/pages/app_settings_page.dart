@@ -88,10 +88,15 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   void buildSettingSections(){
     //reset main content
     mainContent = [];
+    //if user has full access, add challenge mode setting to general settings
+    List<String> generalSettingsFilters = ['dailyReminders'];
+    if(curUser.hasFullAccess){
+      generalSettingsFilters.add('challengeMode');
+    }
     //add general settings section
     Iterable<MapEntry<String, dynamic>> generalSettings = filterSettings(
         allSettings,
-        ['dailyReminders']
+        generalSettingsFilters
     );
     mainContent.add(
         SettingSection(

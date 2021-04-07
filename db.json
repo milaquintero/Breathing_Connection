@@ -11,12 +11,24 @@
       "challengeTechniqueID": 3,
       "emergencyTechniqueID": 4,
       "customTechniqueIDs": [],
+      "dailyReminderLists": {
+        "challengeModeTimes": [
+          "2021-04-07T08:00:00.000",
+          "2021-04-07T12:00:00.000",
+          "2021-04-07T18:00:00.000"
+        ],
+        "regularTimes": [
+          "2021-04-07T8:00:00.000",
+          "2021-04-07T18:00:00.000"
+        ]
+      },
       "userSettings": {
         "breathingSound": true,
         "backgroundSound": true,
         "vibration": true,
         "dailyReminders": true,
-        "themeID": 1
+        "themeID": 1,
+        "challengeMode": false
       }
     }
   ],

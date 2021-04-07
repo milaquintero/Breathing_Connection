@@ -12,7 +12,7 @@ class UserService {
       //Response userResponse = await get('$BASE_URL/users/$userID');
       //TEST
       Response userResponse = await Future.delayed(Duration(seconds: 1), (){
-        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":false,"isSubscribedToEmails":false,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":1}}', 200);
+        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":false,"isSubscribedToEmails":false,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"dailyReminderLists":{"challengeModeTimes":["2021-04-07T8:00:00.000","2021-04-07T12:00:00.000","2021-04-07T18:00:00.000"],"regularTimes":["2021-04-07T14:25:00.000","2021-04-07T18:00:00.000"]},"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":1,"challengeMode":false}}', 200);
       });
       return User.fromJson(jsonDecode(userResponse.body));
     }

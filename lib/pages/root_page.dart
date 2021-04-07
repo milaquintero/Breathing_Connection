@@ -1,8 +1,11 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
+import 'package:breathing_connection/models/notification_manager.dart';
+import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/pages/app_settings_page.dart';
 import 'package:breathing_connection/pages/page_not_found.dart';
 import 'package:breathing_connection/pages/pro_license_page.dart';
@@ -10,6 +13,14 @@ import 'package:breathing_connection/pages/technique_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/pages/home_page.dart';
 import 'package:provider/provider.dart';
+
+//handle displaying notification when alarm goes off
+void alarmCallback(){
+  NotificationManager n = new NotificationManager();
+  n.initNotificationManager();
+  n.showNotification("Time to take a breather", "Your next breathing session begins now");
+}
+
 class RootPage extends StatefulWidget {
   @override
   _RootPageState createState() => _RootPageState();
@@ -24,6 +35,61 @@ class _RootPageState extends State<RootPage> {
   List<NavLink> navLinks;
   //app theme data
   AppTheme appTheme;
+  @override
+  void initState() {
+    super.initState();
+    //get user's selected theme based on themeID from user settings
+    User curUser = Provider.of<User>(context, listen: false);
+    //schedule daily reminders if setting is on
+    if(curUser.userSettings.dailyReminders){
+      //schedule reminders for AM/PM if challenge mode isn't on or using free version
+      if(!curUser.userSettings.challengeMode || !curUser.hasFullAccess){
+        int timerId = 0;
+        //set alarms for challenge times (three times a day)
+        for(DateTime regularTime in curUser.dailyReminderLists.regularTimes){
+          DateTime now = DateTime.now();
+          AndroidAlarmManager.periodic(
+            //repeat every 24 hours in case user doesn't quit the app
+            Duration(hours: 24),
+            timerId,
+            alarmCallback,
+            startAt: DateTime(
+                now.year,
+                now.month,
+                now.day,
+                regularTime.hour,
+                regularTime.minute),
+            exact: true,
+            wakeup: true
+          );
+          timerId++;
+        }
+      }
+      //check if user has full version and challenge mode is on
+      else{
+        int timerId = 0;
+        //set alarm for regular times (AM/PM)
+        for(DateTime challengeModeTime in curUser.dailyReminderLists.challengeModeTimes){
+          DateTime now = DateTime.now();
+          AndroidAlarmManager.periodic(
+              //repeat every 24 hours in case user doesn't quit the app
+              Duration(hours: 24),
+              timerId,
+              alarmCallback,
+              startAt: DateTime(
+                  now.year,
+                  now.month,
+                  now.day,
+                  challengeModeTime.hour,
+                  challengeModeTime.minute),
+              exact: true,
+              wakeup: true
+          );
+          timerId++;
+        }
+      }
+    }
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

@@ -6,15 +6,17 @@ class UserSettings{
   bool vibration;
   bool dailyReminders;
   int themeID;
+  bool challengeMode;
   UserSettings({this.breathingSound, this.backgroundSound,
-    this.vibration, this.dailyReminders, this.themeID});
+    this.vibration, this.dailyReminders, this.themeID, this.challengeMode});
   factory UserSettings.fromJson(Map<String, dynamic> json){
     return UserSettings(
       breathingSound: json['breathingSound'],
       backgroundSound: json['backgroundSound'],
       vibration: json['vibration'],
       dailyReminders: json['dailyReminders'],
-      themeID: json['themeID']
+      themeID: json['themeID'],
+      challengeMode: json['challengeMode']
     );
   }
   Map<String, dynamic> toJson(){
@@ -24,6 +26,7 @@ class UserSettings{
       "vibration": vibration,
       "dailyReminders": dailyReminders,
       "themeID": themeID,
+      "challengeMode": challengeMode
     };
   }
   setProperty(String property, dynamic value){
@@ -43,6 +46,8 @@ class UserSettings{
       case "themeID":
         themeID = value;
         break;
+      case "challengeMode":
+        challengeMode = value;
     }
   }
 }
