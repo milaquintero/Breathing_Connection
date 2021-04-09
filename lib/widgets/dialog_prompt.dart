@@ -33,9 +33,9 @@ class DialogPrompt extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: dialogHeight,
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: titlePadding,
