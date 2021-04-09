@@ -1,10 +1,10 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import '../../main.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/pages/app_settings_page.dart';
 import 'package:breathing_connection/pages/page_not_found.dart';
@@ -13,13 +13,6 @@ import 'package:breathing_connection/pages/technique_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:breathing_connection/pages/home_page.dart';
 import 'package:provider/provider.dart';
-
-//handle displaying notification when alarm goes off
-void alarmCallback(){
-  NotificationManager n = new NotificationManager();
-  n.initNotificationManager();
-  n.showNotification("Time to take a breather", "Your next breathing session begins now");
-}
 
 class RootPage extends StatefulWidget {
   @override
@@ -35,55 +28,72 @@ class _RootPageState extends State<RootPage> {
   List<NavLink> navLinks;
   //app theme data
   AppTheme appTheme;
+  //set a reminder
+  void setReminder({int timerId, Function callback, DateTime timeToStart}) async{
+    await AndroidAlarmManager.periodic(
+      //repeat every 24 hours in case user doesn't quit the app
+        Duration(hours: 24),
+        timerId,
+        callback,
+        startAt: timeToStart,
+        exact: true,
+        wakeup: true,
+        rescheduleOnReboot: true
+    );
+  }
   @override
-  void initState() {
+  void initState(){
     super.initState();
     //get user's selected theme based on themeID from user settings
     User curUser = Provider.of<User>(context, listen: false);
+    //app main data
+    mainData = Provider.of<MainData>(context, listen: false);
     //schedule daily reminders if setting is on
     if(curUser.userSettings.dailyReminders){
       //schedule reminders for AM/PM if challenge mode isn't on or using free version
       if(!curUser.userSettings.challengeMode || !curUser.hasFullAccess){
+        //timer id
         int timerId = 0;
         //set alarms for challenge times (three times a day)
         for(DateTime regularTime in curUser.dailyReminderLists.regularTimes){
           DateTime now = DateTime.now();
-          AndroidAlarmManager.periodic(
-            //repeat every 24 hours in case user doesn't quit the app
-            Duration(hours: 24),
-            timerId,
-            alarmCallback,
-            startAt: DateTime(
-                now.year,
-                now.month,
-                now.day,
-                regularTime.hour,
-                regularTime.minute),
-            exact: true,
-            wakeup: true
+          BreathingConnection.setNotificationText(
+            header: mainData.dailyReminderHeader,
+            footer: mainData.dailyReminderFooter
+          );
+          setReminder(
+            timerId: timerId,
+            timeToStart: DateTime(
+              now.year,
+              now.month,
+              now.day,
+              regularTime.hour,
+              regularTime.minute),
+            callback: BreathingConnection.showNotification
           );
           timerId++;
         }
       }
       //check if user has full version and challenge mode is on
       else{
+        //timer id
         int timerId = 0;
         //set alarm for regular times (AM/PM)
         for(DateTime challengeModeTime in curUser.dailyReminderLists.challengeModeTimes){
           DateTime now = DateTime.now();
-          AndroidAlarmManager.periodic(
-              //repeat every 24 hours in case user doesn't quit the app
-              Duration(hours: 24),
-              timerId,
-              alarmCallback,
-              startAt: DateTime(
+          BreathingConnection.setNotificationText(
+              header: mainData.challengeReminderHeader,
+              footer: mainData.challengeReminderFooter
+          );
+          setReminder(
+              timerId: timerId,
+              timeToStart: DateTime(
                   now.year,
                   now.month,
                   now.day,
                   challengeModeTime.hour,
                   challengeModeTime.minute),
-              exact: true,
-              wakeup: true
+              callback: BreathingConnection.showNotification
           );
           timerId++;
         }
@@ -93,8 +103,6 @@ class _RootPageState extends State<RootPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //app main data
-    mainData = Provider.of<MainData>(context);
     //handler for current page (used by bottom nav)
     curPage = Provider.of<CurrentPageHandler>(context);
     //list of links for side nav

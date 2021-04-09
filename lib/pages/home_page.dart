@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
     //add morning section to main content
     mainContent.add(
         TechniqueSection(
-            headerText: 'Day Session',
+            headerText: mainData.amSessionHeaderText,
             techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
             textBgColor: appTheme.amTechniqueSectionColor,
             textColor: appTheme.amTechniqueTextColor,
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     //add night section to main content
     mainContent.add(
         TechniqueSection(
-          headerText: 'Night Session',
+          headerText: mainData.pmSessionHeaderText,
           techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
           textBgColor: appTheme.pmTechniqueSectionColor,
           textColor: appTheme.pmTechniqueTextColor,
@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
     //add emergency section to main content
     mainContent.add(
         TechniqueSection(
-          headerText: 'Emergency',
+          headerText: mainData.emergencySessionHeaderText,
           techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
           textBgColor: appTheme.emergencyTechniqueSectionColor,
           textColor: appTheme.emergencyTechniqueTextColor,
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
       //add challenge section
       mainContent.add(
           TechniqueSection(
-            headerText: 'Challenge',
+            headerText: mainData.challengeSessionHeaderText,
             techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
             textBgColor: appTheme.challengeTechniqueSectionColor,
             textColor: appTheme.challengeTechniqueTextColor,
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
         //add formatted custom techniques
         mainContent.add(
             TechniqueSection(
-              headerText: 'Custom Session',
+              headerText: mainData.customSessionHeaderText,
               techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
               textBgColor: appTheme.customTechniqueSectionColor,
               textColor: appTheme.customTechniqueTextColor,
@@ -177,13 +177,13 @@ class _HomePageState extends State<HomePage> {
                 subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 28, right: 28),
                 headerIcon: Icons.email,
                 headerBgColor: appTheme.brandPrimaryColor,
-                approveButtonText: 'Subscribe',
+                approveButtonText: mainData.emailPopupApproveBtnText,
                 approveButtonColor: appTheme.brandPrimaryColor,
-                denyButtonText: 'Close',
+                denyButtonText: mainData.emailPopupDenyBtnText,
                 denyButtonColor: appTheme.errorColor,
-                titleText: 'Stay In Touch',
+                titleText: mainData.emailPopupHeaderText,
                 titleColor: appTheme.cardTitleColor,
-                subtitleText: 'Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!',
+                subtitleText: mainData.emailPopupBodyText,
                 subtitleColor: appTheme.cardSubtitleColor,
                 cbFunction: (){
                   //redirect to email subscription page
@@ -204,11 +204,10 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 44, bottom: 12),
+            padding: EdgeInsets.only(top: 28, bottom: 32),
             decoration: BoxDecoration(
               color: appTheme.bgPrimaryColor,
             ),
-            height: screenHeight / 2.40,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -221,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                   child: Text(
-                    'Your breathing Journey',
+                    mainData.homePageTitleText,
                     style: TextStyle(
                         fontSize: 24,
                         color: appTheme.textAccentColor
@@ -241,6 +240,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         removeTop: true,
         child: ListView(
+          shrinkWrap: true,
           children: mainContent,
         ),
       )

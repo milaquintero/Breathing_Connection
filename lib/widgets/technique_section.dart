@@ -48,8 +48,8 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                     left: -80,
                     top: -100,
                     child: Container(
-                      height: 400,
-                      width: 400,
+                      height: 450,
+                      width: 450,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
                         color: widget.decorationColor,

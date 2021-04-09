@@ -97,13 +97,13 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                 subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 22, right: 22),
                 headerIcon: Icons.add_moderator,
                 headerBgColor: appTheme.brandPrimaryColor,
-                approveButtonText: 'Try It Now',
+                approveButtonText: mainData.proPopupApproveBtnText,
                 approveButtonColor: appTheme.brandPrimaryColor,
-                denyButtonText: 'Close',
+                denyButtonText: mainData.proPopupDenyBtnText,
                 denyButtonColor: appTheme.errorColor,
-                titleText: 'Breathe Easy',
+                titleText: mainData.proPopupHeaderText,
                 titleColor: appTheme.cardTitleColor,
-                subtitleText: 'Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!',
+                subtitleText: mainData.proPopupBodyText,
                 subtitleColor: appTheme.cardSubtitleColor,
                 cbFunction: (){
                   //redirect to PRO page

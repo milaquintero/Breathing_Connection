@@ -1,5 +1,6 @@
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/email_form_model.dart';
+import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,15 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   final EmailFormModel emailFormModel = EmailFormModel();
   //app theme data
   AppTheme appTheme;
+  //app main data
+  MainData mainData;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+    //app main data
+    mainData = Provider.of<MainData>(context);
   }
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       decorationPrimaryColor: appTheme.decorationPrimaryColor,
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
       withIconHeader: true,
+      appBarColor: appTheme.brandPrimaryColor,
       form: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -71,13 +77,13 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                   if(_formKey.currentState.validate()){
                     //store valid entries into model
                     _formKey.currentState.save();
-                    //TODO: send request to add user to email list
+                    //TODO: send request to add user to send user confirmation email
                   }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                   child: Text(
-                    'Sign Up',
+                    mainData.emailPageSubmitBtnText,
                     style: TextStyle(
                         color: appTheme.textPrimaryColor,
                         fontSize: 24

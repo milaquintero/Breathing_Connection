@@ -1,34 +1,72 @@
-import 'dart:isolate';
-
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:breathing_connection/models/current_theme_handler.dart';
-import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/models/current_page_handler.dart';
-import 'package:breathing_connection/pages/create_custom_technique_page.dart';
-import 'package:breathing_connection/pages/email_subscription_page.dart';
-import 'package:breathing_connection/pages/page_not_found.dart';
-import 'package:breathing_connection/pages/root_page.dart';
-import 'package:breathing_connection/pages/technique_details_page.dart';
+import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:breathing_connection/pages/loading_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'models/current_theme_handler.dart';
+import 'models/main_data.dart';
+import 'models/current_page_handler.dart';
+import 'pages/create_custom_technique_page.dart';
+import 'pages/email_subscription_page.dart';
+import 'pages/page_not_found.dart';
+import 'pages/root_page.dart';
+import 'pages/technique_details_page.dart';
+import 'pages/loading_page.dart';
 import 'models/technique.dart';
 import 'models/user.dart';
 import 'models/view_technique_details_handler.dart';
 
-void printHello() {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  print("[$now] Hello, world! isolate=$isolateId function='$printHello'");
-}
+/// Global [SharedPreferences] object.
+SharedPreferences prefs;
+/// The [SharedPreferences] key to access the alarm fire count.
+const String notificationHeaderKey = 'header';
+const String notificationFooterKey = 'footer';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
+  prefs = await SharedPreferences.getInstance();
+  //set defaults to empty string for notifications
+  if (!prefs.containsKey(notificationHeaderKey)) {
+    await prefs.setString(notificationHeaderKey, "");
+  }
+  if (!prefs.containsKey(notificationFooterKey)) {
+    await prefs.setString(notificationFooterKey, "");
+  }
   runApp(BreathingConnection());
 }
 
-class BreathingConnection extends StatelessWidget {
+class BreathingConnection extends StatefulWidget {
+  static Future<void> setNotificationText({String header, String footer}) async {
+    final prefs = await SharedPreferences.getInstance();
+    // Ensure we've loaded the latest data from the background isolate.
+    await prefs.reload();
+    //set header and footer in shared preferences
+    String currentHeader = header ?? "";
+    await prefs.setString(notificationHeaderKey, currentHeader);
+    String currentFooter = footer ?? "";
+    await prefs.setString(notificationFooterKey, currentFooter);
+  }
+  static Future<void> showNotification()async{
+    //get header and footer for notification
+    final prefs = await SharedPreferences.getInstance();
+    String notificationHeader = prefs.getString(notificationHeaderKey) ?? "";
+    String notificationFooter = prefs.getString(notificationFooterKey) ?? "";
+    //show notification
+    NotificationManager nm = NotificationManager();
+    nm.initNotificationManager();
+    nm.showNotification(notificationHeader, notificationFooter);
+
+  }
+  @override
+  _BreathingConnectionState createState() => _BreathingConnectionState();
+}
+
+class _BreathingConnectionState extends State<BreathingConnection> {
+  @override
+  void initState(){
+    super.initState();
+    AndroidAlarmManager.initialize();
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

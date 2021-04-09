@@ -80,8 +80,6 @@
         "description": "Force Abdomen"
       }
     ],
-    "popupWaitTime": 30,
-    "appBarHeight": 72.0,
     "themes": [
       {
         "themeID": 1,
@@ -157,7 +155,32 @@
         "cardActionColor": "0xFFFFFFFF",
         "bottomNavBgColor": "0xFF304A7D"
       }
-    ]
+    ],
+    "popupWaitTime": "30",
+    "appBarHeight": "72.0",
+    "homePageTitleText": "Your breathing Journey",
+    "emailPopupHeaderText": "Stay In Touch",
+    "emailPopupBodyText": "Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!",
+    "emailPopupApproveBtnText": "Subscribe",
+    "emailPopupDenyBtnText": "Close",
+    "emailPageSubmitBtnText": "Subscribe",
+    "proPopupHeaderText": "Breathe Easy",
+    "proPopupBodyText": "Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!",
+    "proPopupApproveBtnText": "Try It Now",
+    "proPopupDenyBtnText": "Close",
+    "proPageSubmitBtnText": "Get It Now",
+    "proPageHeaderText": "Breathe better with Breathing Connection Pro",
+    "amSectionHeaderText": "Morning Session",
+    "pmSectionHeaderText": "Night Session",
+    "emergencySectionHeaderText": "Emergency",
+    "challengeSectionHeaderText": "Challenge",
+    "customSectionHeaderText": "Custom",
+    "dailyReminderHeader": "Time to take a breather",
+    "dailyReminderFooter": "Your next breathing session begins now",
+    "challengeReminderHeader": "Time to breathe some life into this day",
+    "challengeReminderFooter": "Challenge yourself with a breathing session now",
+    "emailSubSuccessText": "",
+    "proSubSuccessText": ""
   },
   "techniques": [
     {

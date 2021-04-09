@@ -1,5 +1,6 @@
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
+import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/widgets/fancy_bullet_list.dart';
 import 'package:breathing_connection/widgets/fancy_scrollable_page.dart';
 import 'package:breathing_connection/widgets/fancy_tag.dart';
@@ -16,11 +17,14 @@ class ProLicensePage extends StatefulWidget {
 
 class _ProLicensePageState extends State<ProLicensePage> {
   AppTheme appTheme;
+  MainData mainData;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
+    //app main data
+    mainData = Provider.of<MainData>(widget.rootContext);
   }
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
           Padding(
             padding: EdgeInsets.only(top: 32),
             child: Text(
-              'Breathe better with Breathing Connection Pro',
+              mainData.proPageHeaderText,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 36,
@@ -107,7 +111,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 child: Text(
-                  'Get It Now',
+                  mainData.proPageSubmitBtnText,
                   style: TextStyle(
                       color: appTheme.textPrimaryColor,
                       fontSize: 24
