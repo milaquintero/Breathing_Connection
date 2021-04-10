@@ -93,7 +93,7 @@ class MainData{
     this.amSessionHeaderText = mainData.amSessionHeaderText;
     this.pmSessionHeaderText = mainData.pmSessionHeaderText;
     this.emergencySessionHeaderText = mainData.emergencySessionHeaderText;
-    this.challengeSessionHeaderText = mainData.emergencySessionHeaderText;
+    this.challengeSessionHeaderText = mainData.challengeSessionHeaderText;
     this.customSessionHeaderText = mainData.customSessionHeaderText;
     this.emailPageSubmitBtnText = mainData.emailPageSubmitBtnText;
     this.proPageSubmitBtnText = mainData.proPageSubmitBtnText;

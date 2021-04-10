@@ -10,9 +10,10 @@ class FancyTextFormField extends StatefulWidget {
   final double maxNum;
   final double minNum;
   final int maxLength;
+  final Function(String) onFieldSubmitted;
   FancyTextFormField({this.fieldType, this.fieldLabel, this.keyboardType,
     this.onSaved, this.shouldResetIfNull = false, this.isGrouped = false,
-    this.maxNum, this.minNum, this.maxLength});
+    this.maxNum, this.minNum, this.maxLength, this.onFieldSubmitted});
 
   @override
   _FancyTextFormFieldState createState() => _FancyTextFormFieldState();
@@ -36,8 +37,9 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
           errorMaxLines: 2,
           contentPadding: widget.isGrouped ? EdgeInsets.all(8) : EdgeInsets.all(12)
         ),
-        onFieldSubmitted: (value){
+        onFieldSubmitted: widget.onFieldSubmitted != null ? widget.onFieldSubmitted : (value){
           if(widget.shouldResetIfNull && (value == "" || value == null)){
+            print("reseting");
             if(widget.fieldType == "number"){
               _fancyTextFormFieldController.text = "0";
             }

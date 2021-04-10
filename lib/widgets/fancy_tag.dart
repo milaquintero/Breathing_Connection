@@ -5,9 +5,12 @@ class FancyTag extends StatelessWidget {
   final String tagFooter;
   final bool hasFooter;
   final double nameFontSize;
-  final  double footerFontSize;
+  final double footerFontSize;
+  final bool isDismissible;
+  final Function(String) dismissCallback;
   FancyTag({this.tagName, this.hasFooter = false, this.tagFooter,
-  this.footerFontSize, this.nameFontSize});
+  this.footerFontSize, this.nameFontSize, this.isDismissible = false,
+  this.dismissCallback});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,27 +20,43 @@ class FancyTag extends StatelessWidget {
         color: Colors.deepOrange,
         borderRadius: BorderRadius.circular(10)
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: isDismissible ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
         children: [
-          Text(
-            tagName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: nameFontSize ?? 18,
-              fontWeight: FontWeight.bold
-            ),
-            textAlign: TextAlign.center,
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                tagName,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: nameFontSize ?? 18,
+                  fontWeight: FontWeight.bold
+                ),
+                textAlign: TextAlign.center,
+              ),
+              hasFooter ? Text(
+                tagFooter,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: footerFontSize ?? 18,
+                    fontWeight: FontWeight.bold
+                ),
+                textAlign: TextAlign.center,
+              ) : Container()
+            ],
           ),
-          hasFooter ? Text(
-            tagFooter,
-            style: TextStyle(
+          isDismissible ? IconButton(
+              onPressed: (){
+                dismissCallback(tagName);
+              },
+              icon: Icon(
+                Icons.close,
                 color: Colors.white,
-                fontSize: footerFontSize ?? 18,
-                fontWeight: FontWeight.bold
-            ),
-            textAlign: TextAlign.center,
-          ) : null
+                size: 32,
+              )
+          ) : Container()
         ],
       ),
     );

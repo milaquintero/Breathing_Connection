@@ -11,6 +11,7 @@ import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_image_selector.dart';
 import 'package:breathing_connection/widgets/fancy_instructional_text.dart';
+import 'package:breathing_connection/widgets/fancy_tag_selector.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -159,12 +160,24 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   }
               ),
             ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: FancyTagSelector(
+                  addButtonColor: appTheme.brandPrimaryColor,
+                  addButtonTextColor: appTheme.textPrimaryColor,
+                  onChange: (selectedTags){
+                    customTechniqueFormModel.selectedTags = selectedTags;
+                  }
+              ),
+            ),
             Padding(
               padding: EdgeInsets.only(top: 48, bottom: 48),
               child: TextButton(
                 onPressed: (){
                   //validate form
-                  if(_formKey.currentState.validate() && customTechniqueFormModel.assetImage != null){
+                  if(_formKey.currentState.validate() &&
+                      customTechniqueFormModel.assetImage != null &&
+                      customTechniqueFormModel.selectedTags != null){
                     //store valid entries into model
                     _formKey.currentState.save();
                     //custom techniques are always paid version only
@@ -176,13 +189,15 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       exhaleDuration: customTechniqueFormModel.exhaleDuration,
                       secondHoldDuration: customTechniqueFormModel.secondHoldDuration,
                       assetImage: customTechniqueFormModel.assetImage,
+                      tags: customTechniqueFormModel.selectedTags,
                       isPaidVersionOnly: true
                     );
                     //add new technique to user in backend and reflect in app
                     addCustomTechnique(newTechnique, homePageLink, screenHeight, context);
                   }
                   //show alert if asset image wasn't selected
-                  else if(customTechniqueFormModel.assetImage == null){
+                  else if(customTechniqueFormModel.assetImage == null || customTechniqueFormModel.selectedTags == null){
+                    String dialogBody = customTechniqueFormModel.assetImage == null ? 'Please select a Background Image.' : 'Please select at least one Tag.';
                     showDialog(
                         barrierDismissible: false,
                         context: context,
@@ -197,7 +212,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                             buttonColor: appTheme.brandPrimaryColor,
                             titleText: 'Invalid Form',
                             titleTextColor: appTheme.errorColor,
-                            subtitleText: 'Please select a Background Image.',
+                            subtitleText: dialogBody,
                             cbFunction: (){},
                           );
                         }

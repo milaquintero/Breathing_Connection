@@ -58,9 +58,12 @@
     "images": [
       "assets/day.jpg",
       "assets/night.jpg",
-      "assets/custom.jpg",
       "assets/emergency.jpg",
-      "assets/challenge.jpg"
+      "assets/challenge.jpg",
+      "assets/custom-1.jpg",
+      "assets/custom-2.jpg",
+      "assets/custom-3.jpg",
+      "assets/custom-4.jpg"
     ],
     "inhaleExhaleTypes": [
       {

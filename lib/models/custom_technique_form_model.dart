@@ -7,9 +7,10 @@ class CustomTechniqueFormModel{
   int secondHoldDuration;
   bool isPaidVersionOnly;
   String assetImage;
+  List<String> selectedTags;
   CustomTechniqueFormModel({this.title, this.assetImage, this.isPaidVersionOnly = true,
   this.secondHoldDuration, this.exhaleDuration, this.inhaleDuration, this.firstHoldDuration,
-  this.description});
+  this.description, this.selectedTags});
   setProperty(property, value){
     if(property == 'inhaleDuration'){
       this.inhaleDuration = value;

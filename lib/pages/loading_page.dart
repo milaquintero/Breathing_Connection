@@ -106,7 +106,7 @@ class _LoadingPageState extends State<LoadingPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Image.asset(
-                      'assets/logo.jpg',
+                    selectedTheme.themeID == 2 ? 'assets/logo-dark.png' : 'assets/logo.png',
                       height: 120,
                       fit: BoxFit.fitHeight,
                   ),

@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  'assets/logo_with_name.jpg',
+                  appTheme.themeID == 2 ? 'assets/logo_with_name-dark.png' : 'assets/logo_with_name.png',
                   height: screenHeight / 4.3,
                 ),
                 Padding(
