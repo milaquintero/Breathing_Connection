@@ -9,9 +9,10 @@ class FancyTextFormField extends StatefulWidget {
   final bool isGrouped;
   final double maxNum;
   final double minNum;
+  final int maxLength;
   FancyTextFormField({this.fieldType, this.fieldLabel, this.keyboardType,
     this.onSaved, this.shouldResetIfNull = false, this.isGrouped = false,
-    this.maxNum, this.minNum});
+    this.maxNum, this.minNum, this.maxLength});
 
   @override
   _FancyTextFormFieldState createState() => _FancyTextFormFieldState();
@@ -51,6 +52,9 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
           }
           else if (value.isEmpty && widget.isGrouped) {
             return 'Required';
+          }
+          else if(widget.maxLength != null && value.length > widget.maxLength){
+            return 'Input must be less than ${widget.maxLength} characters';
           }
           else if(widget.fieldType == 'email' && !RegExp(r'(?:[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])').hasMatch(value)){
             return 'Invalid email format';

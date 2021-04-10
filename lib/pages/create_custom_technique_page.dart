@@ -53,6 +53,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
       bgColor: appTheme.bgSecondaryColor,
       decorationPrimaryColor: appTheme.decorationPrimaryColor,
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
+      appBarColor: appTheme.brandPrimaryColor,
       withIconHeader: true,
       form: Form(
         key: _formKey,
@@ -64,6 +65,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             FancyTextFormField(
               fieldLabel: 'Title',
               fieldType: 'text',
+              maxLength: 25,
               keyboardType: TextInputType.name,
               onSaved: (title){
                 customTechniqueFormModel.title = title;
@@ -72,6 +74,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             FancyTextFormField(
                 fieldLabel: 'Description',
                 fieldType: 'text',
+                maxLength: 150,
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (description){
                   customTechniqueFormModel.description = description;
