@@ -206,7 +206,8 @@
       "categoryAvailabilities": [
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": false,
@@ -224,7 +225,8 @@
       "categoryAvailabilities": [
         "PM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": false,
@@ -243,7 +245,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": false,
@@ -262,7 +265,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": false,
@@ -281,7 +285,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": false,
@@ -300,7 +305,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": true,
@@ -319,7 +325,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": true,
@@ -338,7 +345,8 @@
         "PM",
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": true,
@@ -356,7 +364,8 @@
       "categoryAvailabilities": [
         "AM",
         "Emergency"
-      ]
+      ],
+      "associatedUserID": null
     },
     {
       "isPaidVersionOnly": true,
@@ -374,7 +383,8 @@
       "categoryAvailabilities": [
         "AM",
         "Emergency"
-      ]
-    }
+      ],
+      "associatedUserID": null
+    },
   ]
 }

@@ -48,6 +48,8 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     curUser = Provider.of<User>(context);
     //screen height
     double screenHeight = MediaQuery.of(context).size.height;
+    //make sure no non associated custom techniques are displayed (UI validation)
+    availableTechniques.removeWhere((technique) => technique.associatedUserID != null && technique.associatedUserID != curUser.userId);
     //always show technique list in main content (with conditional rendering for PRO techniques)
     availableTechniques.forEach((technique){
       mainContent.add(TechniqueCard(
