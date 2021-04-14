@@ -6,6 +6,7 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
+import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
@@ -32,6 +33,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   double screenHeight;
   //selected theme data
   AppTheme appTheme;
+  //current user data
+  User curUser;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -42,6 +45,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     screenHeight = MediaQuery.of(context).size.height;
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+    //current user data
+    curUser = Provider.of<User>(context);
   }
 
   @override
@@ -181,6 +186,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                     //store valid entries into model
                     _formKey.currentState.save();
                     //custom techniques are always paid version only
+                    //associatedUserID for custom techniques is id of user who created it
                     Technique newTechnique = Technique(
                       title: customTechniqueFormModel.title,
                       description: customTechniqueFormModel.description,
@@ -190,6 +196,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       secondHoldDuration: customTechniqueFormModel.secondHoldDuration,
                       assetImage: customTechniqueFormModel.assetImage,
                       tags: customTechniqueFormModel.selectedTags,
+                      associatedUserID: curUser.userId,
                       isPaidVersionOnly: true
                     );
                     //add new technique to user in backend and reflect in app
@@ -203,7 +210,6 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                         context: context,
                         builder: (context){
                           return DialogAlert(
-                            dialogHeight: screenHeight / 2.53,
                             titlePadding: EdgeInsets.only(top: 12),
                             subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
                             headerIcon: Icons.cancel,
@@ -241,12 +247,14 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   }
 
   Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
-    //add technique in service first which returns it with techniqueID
-    Technique updatedNewTechnique = await UserService.handleCustomTechnique('add', newTechnique);
-    //TODO: add to techniques list
+    //add technique in technique service first which returns it with techniqueID
+    Technique updatedNewTechnique = await TechniqueService.handleCustomTechnique('add', newTechnique);
+    //update technique list provider with new technique
+    Provider.of<List<Technique>>(context, listen: false).add(updatedNewTechnique);
+    //then add technique id to customTechniques list in user service
+    await UserService.handleCustomTechnique('add', newTechnique.techniqueID);
     //add technique to user
-    //TODO: pass actual new technique id
-    Provider.of<User>(context, listen: false).handleCustomTechnique('add', 11);
+    Provider.of<User>(context, listen: false).handleCustomTechnique('add', updatedNewTechnique.techniqueID);
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
     showDialog(
@@ -254,15 +262,14 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
         context: context,
         builder: (context){
           return DialogAlert(
-            dialogHeight: screenHeight / 1.98,
             titlePadding: EdgeInsets.only(top: 12),
             subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
             headerIcon: Icons.fact_check,
             headerBgColor: appTheme.brandPrimaryColor,
             buttonText: 'Back to Home',
             buttonColor: appTheme.brandPrimaryColor,
-            titleText: 'Success',
-            subtitleText: 'Click the Back to Home button to view your Breathing Technique under the Custom Techniques section.',
+            titleText: mainData.customTechniqueSuccessHead,
+            subtitleText: mainData.customTechniqueSuccessBody,
             cbFunction: (){
               //redirect to home page
               Navigator.of(context).pushReplacementNamed('/root');

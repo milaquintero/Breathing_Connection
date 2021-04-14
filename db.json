@@ -182,8 +182,12 @@
     "dailyReminderFooter": "Your next breathing session begins now",
     "challengeReminderHeader": "Time to breathe some life into this day",
     "challengeReminderFooter": "Challenge yourself with a breathing session now",
-    "emailSubSuccessText": "",
-    "proSubSuccessText": ""
+    "emailSubSuccessHead": "",
+    "emailSubSuccessBody": "",
+    "proSubSuccessHead": "",
+    "proSubSuccessBody": "",
+    "customTechniqueSuccessHead": "Success",
+    "customTechniqueSuccessBody": "Click the Back to Home button to view your Breathing Technique under the Custom Techniques section."
   },
   "techniques": [
     {

@@ -14,10 +14,12 @@ class Technique{
   int exhaleTypeID;
   List<String> tags;
   List<String> categoryDependencies;
+  int associatedUserID;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
     this.exhaleDuration, this.secondHoldDuration, this.assetImage,
-    this.exhaleTypeID, this.inhaleTypeID, this.tags, this.categoryDependencies});
+    this.exhaleTypeID, this.inhaleTypeID, this.tags, this.categoryDependencies,
+    this.associatedUserID});
   factory Technique.fromJson(Map<String, dynamic> json){
     Iterable jsonTags = json['tags'] ?? [];
     Iterable jsonCategoryDependencies = json['categoryAvailabilities'] ?? [];
@@ -33,6 +35,7 @@ class Technique{
       assetImage: json['assetImage'],
       inhaleTypeID: json['inhaleTypeID'],
       exhaleTypeID: json['exhaleTypeID'],
+      associatedUserID: json['associatedUserID'],
       tags: jsonTags.map((jsonTag) => jsonTag.toString()).toList(),
       categoryDependencies: jsonCategoryDependencies.map((jsonCategory) => jsonCategory.toString()).toList()
     );
@@ -51,7 +54,8 @@ class Technique{
         inhaleTypeID: immutableTechnique.inhaleTypeID,
         exhaleTypeID: immutableTechnique.exhaleTypeID,
         tags: immutableTechnique.tags,
-        categoryDependencies: immutableTechnique.categoryDependencies
+        categoryDependencies: immutableTechnique.categoryDependencies,
+        associatedUserID: immutableTechnique.associatedUserID
     );
   }
   static Map<String, dynamic> toJson(Technique selectedTechnique){
@@ -68,6 +72,7 @@ class Technique{
     techniqueMap['inhaleType'] = selectedTechnique.inhaleTypeID;
     techniqueMap['tags'] = selectedTechnique.tags;
     techniqueMap['categoryDependencies'] = selectedTechnique.categoryDependencies;
+    techniqueMap['associatedUserID'] = selectedTechnique.associatedUserID;
     return techniqueMap;
   }
 

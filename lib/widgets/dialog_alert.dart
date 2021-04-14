@@ -9,13 +9,12 @@ class DialogAlert extends StatelessWidget {
   final Color buttonColor;
   final Color headerBgColor;
   final Color titleTextColor;
-  final double dialogHeight;
   final EdgeInsets titlePadding;
   final EdgeInsets subtitlePadding;
   DialogAlert({this.buttonText, this.cbFunction,
     this.titleText, this.subtitleText, this.headerIcon,
     this.buttonColor, this.headerBgColor, this.titleTextColor,
-    this.dialogHeight, this.titlePadding, this.subtitlePadding});
+    this.titlePadding, this.subtitlePadding});
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -28,9 +27,9 @@ class DialogAlert extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: dialogHeight,
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: titlePadding,

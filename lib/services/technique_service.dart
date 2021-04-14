@@ -20,4 +20,26 @@ class TechniqueService{
       throw new Exception(error);
     }
   }
+
+  static Future<Technique> handleCustomTechnique(String op, Technique selectedTechnique) async{
+    try{
+      //PROD
+      //Response customTechniqueResponse = await get('$BASE_URL/users/$userID');
+      //TEST
+      if(op == 'add'){
+        Technique updatedSelectedTechnique = await Future.delayed(Duration(seconds: 1), (){
+          //TODO: persist actual technique
+          selectedTechnique.techniqueID = 11;
+          return selectedTechnique;
+        });
+        return updatedSelectedTechnique;
+      }
+      else{
+        return null;
+      }
+    }
+    catch(error){
+      throw new Exception(error);
+    }
+  }
 }

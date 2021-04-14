@@ -12,7 +12,7 @@ class UserService {
       //Response userResponse = await get('$BASE_URL/users/$userID');
       //TEST
       Response userResponse = await Future.delayed(Duration(seconds: 1), (){
-        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":true,"isSubscribedToEmails":false,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"dailyReminderLists":{"challengeModeTimes":["2021-04-07T8:00:00.000","2021-04-07T12:00:00.000","2021-04-07T18:00:00.000"],"regularTimes":["2021-04-07T08:00:00.000","2021-04-07T18:00:00.000"]},"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":1,"challengeMode":false}}', 200);
+        return Response('{"id":1,"username":"Viznaga","email":"viz@viz.com","hasFullAccess":true,"isSubscribedToEmails":false,"amTechniqueID":1,"pmTechniqueID":2,"challengeTechniqueID":3,"emergencyTechniqueID":4,"customTechniqueIDs":[],"dailyReminderLists":{"challengeModeTimes":["2021-04-07T8:00:00.000","2021-04-07T12:00:00.000","2021-04-07T18:00:00.000"],"regularTimes":["2021-04-07T08:00:00.000","2021-04-07T18:00:00.000"]},"userSettings":{"breathingSound":true,"backgroundSound":true,"vibration":true,"dailyReminders":true,"themeID":2,"challengeMode":false}}', 200);
       });
       return User.fromJson(jsonDecode(userResponse.body));
     }
@@ -20,16 +20,14 @@ class UserService {
       throw new Exception(error);
     }
   }
-  static Future<Technique> handleCustomTechnique(String op, Technique selectedTechnique) async{
+  static Future<void> handleCustomTechnique(String op, int customTechniqueID) async{
     try{
       //PROD
       //Response customTechniqueResponse = await get('$BASE_URL/users/$userID');
       //TEST
-      Technique updatedSelectedTechnique = await Future.delayed(Duration(seconds: 1), (){
-        selectedTechnique.techniqueID = 8;
-        return selectedTechnique;
-      });
-      return updatedSelectedTechnique;
+      if(op == 'add'){
+        //TODO: persist adding technique id to user's custom technique list
+      }
     }
     catch(error){
       throw new Exception(error);

@@ -34,9 +34,12 @@ class _FancyTagSelectorState extends State<FancyTagSelector> {
         ),
         TextButton(
             onPressed: (){
-              if(inputText.isNotEmpty && inputText.length < 25){
+              if(inputText.isNotEmpty && inputText.length <= 25){
                 setState(() {
+                  //add tag
                   selectedTags.add(inputText);
+                  //update selected tags in parent
+                  widget.onChange(selectedTags);
                 });
               }
             },
@@ -64,7 +67,10 @@ class _FancyTagSelectorState extends State<FancyTagSelector> {
               isDismissible: true,
               dismissCallback: (String tagToDelete){
                 setState(() {
+                  //remove tag
                   selectedTags.removeWhere((tag) => tag == tagToDelete);
+                  //update selected tags in parent
+                  widget.onChange(selectedTags);
                 });
               },
             );

@@ -8,9 +8,10 @@ class CustomTechniqueFormModel{
   bool isPaidVersionOnly;
   String assetImage;
   List<String> selectedTags;
+  int associatedUserID;
   CustomTechniqueFormModel({this.title, this.assetImage, this.isPaidVersionOnly = true,
   this.secondHoldDuration, this.exhaleDuration, this.inhaleDuration, this.firstHoldDuration,
-  this.description, this.selectedTags});
+  this.description, this.selectedTags, this.associatedUserID});
   setProperty(property, value){
     if(property == 'inhaleDuration'){
       this.inhaleDuration = value;
@@ -41,6 +42,6 @@ class CustomTechniqueFormModel{
   }
   @override
   String toString() {
-    return 'Title: ${this.title}, Description: ${this.description}, Asset Image: ${this.assetImage}, Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}';
+    return 'Title: ${this.title}, Description: ${this.description}, Asset Image: ${this.assetImage}, Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}, Tags: ${this.selectedTags}, Associated User ID: ${this.associatedUserID}';
   }
 }

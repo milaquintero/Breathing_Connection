@@ -122,6 +122,7 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                                         padding: EdgeInsets.symmetric(vertical: 4),
                                         child: Text(
                                           widget.techniques[index].title,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: screenHeight / 28,
                                               color: widget.textColor

@@ -16,13 +16,11 @@ class MainData{
   String emailPopupBodyText;
   String emailPopupApproveBtnText;
   String emailPopupDenyBtnText;
-  String emailSubSuccessText;
   String emailPageSubmitBtnText;
   String proPopupHeaderText;
   String proPopupBodyText;
   String proPopupApproveBtnText;
   String proPopupDenyBtnText;
-  String proSubSuccessText;
   String proPageSubmitBtnText;
   String proPageHeaderText;
   String amSessionHeaderText;
@@ -34,16 +32,24 @@ class MainData{
   String dailyReminderFooter;
   String challengeReminderHeader;
   String challengeReminderFooter;
+  String customTechniqueSuccessHead;
+  String customTechniqueSuccessBody;
+  String proSubSuccessHead;
+  String proSubSuccessBody;
+  String emailSubSuccessHead;
+  String emailSubSuccessBody;
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
     this.emailPopupApproveBtnText, this.emailPopupBodyText, this.emailPopupDenyBtnText,
-    this.emailPopupHeaderText, this.emailSubSuccessText, this.homePageTitleText,
+    this.emailPopupHeaderText, this.homePageTitleText,
     this.proPageHeaderText, this.proPageSubmitBtnText, this.proPopupApproveBtnText,
     this.proPopupBodyText, this.proPopupDenyBtnText, this.proPopupHeaderText,
-    this.proSubSuccessText, this.amSessionHeaderText, this.challengeSessionHeaderText,
+    this.amSessionHeaderText, this.challengeSessionHeaderText,
     this.customSessionHeaderText, this.emergencySessionHeaderText, this.pmSessionHeaderText,
     this.challengeReminderFooter, this.challengeReminderHeader, this.dailyReminderFooter,
-    this.dailyReminderHeader});
+    this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
+    this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
+    this.proSubSuccessHead});
   factory MainData.fromJson(Map<String, dynamic> json){
     Iterable jsonPages = json['pages'] ?? [];
     Iterable jsonImages = json['images'] ?? [];
@@ -76,10 +82,13 @@ class MainData{
       dailyReminderFooter: json['dailyReminderFooter'],
       dailyReminderHeader: json['dailyReminderHeader'],
       challengeReminderFooter: json['challengeReminderFooter'],
-      challengeReminderHeader: json['challengeReminderHeader']
-
-      /*proSubSuccessText: json['proSubSuccessText'],
-      emailSubSuccessText: json['emailSubSuccessText'],*/
+      challengeReminderHeader: json['challengeReminderHeader'],
+      customTechniqueSuccessHead: json['customTechniqueSuccessHead'],
+      customTechniqueSuccessBody: json['customTechniqueSuccessBody'],
+      proSubSuccessHead: json['proSubSuccessHead'],
+      proSubSuccessBody: json['proSubSuccessBody'],
+      emailSubSuccessHead: json['emailSubSuccessHead'],
+      emailSubSuccessBody: json['emailSubSuccessBody']
     );
   }
   setMainData(MainData mainData){
@@ -110,8 +119,11 @@ class MainData{
     this.dailyReminderFooter = mainData.dailyReminderFooter;
     this.challengeReminderHeader = mainData.challengeReminderHeader;
     this.challengeReminderFooter = mainData.challengeReminderFooter;
-
-/*    this.proSubSuccessText = mainData.proSubSuccessText;
-    this.emailSubSuccessText = mainData.emailSubSuccessText;*/
+    this.customTechniqueSuccessHead = mainData.customTechniqueSuccessHead;
+    this.customTechniqueSuccessBody = mainData.customTechniqueSuccessBody;
+    this.proSubSuccessHead = mainData.proSubSuccessHead;
+    this.proSubSuccessBody = mainData.proSubSuccessBody;
+    this.emailSubSuccessHead = mainData.emailSubSuccessHead;
+    this.emailSubSuccessBody = mainData.emailSubSuccessBody;
   }
 }
