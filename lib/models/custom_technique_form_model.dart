@@ -9,9 +9,12 @@ class CustomTechniqueFormModel{
   String assetImage;
   List<String> selectedTags;
   int associatedUserID;
+  int inhaleTypeID;
+  int exhaleTypeID;
   CustomTechniqueFormModel({this.title, this.assetImage, this.isPaidVersionOnly = true,
   this.secondHoldDuration, this.exhaleDuration, this.inhaleDuration, this.firstHoldDuration,
-  this.description, this.selectedTags, this.associatedUserID});
+  this.description, this.selectedTags, this.associatedUserID,
+  this.exhaleTypeID, this.inhaleTypeID});
   setProperty(property, value){
     if(property == 'inhaleDuration'){
       this.inhaleDuration = value;
@@ -42,6 +45,6 @@ class CustomTechniqueFormModel{
   }
   @override
   String toString() {
-    return 'Title: ${this.title}, Description: ${this.description}, Asset Image: ${this.assetImage}, Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}, Tags: ${this.selectedTags}, Associated User ID: ${this.associatedUserID}';
+    return 'Title: ${this.title}, Description: ${this.description}, Asset Image: ${this.assetImage}, Inhale Duration: ${this.inhaleDuration}, First Hold Duration: ${this.firstHoldDuration}, Exhale Duration: ${this.exhaleDuration}, Second Hold Duration: ${this.secondHoldDuration}, Tags: ${this.selectedTags}, Associated User ID: ${this.associatedUserID}, Inhale Type ID: ${this.inhaleTypeID}, Exhale Type ID:, ${this.exhaleTypeID}';
   }
 }

@@ -14,7 +14,7 @@ class FancyTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: hasFooter ? EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 16) : isDismissible ? EdgeInsets.symmetric(horizontal: 32, vertical: 12) : EdgeInsets.all(12),
+      padding: hasFooter ? EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 16) : isDismissible ? EdgeInsets.symmetric(horizontal: 46, vertical: 12) : EdgeInsets.all(12),
       margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.deepOrange,
@@ -22,10 +22,11 @@ class FancyTag extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: isDismissible ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
         children: [
-          Flexible(
+          Expanded(
             child: Stack(
+              alignment: isDismissible ? Alignment.centerLeft : Alignment.center,
               children: [
                 Text(
                   tagName,

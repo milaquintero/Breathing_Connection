@@ -39,7 +39,6 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
         ),
         onFieldSubmitted: widget.onFieldSubmitted != null ? widget.onFieldSubmitted : (value){
           if(widget.shouldResetIfNull && (value == "" || value == null)){
-            print("reseting");
             if(widget.fieldType == "number"){
               _fancyTextFormFieldController.text = "0";
             }

@@ -2,6 +2,7 @@ import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/custom_technique_form_model.dart';
+import 'package:breathing_connection/models/inhale_exhale_type.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/technique.dart';
@@ -9,6 +10,7 @@ import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
+import 'package:breathing_connection/widgets/fancy_dropdown_form_field.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_image_selector.dart';
 import 'package:breathing_connection/widgets/fancy_instructional_text.dart';
@@ -35,6 +37,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   AppTheme appTheme;
   //current user data
   User curUser;
+  //inhale/exhale type options
+  List<DropdownMenuItem<int>> inhaleExhaleTypeOptions = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -47,6 +51,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
     //current user data
     curUser = Provider.of<User>(context);
+    //set inhale exhale type options
+    inhaleExhaleTypeOptions = mainData.inhaleExhaleTypes.map((inhaleExhaleType){
+      return DropdownMenuItem<int>(
+        child: Text(inhaleExhaleType.description),
+        value: inhaleExhaleType.inhaleExhaleTypeID,
+      );
+    }).toList();
   }
 
   @override
@@ -108,6 +119,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   customTechniqueFormModel.inhaleDuration = int.parse(inhaleDuration);
                 }
             ),
+            FancyDropdownFormField(
+                title: 'Inhale Type',
+                options: inhaleExhaleTypeOptions,
+                onChanged: (selectedInhaleTypeID){
+                  customTechniqueFormModel.inhaleTypeID = selectedInhaleTypeID;
+                }
+            ),
             FancyTextFormField(
                 fieldLabel: 'First Hold Duration',
                 fieldType: 'number',
@@ -128,6 +146,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 minNum: 0,
                 onSaved: (exhaleDuration){
                   customTechniqueFormModel.exhaleDuration = int.parse(exhaleDuration);
+                }
+            ),
+            FancyDropdownFormField(
+                title: 'Exhale Type',
+                options: inhaleExhaleTypeOptions,
+                onChanged: (selectedExhaleTypeID){
+                  customTechniqueFormModel.exhaleTypeID = selectedExhaleTypeID;
                 }
             ),
             FancyTextFormField(
@@ -187,6 +212,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                     _formKey.currentState.save();
                     //custom techniques are always paid version only
                     //associatedUserID for custom techniques is id of user who created it
+                    //all category assignments are allowed for custom techniques
                     Technique newTechnique = Technique(
                       title: customTechniqueFormModel.title,
                       description: customTechniqueFormModel.description,
@@ -197,14 +223,17 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       assetImage: customTechniqueFormModel.assetImage,
                       tags: customTechniqueFormModel.selectedTags,
                       associatedUserID: curUser.userId,
+                      categoryDependencies: ["AM", "PM", "Emergency", "Challenge"],
+                      inhaleTypeID: customTechniqueFormModel.inhaleTypeID,
+                      exhaleTypeID: customTechniqueFormModel.exhaleTypeID,
                       isPaidVersionOnly: true
                     );
                     //add new technique to user in backend and reflect in app
                     addCustomTechnique(newTechnique, homePageLink, screenHeight, context);
                   }
                   //show alert if asset image wasn't selected
-                  else if(customTechniqueFormModel.assetImage == null || customTechniqueFormModel.selectedTags == null){
-                    String dialogBody = customTechniqueFormModel.assetImage == null ? 'Please select a Background Image.' : 'Please select at least one Tag.';
+                  else{
+                    String dialogBody = customTechniqueFormModel.assetImage == null ? 'Please select a Background Image.' : customTechniqueFormModel.selectedTags == null ? 'Please select at least one Tag.' : 'Please revise the form for errors.';
                     showDialog(
                         barrierDismissible: false,
                         context: context,

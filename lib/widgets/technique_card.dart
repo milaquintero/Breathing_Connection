@@ -55,6 +55,10 @@ class _TechniqueCardState extends State<TechniqueCard> {
       techniqueMenuOptions.add(PopupMenuItem<String>(
           child: Text('Set as Emergency Technique'), value: 'Emergency'));
     }
+    if(widget.technique.categoryDependencies.contains('Challenge')){
+      techniqueMenuOptions.add(PopupMenuItem<String>(
+          child: Text('Set as Challenge Technique'), value: 'Challenge'));
+    }
   }
   @override
   Widget build(BuildContext context) {
