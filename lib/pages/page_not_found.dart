@@ -19,6 +19,7 @@ class _PageNotFoundState extends State<PageNotFound> {
   NavLink homePage;
   double screenHeight;
   AppTheme appTheme;
+  MainData mainData;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -32,6 +33,8 @@ class _PageNotFoundState extends State<PageNotFound> {
     screenHeight = MediaQuery.of(context).size.height;
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
+    //app main data
+    mainData = Provider.of<MainData>(widget.rootContext);
   }
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,7 @@ class _PageNotFoundState extends State<PageNotFound> {
       bgColor: appTheme.errorColor,
       decorationPrimaryColor: appTheme.decorationPrimaryColor,
       decorationSecondaryColor: appTheme.errorColor,
+      appBarHeight: mainData.appBarHeight,
       child: Container(
         height: screenHeight / 1.95,
         margin: EdgeInsets.only(top: screenHeight / 8, left: 16, right: 16),

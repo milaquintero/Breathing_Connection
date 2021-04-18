@@ -52,18 +52,23 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                       width: 450,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
-                        color: widget.decorationColor,
+                        gradient: RadialGradient(
+                          colors: [Colors.blueGrey, Color.lerp(widget.decorationColor, Colors.blueGrey, 0.01), widget.decorationColor],
+                          center: Alignment(0.6, 0.3),
+                          focal: Alignment(0.3, -0.1),
+                          focalRadius: 0.5,
+                        ),
                       ),
                     )
                 ),
                 //section header text
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight / 36),
+                  padding: EdgeInsets.symmetric(vertical: 28),
                   child: Text(
                     widget.headerText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: screenHeight / 24,
+                      fontSize: 32,
                       color: widget.headerTextColor,
                     ),
                   ),

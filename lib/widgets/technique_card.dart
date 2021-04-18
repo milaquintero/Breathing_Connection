@@ -67,21 +67,29 @@ class _TechniqueCardState extends State<TechniqueCard> {
         border: Border(
             top: BorderSide(
               color: borderColor,
-              width: 1.5
+              width: 1.25
             )
         ),
       ),
-      child: Card(
+      child: Container(
         margin: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [Colors.blueGrey, Color.lerp(listTileBg, Colors.blueGrey, 0.25), listTileBg],
+            center: Alignment(0.6, -0.3),
+            focal: Alignment(0.3, -0.1),
+            focalRadius: 10.5,
+          )
+        ),
         child: ListTile(
           enabled: shouldBeEnabled,
-          contentPadding: EdgeInsets.all(20),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 36),
           onTap: (){},
           leading: shouldBeEnabled ? PopupMenuButton(
             child: IconButton(
               icon: Icon(
                 Icons.more_vert,
-                size: 32,
+                size: 36,
                 color: widget.cardActionColor,
               ),
               tooltip: widget.technique.title + ' Technique Options',
@@ -91,14 +99,13 @@ class _TechniqueCardState extends State<TechniqueCard> {
               widget.changeTechnique(op, widget.technique);
             },
           ) : null,
-          tileColor: listTileBg,
           title: Padding(
             padding: EdgeInsets.only(bottom: 8),
             child: Text(
                 widget.technique.title,
                 style: TextStyle(
-                    fontSize: 22,
-                    color: titleColor
+                    fontSize: 26,
+                    color: titleColor,
                 ),
             ),
           ),
@@ -110,14 +117,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontSize: 15,
-                    color: subtitleColor
-                ),
-              ),
-              Text(
-                'Breathing Rhythm: ${widget.technique.inhaleDuration}-${widget.technique.firstHoldDuration}-${widget.technique.exhaleDuration}-${widget.technique.secondHoldDuration}',
-                style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 24,
                     color: subtitleColor
                 ),
               )
@@ -126,14 +126,14 @@ class _TechniqueCardState extends State<TechniqueCard> {
           trailing: shouldBeEnabled ? IconButton(
             icon: Icon(
               Icons.help,
-              size: 32,
+              size: 36,
               color: widget.cardActionColor,
             ),
             onPressed: (){
               widget.viewTechniqueDetails(widget.technique);
             },
           ) : Container(
-            width: 60,
+            width: 70,
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             decoration: BoxDecoration(
                 color: widget.disabledCardBgAccentColor,
@@ -146,7 +146,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
               'PRO',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 24,
               ),
             ),
           ),

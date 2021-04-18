@@ -23,11 +23,7 @@ class FancyTextContainer extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(10),
           gradient: RadialGradient(
-            colors: [
-              bgGradientComparisonColor,
-              Color.lerp(bgColor, bgGradientComparisonColor, 0.5),
-              bgColor
-            ],
+            colors: [bgGradientComparisonColor, Color.lerp(bgColor, bgGradientComparisonColor, 0.5), bgColor],
             center: Alignment(0.6, -0.3),
             focal: Alignment(0.3, -0.1),
             focalRadius: 3.5,
@@ -38,14 +34,14 @@ class FancyTextContainer extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            top: -74,
+            top: -76,
             child: CircleAvatar(
               backgroundColor: iconBgColor,
-              radius: 48,
+              radius: 50,
               child: Icon(
                 icon,
                 color: iconColor,
-                size: 48,
+                size: 50,
               ),
             ),
           ),
@@ -57,7 +53,7 @@ class FancyTextContainer extends StatelessWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 26,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: textColor
                   ),

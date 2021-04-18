@@ -93,7 +93,6 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
             context: context,
             builder: (context){
               return DialogPrompt(
-                dialogHeight: screenHeight / 2.25,
                 bgColor: appTheme.bgPrimaryColor,
                 titlePadding: EdgeInsets.only(top: 12),
                 subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 22, right: 22),
@@ -121,7 +120,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
       mainContent.insert(0, Card(
         margin: EdgeInsets.zero,
         child: ListTile(
-          contentPadding: EdgeInsets.all(20),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           onTap: (){
             //top card should take user to custom technique form
             Navigator.of(context).pushNamed('/create-custom-technique');
@@ -135,11 +134,17 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                     left: -80,
                     top: -100,
                     child: Container(
-                      height: 400,
-                      width: 400,
+                      height: 450,
+                      width: 450,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
                         color: appTheme.bgAccentColor,
+                        gradient: RadialGradient(
+                          colors: [Colors.blueGrey, Color.lerp(appTheme.bgAccentColor, Colors.blueGrey, 0.5), appTheme.bgAccentColor],
+                          center: Alignment(0.6, 0.3),
+                          focal: Alignment(0.3, -0.1),
+                          focalRadius: 0.5,
+                        ),
                       ),
                     )
                 ),
@@ -149,14 +154,14 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                     Text(
                       'Add Technique',
                       style: TextStyle(
-                          fontSize: screenHeight / 23,
-                          color: appTheme.textPrimaryColor
+                          fontSize: 30,
+                          color: appTheme.textPrimaryColor,
                       ),
                     ),
                     SizedBox(width: 10,),
                     Icon(
                       Icons.add_circle,
-                      size: screenHeight / 19,
+                      size: 32,
                       color: appTheme.textPrimaryColor,
                     )
                   ],
@@ -177,7 +182,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
         title: Text(
             'Breathing Techniques',
             style: TextStyle(
-                fontSize: 24
+                fontSize: 30,
             ),
         ),
         centerTitle: true,

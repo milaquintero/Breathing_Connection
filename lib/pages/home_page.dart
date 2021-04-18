@@ -171,7 +171,6 @@ class _HomePageState extends State<HomePage> {
             context: context,
             builder: (context){
               return DialogPrompt(
-                dialogHeight: screenHeight / 2.05,
                 bgColor: appTheme.bgPrimaryColor,
                 titlePadding: EdgeInsets.only(top: 12),
                 subtitlePadding: EdgeInsets.only(top: 12, bottom: 20, left: 28, right: 28),
@@ -204,9 +203,14 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 28, bottom: 32),
+            padding: EdgeInsets.only(top: 24, bottom: 36),
             decoration: BoxDecoration(
-              color: appTheme.bgPrimaryColor,
+              gradient: RadialGradient(
+                colors: [Colors.blueGrey, Color.lerp(appTheme.bgPrimaryColor, Colors.blueGrey, 0.5), appTheme.bgPrimaryColor],
+                center: Alignment(0.6, -0.3),
+                focal: Alignment(0.3, -0.1),
+                focalRadius: 3.5,
+              )
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -222,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     mainData.homePageTitleText,
                     style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 26,
                         color: appTheme.textAccentColor
                     ),
                     textAlign: TextAlign.center,

@@ -21,7 +21,7 @@ class FancyBulletList extends StatelessWidget {
               children: [
                 Icon(
                   bulletIcon,
-                  size: 24,
+                  size: 32,
                   color: bulletIconColor,
                 ),
                 SizedBox(
@@ -31,7 +31,7 @@ class FancyBulletList extends StatelessWidget {
                   child: Text(
                     listItems[index],
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 21,
                       color: textColor
                     ),
                   ),

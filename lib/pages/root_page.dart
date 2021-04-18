@@ -1,5 +1,5 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import '../../main.dart';
+import '../main.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';

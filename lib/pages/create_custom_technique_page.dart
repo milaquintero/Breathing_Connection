@@ -72,6 +72,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
       appBarColor: appTheme.brandPrimaryColor,
       withIconHeader: true,
+      appBarHeight: mainData.appBarHeight,
       form: Form(
         key: _formKey,
         child: Column(

@@ -22,12 +22,12 @@ class FancyInstructionalText extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(10),
-        gradient: RadialGradient(
-          colors: [Colors.blueGrey, Color.lerp(bgColor, bgGradientComparisonColor, 0.5), bgColor],
-          center: Alignment(0.6, -0.3),
-          focal: Alignment(0.3, -0.1),
-          focalRadius: 3.5,
-        )
+          gradient: RadialGradient(
+            colors: [bgGradientComparisonColor, Color.lerp(bgColor, bgGradientComparisonColor, 0.5), bgColor],
+            center: Alignment(0.6, -0.3),
+            focal: Alignment(0.3, -0.1),
+            focalRadius: 3.5,
+          )
       ),
       child: Stack(
         alignment: Alignment.topCenter,

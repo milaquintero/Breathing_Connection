@@ -35,15 +35,16 @@ class _ProLicensePageState extends State<ProLicensePage> {
       appBarColor: appTheme.brandPrimaryColor,
       decorationPrimaryColor: appTheme.decorationPrimaryColor,
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
+      appBarHeight: mainData.appBarHeight,
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 32),
+            padding: EdgeInsets.only(top: 36, bottom: 16),
             child: Text(
               mainData.proPageHeaderText,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 36,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: appTheme.textSecondaryColor
               ),

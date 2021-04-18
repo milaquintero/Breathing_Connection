@@ -12,6 +12,7 @@ class FancySplitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainContentColor,
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,

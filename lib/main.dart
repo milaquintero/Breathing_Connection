@@ -18,7 +18,7 @@ import 'models/view_technique_details_handler.dart';
 
 /// Global [SharedPreferences] object.
 SharedPreferences prefs;
-/// The [SharedPreferences] key to access the alarm fire count.
+/// The [SharedPreferences] keys to access the notification header and footer.
 const String notificationHeaderKey = 'header';
 const String notificationFooterKey = 'footer';
 
@@ -93,6 +93,9 @@ class _BreathingConnectionState extends State<BreathingConnection> {
           '/create-custom-technique': (context)=>CreateCustomTechniquePage(),
           '/technique-details': (context)=>TechniqueDetailsPage(),
         },
+        theme: ThemeData(
+          fontFamily: 'ZillaSlab'
+        ),
       )
     );
   }

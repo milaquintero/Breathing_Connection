@@ -45,7 +45,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         title: Text(
           'App Settings',
           style: TextStyle(
-              fontSize: 24
+              fontSize: 30
           ),
         ),
         centerTitle: true,

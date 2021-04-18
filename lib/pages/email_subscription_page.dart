@@ -38,6 +38,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
       withIconHeader: true,
       appBarColor: appTheme.brandPrimaryColor,
+      appBarHeight: mainData.appBarHeight,
       form: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,

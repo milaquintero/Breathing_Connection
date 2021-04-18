@@ -56,21 +56,26 @@ class _SettingSectionState extends State<SettingSection> {
                     left: -80,
                     top: -100,
                     child: Container(
-                      height: 400,
-                      width: 400,
+                      height: 450,
+                      width: 450,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
-                        color: widget.headerDecorationColor,
+                        gradient: RadialGradient(
+                          colors: [Colors.blueGrey, Color.lerp(widget.headerDecorationColor, Colors.blueGrey, 0.01), widget.headerDecorationColor],
+                          center: Alignment(0.6, 0.3),
+                          focal: Alignment(0.3, -0.1),
+                          focalRadius: 0.5,
+                        ),
                       ),
                     )
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight / 36),
+                  padding: EdgeInsets.symmetric(vertical: 28),
                   child: Center(
                     child: Text(
                       widget.headerTitle,
                       style: TextStyle(
-                          fontSize: screenHeight / 24,
+                          fontSize: 30,
                           color: widget.headerTextColor
                       ),
                     ),

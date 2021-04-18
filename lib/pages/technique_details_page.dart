@@ -48,6 +48,7 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
       decorationPrimaryColor: appTheme.decorationPrimaryColor,
       decorationSecondaryColor: appTheme.decorationSecondaryColor,
       appBarColor: appTheme.brandPrimaryColor,
+      appBarHeight: mainData.appBarHeight,
       child: Column(
         children: [
           Padding(

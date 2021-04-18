@@ -36,10 +36,10 @@ class _SettingCardState extends State<SettingCard> {
   @override
   Widget build(BuildContext context) {
     settingTextStyle = TextStyle(
-        fontSize: 22,
+        fontSize: 28,
         color: widget.textColor
     );
-    cardPadding = EdgeInsets.all(20);
+    cardPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 36);
     //get run time type of value
     type = widget.settingValue.runtimeType;
     //screen height
@@ -52,15 +52,20 @@ class _SettingCardState extends State<SettingCard> {
               border: widget.isLast ? Border() : Border(
                   bottom: BorderSide(
                       color: widget.cardBorderColor,
-                      width: widget.isLast ? 0 : 1
-                  )
+                      width: widget.isLast ? 0 : 1.5
+                  ),
+              ),
+              gradient: RadialGradient(
+                colors: [Colors.blueGrey, Color.lerp(widget.cardBgColor, Colors.blueGrey, 0.25), widget.cardBgColor],
+                center: Alignment(0.6, -0.3),
+                focal: Alignment(0.3, -0.1),
+                focalRadius: 12.5,
               )
           ),
-          child: Card(
+          child: Container(
             margin: EdgeInsets.zero,
             child: ListTile(
               contentPadding: cardPadding,
-              tileColor: widget.cardBgColor,
               leading: Icon(
                 Icons.multitrack_audio_rounded,
                 size: 32,
@@ -82,17 +87,24 @@ class _SettingCardState extends State<SettingCard> {
         )
       ];
     }
-    //if setting type is string
+    //if setting type is int/string
     else{
       settingDisplay = [
-        Card(
+        Container(
           margin: EdgeInsets.zero,
+          decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [Colors.blueGrey, Color.lerp(widget.cardBgColor, Colors.blueGrey, 0.25), widget.cardBgColor],
+                center: Alignment(0.6, -0.3),
+                focal: Alignment(0.3, -0.1),
+                focalRadius: 12.5,
+              )
+          ),
           child: ListTile(
             contentPadding: cardPadding,
-            tileColor: widget.cardBgColor,
             leading: Icon(
               Icons.color_lens_outlined,
-              size: 32,
+              size: 36,
               color: widget.cardIconColor,
             ),
             title: Text(
@@ -109,7 +121,7 @@ class _SettingCardState extends State<SettingCard> {
                       builder: (context){
                         return DialogThemeSelection(
                           titleText: 'Select Theme',
-                          titlePadding: EdgeInsets.symmetric(vertical: 12),
+                          titlePadding: EdgeInsets.only(top: 12),
                           headerIcon: Icons.color_lens_sharp,
                           headerBgColor: widget.curThemePrimaryColor,
                           themeList: widget.selectionList,

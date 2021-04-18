@@ -22,7 +22,7 @@ class DialogThemeSelection extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+            padding: EdgeInsets.only(top: 24, bottom: 24, left: 24, right: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -39,7 +39,12 @@ class DialogThemeSelection extends StatelessWidget {
                 ),
                 ListView.builder(
                   itemBuilder: (context, index){
-                    return Card(
+                    return Container(
+                      margin: EdgeInsets.only(top: 12),
+                      decoration: BoxDecoration(
+                        color: themeList[index].brandPrimaryColor,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
                       child: ListTile(
                         onTap: (){
                           //close dialog
@@ -54,7 +59,6 @@ class DialogThemeSelection extends StatelessWidget {
                             color: themeList[index].textPrimaryColor
                           ),
                         ),
-                        tileColor: themeList[index].brandPrimaryColor,
                       ),
                     );
                   },

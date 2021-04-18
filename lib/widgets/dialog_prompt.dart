@@ -13,13 +13,12 @@ class DialogPrompt extends StatelessWidget {
   final Color headerBgColor;
   final Color titleColor;
   final Color subtitleColor;
-  final double dialogHeight;
   final EdgeInsets titlePadding;
   final EdgeInsets subtitlePadding;
   DialogPrompt({this.cbFunction, this.denyButtonText, this.approveButtonText,
     this.titleText, this.subtitleText, this.headerIcon,
     this.approveButtonColor, this.denyButtonColor, this.headerBgColor,
-    this.dialogHeight, this.titlePadding, this.subtitlePadding,
+    this.titlePadding, this.subtitlePadding,
     this.subtitleColor, this.titleColor, this.bgColor});
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class DialogPrompt extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+            padding: EdgeInsets.only(top: 28, bottom: 28, left: 12, right: 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -104,7 +103,7 @@ class DialogPrompt extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: -60,
+            top: -50,
             child: CircleAvatar(
               backgroundColor: headerBgColor,
               radius: 40,

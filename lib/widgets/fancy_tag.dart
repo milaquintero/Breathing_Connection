@@ -25,15 +25,15 @@ class FancyTag extends StatelessWidget {
         mainAxisAlignment: isDismissible ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Stack(
-              alignment: isDismissible ? Alignment.centerLeft : Alignment.center,
+            child: Column(
+              crossAxisAlignment: isDismissible ? CrossAxisAlignment.start : CrossAxisAlignment.center,
               children: [
                 Text(
                   tagName,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: nameFontSize ?? 18,
+                    fontSize: nameFontSize ?? 24,
                     fontWeight: FontWeight.bold
                   ),
                   textAlign: TextAlign.center,

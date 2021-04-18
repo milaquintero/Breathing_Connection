@@ -160,8 +160,8 @@
       }
     ],
     "popupWaitTime": "30",
-    "appBarHeight": "72.0",
-    "homePageTitleText": "Your breathing Journey",
+    "appBarHeight": "96.0",
+    "homePageTitleText": "Your Breathing Journey",
     "emailPopupHeaderText": "Stay In Touch",
     "emailPopupBodyText": "Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!",
     "emailPopupApproveBtnText": "Subscribe",
@@ -385,6 +385,6 @@
         "Emergency"
       ],
       "associatedUserID": null
-    },
+    }
   ]
 }

@@ -27,7 +27,7 @@ class DialogAlert extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+            padding: EdgeInsets.only(top: 28, bottom: 28, left: 12, right: 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
