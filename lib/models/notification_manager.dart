@@ -9,7 +9,7 @@ class NotificationManager
 
   void initNotificationManager()
   {
-    initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    initializationSettingsAndroid = new AndroidInitializationSettings('@drawable/ic_stat_onesignal_default');
     initializationSettingsMacOS = new MacOSInitializationSettings();
     initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, macOS: initializationSettingsMacOS);
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
