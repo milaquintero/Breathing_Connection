@@ -1,4 +1,3 @@
-import 'package:breathing_connection/constants.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +11,11 @@ class TechniqueSection extends StatefulWidget {
   final IconData startIcon;
   final Function(Technique) viewTechniqueDetails;
   final Color decorationColor;
+  final String assetURL;
   TechniqueSection({this.headerText, this.techniques,
     this.textBgColor, this.textColor, this.startIcon,
     this.headerColor, this.headerTextColor, this.viewTechniqueDetails,
-    this.decorationColor});
+    this.decorationColor, this.assetURL});
 
   @override
   _TechniqueSectionState createState() => _TechniqueSectionState();
@@ -90,7 +90,7 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    "$BASE_IMAGE_ASSET_URL/${widget.techniques[index].assetImage}"
+                                    "${widget.assetURL}/${widget.techniques[index].assetImage}"
                                 ),
                                 fit: BoxFit.cover,
                             ),

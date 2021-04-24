@@ -1,8 +1,8 @@
 import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/custom_technique_form_model.dart';
-import 'package:breathing_connection/models/inhale_exhale_type.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/technique.dart';
@@ -37,6 +37,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   AppTheme appTheme;
   //current user data
   User curUser;
+  //CDN asset handler
+  AssetHandler assetHandler;
   //inhale/exhale type options
   List<DropdownMenuItem<int>> inhaleExhaleTypeOptions = [];
   @override
@@ -51,6 +53,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
     //current user data
     curUser = Provider.of<User>(context);
+    //get CDN asset handler
+    assetHandler = Provider.of<AssetHandler>(context);
     //set inhale exhale type options
     inhaleExhaleTypeOptions = mainData.inhaleExhaleTypes.map((inhaleExhaleType){
       return DropdownMenuItem<int>(
@@ -186,6 +190,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   btnTextColorSelected: appTheme.textPrimaryColor,
                   btnTextColorUnselected: appTheme.textPrimaryColor,
                   bgGradientComparisonColor: appTheme.bgAccentColor,
+                  assetURL: assetHandler.imageAssetURL,
                   onChange: (assetImage){
                     customTechniqueFormModel.assetImage = assetImage;
                   }

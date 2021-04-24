@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
@@ -58,6 +59,8 @@ class _HomePageState extends State<HomePage> {
   List<Technique> availableTechniques;
   //current user data
   User curUser;
+  //CDN asset handler
+  AssetHandler assetHandler;
   @override
   void dispose() {
     super.dispose();
@@ -74,6 +77,8 @@ class _HomePageState extends State<HomePage> {
     availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
     //app main data
     mainData = Provider.of<MainData>(widget.rootContext);
+    //get asset handler for CDN resources
+    assetHandler = Provider.of<AssetHandler>(widget.rootContext);
     //screen height
     screenHeight = MediaQuery.of(context).size.height;
     //add morning section to main content
@@ -87,6 +92,7 @@ class _HomePageState extends State<HomePage> {
             headerColor: appTheme.amTechniqueSectionColor,
             headerTextColor: appTheme.amTechniqueTextColor,
             decorationColor: appTheme.bgAccentColor,
+            assetURL: assetHandler.imageAssetURL,
             viewTechniqueDetails: (Technique selectedTechnique){
               handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
             }
@@ -103,6 +109,7 @@ class _HomePageState extends State<HomePage> {
           headerColor: appTheme.pmTechniqueSectionColor,
           headerTextColor: appTheme.pmTechniqueTextColor,
           decorationColor: appTheme.bgAccentColor,
+          assetURL: assetHandler.imageAssetURL,
           viewTechniqueDetails: (Technique selectedTechnique){
             handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
           },
@@ -119,6 +126,7 @@ class _HomePageState extends State<HomePage> {
           headerColor: appTheme.emergencyTechniqueSectionColor,
           headerTextColor: appTheme.emergencyTechniqueTextColor,
           decorationColor: appTheme.bgAccentColor,
+          assetURL: assetHandler.imageAssetURL,
           viewTechniqueDetails: (Technique selectedTechnique){
             handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
           },
@@ -137,6 +145,7 @@ class _HomePageState extends State<HomePage> {
             headerColor: appTheme.challengeTechniqueSectionColor,
             headerTextColor: appTheme.challengeTechniqueTextColor,
             decorationColor: appTheme.bgAccentColor,
+            assetURL: assetHandler.imageAssetURL,
             viewTechniqueDetails: (Technique selectedTechnique){
               handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
             },
@@ -154,6 +163,7 @@ class _HomePageState extends State<HomePage> {
               headerColor: appTheme.customTechniqueSectionColor,
               headerTextColor: appTheme.customTechniqueTextColor,
               decorationColor: appTheme.bgAccentColor,
+              assetURL: assetHandler.imageAssetURL,
               viewTechniqueDetails: (Technique selectedTechnique){
                 handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
               },

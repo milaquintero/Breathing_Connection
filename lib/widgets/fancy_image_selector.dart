@@ -9,10 +9,11 @@ class FancyImageSelector extends StatefulWidget {
   final Color btnTextColorSelected;
   final Color btnTextColorUnselected;
   final Color bgGradientComparisonColor;
+  final String assetURL;
   FancyImageSelector({this.images, this.onChange,
     this.btnColorSelected, this.btnColorUnselected,
     this.btnTextColorSelected, this.btnTextColorUnselected,
-    this.bgGradientComparisonColor});
+    this.bgGradientComparisonColor, this.assetURL});
 
   @override
   _FancyImageSelectorState createState() => _FancyImageSelectorState();
@@ -48,7 +49,7 @@ class _FancyImageSelectorState extends State<FancyImageSelector> {
               padding: EdgeInsets.only(top: 24),
               child: ClipRRect(
                 child: Image.network(
-                    "$BASE_IMAGE_ASSET_URL/$image",
+                    "${widget.assetURL}/$image",
                     height: 150,
                     width: 150,
                     fit: BoxFit.fitHeight,

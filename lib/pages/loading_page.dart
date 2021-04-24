@@ -1,12 +1,10 @@
 import 'dart:async';
-
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/nav_link.dart';
-import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/services/main_data_service.dart';
@@ -67,8 +65,10 @@ class _LoadingPageState extends State<LoadingPage> {
     await getTechniques();
     //get main data only after user data is present
     await getMainData();
-    //get user's selected theme based on themeID from user settings
     User curUser = Provider.of<User>(context, listen: false);
+    //set asset handler URL based on whether user has full access
+    Provider.of<AssetHandler>(context, listen: false).init(curUser.hasFullAccess);
+    //get user's selected theme based on themeID from user settings
     MainData mainData = Provider.of<MainData>(context, listen: false);
     selectedTheme = mainData.themes.firstWhere((theme) => theme.themeID == curUser.userSettings.themeID);
     //load user's latest selected theme
