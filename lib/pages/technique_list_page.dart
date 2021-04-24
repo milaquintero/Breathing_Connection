@@ -140,7 +140,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                         borderRadius: BorderRadius.circular(300),
                         color: appTheme.bgAccentColor,
                         gradient: RadialGradient(
-                          colors: [Colors.blueGrey, Color.lerp(appTheme.bgAccentColor, Colors.blueGrey, 0.5), appTheme.bgAccentColor],
+                          colors: [Colors.blueGrey[400], Color.lerp(appTheme.bgAccentColor, Colors.blueGrey[400], 0.01), appTheme.bgAccentColor],
                           center: Alignment(0.6, 0.3),
                           focal: Alignment(0.3, -0.1),
                           focalRadius: 0.5,

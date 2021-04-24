@@ -61,7 +61,7 @@ class _SettingSectionState extends State<SettingSection> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(300),
                         gradient: RadialGradient(
-                          colors: [Colors.blueGrey, Color.lerp(widget.headerDecorationColor, Colors.blueGrey, 0.01), widget.headerDecorationColor],
+                          colors: [Colors.blueGrey[400], Color.lerp(widget.headerDecorationColor, Colors.blueGrey[400], 0.01), widget.headerDecorationColor],
                           center: Alignment(0.6, 0.3),
                           focal: Alignment(0.3, -0.1),
                           focalRadius: 0.5,

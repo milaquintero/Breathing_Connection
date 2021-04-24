@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: 24, bottom: 36),
             decoration: BoxDecoration(
               gradient: RadialGradient(
-                colors: [Colors.blueGrey, Color.lerp(appTheme.bgPrimaryColor, Colors.blueGrey, 0.5), appTheme.bgPrimaryColor],
+                colors: [Colors.blueGrey[400], Color.lerp(appTheme.bgPrimaryColor, Colors.blueGrey[400], 0.5), appTheme.bgPrimaryColor],
                 center: Alignment(0.6, -0.3),
                 focal: Alignment(0.3, -0.1),
                 focalRadius: 3.5,
