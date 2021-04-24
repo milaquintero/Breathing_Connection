@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                   height: screenHeight / 4.3,
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Text(
                     mainData.homePageTitleText,
                     style: TextStyle(
