@@ -1,3 +1,4 @@
+import 'package:breathing_connection/constants.dart';
 import 'package:flutter/material.dart';
 
 class FancyImageSelector extends StatefulWidget {
@@ -46,8 +47,8 @@ class _FancyImageSelectorState extends State<FancyImageSelector> {
             Padding(
               padding: EdgeInsets.only(top: 24),
               child: ClipRRect(
-                child: Image.asset(
-                    image,
+                child: Image.network(
+                    "$BASE_IMAGE_ASSET_URL/$image",
                     height: 150,
                     width: 150,
                     fit: BoxFit.fitHeight,

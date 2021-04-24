@@ -1,3 +1,4 @@
+import 'package:breathing_connection/constants.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,9 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                         padding: EdgeInsets.symmetric(horizontal: screenHeight / 18.5),
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(widget.techniques[index].assetImage),
+                                image: NetworkImage(
+                                    "$BASE_IMAGE_ASSET_URL/${widget.techniques[index].assetImage}"
+                                ),
                                 fit: BoxFit.cover,
                             ),
                         ),

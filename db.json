@@ -56,14 +56,14 @@
       }
     ],
     "images": [
-      "assets/day.jpg",
-      "assets/night.jpg",
-      "assets/emergency.jpg",
-      "assets/challenge.jpg",
-      "assets/custom-1.jpg",
-      "assets/custom-2.jpg",
-      "assets/custom-3.jpg",
-      "assets/custom-4.jpg"
+      "day.jpg",
+      "night.jpg",
+      "emergency.jpg",
+      "challenge.jpg",
+      "custom-1.jpg",
+      "custom-2.jpg",
+      "custom-3.jpg",
+      "custom-4.jpg"
     ],
     "inhaleExhaleTypes": [
       {
