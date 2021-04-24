@@ -117,22 +117,29 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     }
     //user has full access add custom technique button
     else{
-      mainContent.insert(0, Card(
+      mainContent.insert(0, Container(
         margin: EdgeInsets.zero,
+        decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandSecondaryColor, Colors.blueGrey[400], 0.01), appTheme.brandSecondaryColor],
+              center: Alignment(-10.5, 0.8),
+              focal: Alignment(0.3, -0.1),
+              focalRadius: 500.5,
+            )
+        ),
         child: ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           onTap: (){
             //top card should take user to custom technique form
             Navigator.of(context).pushNamed('/create-custom-technique');
           },
-          tileColor: appTheme.brandSecondaryColor,
           title: Stack(
               alignment: Alignment.topCenter,
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                    left: -80,
-                    top: -100,
+                    left: -100,
+                    top: -120,
                     child: Container(
                       height: 450,
                       width: 450,

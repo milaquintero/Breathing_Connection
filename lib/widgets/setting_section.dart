@@ -47,7 +47,14 @@ class _SettingSectionState extends State<SettingSection> {
       children: [
         ClipRect(
           child: Container(
-            color: widget.headerBgColor,
+            decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [Colors.blueGrey[400], Color.lerp(widget.headerBgColor, Colors.blueGrey[400], 0.01), widget.headerBgColor],
+                  center: Alignment(-10.5, 0.8),
+                  focal: Alignment(0.3, -0.1),
+                  focalRadius: 500.4,
+                )
+            ),
             child: Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,

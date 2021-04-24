@@ -34,7 +34,14 @@ class _TechniqueSectionState extends State<TechniqueSection> {
   Widget build(BuildContext context) {
     return ClipRect(
       child: Container(
-        color: widget.headerColor,
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [Colors.blueGrey[400], Color.lerp(widget.headerColor, Colors.blueGrey[400], 0.01), widget.headerColor],
+            center: Alignment(-10.5, 0.8),
+            focal: Alignment(0.3, -0.1),
+            focalRadius: 5.4,
+          )
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
