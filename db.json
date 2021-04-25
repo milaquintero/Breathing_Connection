@@ -65,6 +65,13 @@
       "custom-3.jpg",
       "custom-4.jpg"
     ],
+    "music": [
+      "music.mp3"
+    ],
+    "sounds": [
+      "inhale.wav",
+      "exhale.wav"
+    ],
     "inhaleExhaleTypes": [
       {
         "id": 1,

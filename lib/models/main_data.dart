@@ -7,6 +7,8 @@ import 'nav_link.dart';
 class MainData{
   List<NavLink> pages;
   List<String> images;
+  List<String> music;
+  List<String> sounds;
   List<InhaleExhaleType> inhaleExhaleTypes;
   int popupWaitTime;
   List<AppTheme> themes;
@@ -49,15 +51,19 @@ class MainData{
     this.challengeReminderFooter, this.challengeReminderHeader, this.dailyReminderFooter,
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
-    this.proSubSuccessHead});
+    this.proSubSuccessHead, this.music, this.sounds});
   factory MainData.fromJson(Map<String, dynamic> json){
     Iterable jsonPages = json['pages'] ?? [];
     Iterable jsonImages = json['images'] ?? [];
+    Iterable jsonMusic = json['music'] ?? [];
+    Iterable jsonSounds = json['sounds'] ?? [];
     Iterable jsonInhaleExhaleTypes = json['inhaleExhaleTypes'] ?? [];
     Iterable jsonThemes = json['themes'] ?? [];
     return MainData(
       pages: jsonPages.map((jsonPage) => NavLink.fromJson(jsonPage)).toList(),
-      images: jsonImages.map((jsonImage) => jsonImage.toString()).toList(),
+      images: jsonImages.map((jsonImageFile) => jsonImageFile.toString()).toList(),
+      music: jsonMusic.map((jsonMusicFile) => jsonMusicFile.toString()).toList(),
+      sounds: jsonSounds.map((jsonSoundFile) => jsonSoundFile.toString()).toList(),
       inhaleExhaleTypes: jsonInhaleExhaleTypes.map((jsonInhaleExhaleType) => InhaleExhaleType.fromJson(jsonInhaleExhaleType)).toList(),
       popupWaitTime: int.parse(json['popupWaitTime']),
       themes: jsonThemes.map((jsonTheme) => AppTheme.fromJson(jsonTheme)).toList(),
@@ -94,6 +100,8 @@ class MainData{
   setMainData(MainData mainData){
     this.pages = mainData.pages;
     this.images = mainData.images;
+    this.music = mainData.music;
+    this.sounds = mainData.sounds;
     this.inhaleExhaleTypes = mainData.inhaleExhaleTypes;
     this.popupWaitTime = mainData.popupWaitTime;
     this.themes = mainData.themes;

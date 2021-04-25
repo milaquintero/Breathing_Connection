@@ -18,7 +18,10 @@ class AssetHandler extends ChangeNotifier{
     else{
       baseAssetURL = FREE_VERSION_ASSET_URL;
     }
+    //set image, music and sound asset urls
     imageAssetURL = "$baseAssetURL/$IMAGE_ASSET_DIR";
+    musicAssetURL = "$baseAssetURL/$MUSIC_ASSET_DIR";
+    soundAssetURL = "$baseAssetURL/$SOUND_ASSET_DIR";
     notifyListeners();
   }
 }
