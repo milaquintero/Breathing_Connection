@@ -1,4 +1,7 @@
+import 'dart:collection';
 import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 class AppTheme{
   int themeID;
   String themeName;
@@ -47,7 +50,7 @@ class AppTheme{
   this.cardBgColor, this.cardBorderColor, this.cardSubtitleColor, this.cardTitleColor,
   this.disabledCardBgAccentColor, this.disabledCardBgColor, this.disabledCardBorderColor,
   this.disabledCardTextColor, this.cardActionColor, this.bottomNavBgColor});
-  factory AppTheme.fromJson(Map<String, dynamic> json){
+  factory AppTheme.fromSnapshot(LinkedHashMap json){
     return AppTheme(
       themeID: json['themeID'],
       themeName: json['themeName'],

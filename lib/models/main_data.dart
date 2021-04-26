@@ -1,6 +1,8 @@
-import 'package:breathing_connection/main.dart';
+import 'dart:convert';
+
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/inhale_exhale_type.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'nav_link.dart';
 
@@ -40,6 +42,7 @@ class MainData{
   String proSubSuccessBody;
   String emailSubSuccessHead;
   String emailSubSuccessBody;
+
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
     this.emailPopupApproveBtnText, this.emailPopupBodyText, this.emailPopupDenyBtnText,
@@ -52,51 +55,73 @@ class MainData{
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
     this.proSubSuccessHead, this.music, this.sounds});
-  factory MainData.fromJson(Map<String, dynamic> json){
-    Iterable jsonPages = json['pages'] ?? [];
-    Iterable jsonImages = json['images'] ?? [];
-    Iterable jsonMusic = json['music'] ?? [];
-    Iterable jsonSounds = json['sounds'] ?? [];
-    Iterable jsonInhaleExhaleTypes = json['inhaleExhaleTypes'] ?? [];
-    Iterable jsonThemes = json['themes'] ?? [];
-    return MainData(
-      pages: jsonPages.map((jsonPage) => NavLink.fromJson(jsonPage)).toList(),
-      images: jsonImages.map((jsonImageFile) => jsonImageFile.toString()).toList(),
-      music: jsonMusic.map((jsonMusicFile) => jsonMusicFile.toString()).toList(),
-      sounds: jsonSounds.map((jsonSoundFile) => jsonSoundFile.toString()).toList(),
-      inhaleExhaleTypes: jsonInhaleExhaleTypes.map((jsonInhaleExhaleType) => InhaleExhaleType.fromJson(jsonInhaleExhaleType)).toList(),
-      popupWaitTime: int.parse(json['popupWaitTime']),
-      themes: jsonThemes.map((jsonTheme) => AppTheme.fromJson(jsonTheme)).toList(),
-      appBarHeight: double.parse(json['appBarHeight']),
-      homePageTitleText: json['homePageTitleText'],
-      amSessionHeaderText: json['amSectionHeaderText'],
-      pmSessionHeaderText: json['pmSectionHeaderText'],
-      emergencySessionHeaderText: json['emergencySectionHeaderText'],
-      challengeSessionHeaderText: json['challengeSectionHeaderText'],
-      customSessionHeaderText: json['customSectionHeaderText'],
-      emailPageSubmitBtnText: json['emailPageSubmitBtnText'],
-      proPageHeaderText: json['proPageHeaderText'],
-      proPageSubmitBtnText: json['proPageSubmitBtnText'],
-      emailPopupHeaderText: json['emailPopupHeaderText'],
-      emailPopupBodyText: json['emailPopupBodyText'],
-      emailPopupApproveBtnText: json['emailPopupApproveBtnText'],
-      emailPopupDenyBtnText: json['emailPopupDenyBtnText'],
-      proPopupHeaderText: json['proPopupHeaderText'],
-      proPopupBodyText: json['proPopupBodyText'],
-      proPopupApproveBtnText: json['proPopupApproveBtnText'],
-      proPopupDenyBtnText: json['proPopupDenyBtnText'],
-      dailyReminderFooter: json['dailyReminderFooter'],
-      dailyReminderHeader: json['dailyReminderHeader'],
-      challengeReminderFooter: json['challengeReminderFooter'],
-      challengeReminderHeader: json['challengeReminderHeader'],
-      customTechniqueSuccessHead: json['customTechniqueSuccessHead'],
-      customTechniqueSuccessBody: json['customTechniqueSuccessBody'],
-      proSubSuccessHead: json['proSubSuccessHead'],
-      proSubSuccessBody: json['proSubSuccessBody'],
-      emailSubSuccessHead: json['emailSubSuccessHead'],
-      emailSubSuccessBody: json['emailSubSuccessBody']
-    );
+
+  factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
+    if(op == 'constants'){
+      tempMainData.popupWaitTime = int.parse(snapshot.data['popupWaitTime']) ?? 30;
+      tempMainData.appBarHeight = double.parse(snapshot.data['appBarHeight']) ?? 96.0;
+      tempMainData.homePageTitleText = snapshot.data['homePageTitleText'] ?? '';
+      tempMainData.amSessionHeaderText = snapshot.data['amSectionHeaderText'] ?? '';
+      tempMainData.pmSessionHeaderText = snapshot.data['pmSectionHeaderText'] ?? '';
+      tempMainData.emergencySessionHeaderText = snapshot.data['emergencySectionHeaderText'] ?? '';
+      tempMainData.challengeSessionHeaderText = snapshot.data['challengeSectionHeaderText'] ?? '';
+      tempMainData.customSessionHeaderText = snapshot.data['customSectionHeaderText'] ?? '';
+      tempMainData.emailPageSubmitBtnText = snapshot.data['emailPageSubmitBtnText'] ?? '';
+      tempMainData.proPageHeaderText = snapshot.data['proPageHeaderText'] ?? '';
+      tempMainData.proPageSubmitBtnText = snapshot.data['proPageSubmitBtnText'] ?? '';
+      tempMainData.emailPopupHeaderText = snapshot.data['emailPopupHeaderText'] ?? '';
+      tempMainData.emailPopupBodyText = snapshot.data['emailPopupBodyText'] ?? '';
+      tempMainData.emailPopupApproveBtnText = snapshot.data['emailPopupApproveBtnText'] ?? '';
+      tempMainData.emailPopupDenyBtnText = snapshot.data['emailPopupDenyBtnText'] ?? '';
+      tempMainData.proPopupHeaderText = snapshot.data['proPopupHeaderText'] ?? '';
+      tempMainData.proPopupBodyText = snapshot.data['proPopupBodyText'] ?? '';
+      tempMainData.proPopupApproveBtnText = snapshot.data['proPopupApproveBtnText'] ?? '';
+      tempMainData.proPopupDenyBtnText = snapshot.data['proPopupDenyBtnText'] ?? '';
+      tempMainData.dailyReminderFooter = snapshot.data['dailyReminderFooter'] ?? '';
+      tempMainData.dailyReminderHeader = snapshot.data['dailyReminderHeader'] ?? '';
+      tempMainData.challengeReminderFooter = snapshot.data['challengeReminderFooter'] ?? '';
+      tempMainData.challengeReminderHeader = snapshot.data['challengeReminderHeader'] ?? '';
+      tempMainData.customTechniqueSuccessHead = snapshot.data['customTechniqueSuccessHead'] ?? '';
+      tempMainData.customTechniqueSuccessBody = snapshot.data['customTechniqueSuccessBody'] ?? '';
+      tempMainData.proSubSuccessHead = snapshot.data['proSubSuccessHead'] ?? '';
+      tempMainData.proSubSuccessBody = snapshot.data['proSubSuccessBody'] ?? '';
+      tempMainData.emailSubSuccessHead = snapshot.data['emailSubSuccessHead'] ?? '';
+      tempMainData.emailSubSuccessBody = snapshot.data['emailSubSuccessBody'] ?? '';
+    }
+    else if(op == 'meta'){
+      Iterable pages = snapshot['pages'] ?? [];
+      tempMainData.pages = pages
+          .map((page){
+        return NavLink.fromSnapshot(page);
+      }).toList();
+      Iterable inhaleExhaleTypes = snapshot['inhaleExhaleTypes'] ?? [];
+      tempMainData.inhaleExhaleTypes = inhaleExhaleTypes
+          .map((inhaleExhaleType){
+        return InhaleExhaleType.fromSnapshot(inhaleExhaleType);
+      }).toList();
+    }
+    else if(op == 'assets'){
+      Iterable images = snapshot['images'] ?? [];
+      tempMainData.images = images
+          .map((imageFile) => imageFile.toString()).toList();
+      Iterable music = snapshot.data['music'] ?? [];
+      tempMainData.music = music
+          .map((musicFile) => musicFile.toString()).toList();
+      Iterable sounds = snapshot.data['sounds'] ?? [];
+      tempMainData.sounds = sounds
+          .map((soundFile) => soundFile.toString()).toList();
+    }
+    else if(op == 'colors'){
+      Iterable themes = snapshot.data['themes'] ?? [];
+      tempMainData.themes = themes
+          .map((theme){
+        return AppTheme.fromSnapshot(theme);
+      }).toList();
+    }
+
+    return tempMainData;
   }
+
   setMainData(MainData mainData){
     this.pages = mainData.pages;
     this.images = mainData.images;

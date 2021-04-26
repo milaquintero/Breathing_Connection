@@ -46,7 +46,7 @@ class _LoadingPageState extends State<LoadingPage> {
     //user data
     curUser = Provider.of<User>(context, listen: false);
     //if user has full access remove pro license page from nav links
-    if(curUser.hasFullAccess){
+    if(curUser.hasFullAccess && mainData.pages.isNotEmpty){
       mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
     }
     //update main data in shareable resource

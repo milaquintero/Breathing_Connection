@@ -33,6 +33,52 @@
     }
   ],
   "main-data": {
+    "images": [
+      "day.jpg",
+      "night.jpg",
+      "emergency.jpg",
+      "challenge.jpg",
+      "custom-1.jpg",
+      "custom-2.jpg",
+      "custom-3.jpg",
+      "custom-4.jpg"
+    ],
+    "music": [
+      "music.mp3"
+    ],
+    "sounds": [
+      "inhale.wav",
+      "exhale.wav"
+    ],
+    "popupWaitTime": "30",
+    "appBarHeight": "96.0",
+    "homePageTitleText": "Your Breathing Journey",
+    "emailPopupHeaderText": "Stay In Touch",
+    "emailPopupBodyText": "Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!",
+    "emailPopupApproveBtnText": "Subscribe",
+    "emailPopupDenyBtnText": "Close",
+    "emailPageSubmitBtnText": "Subscribe",
+    "proPopupHeaderText": "Breathe Easy",
+    "proPopupBodyText": "Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!",
+    "proPopupApproveBtnText": "Try It Now",
+    "proPopupDenyBtnText": "Close",
+    "proPageSubmitBtnText": "Get It Now",
+    "proPageHeaderText": "Breathe better with Breathing Connection Pro",
+    "amSectionHeaderText": "Morning Session",
+    "pmSectionHeaderText": "Night Session",
+    "emergencySectionHeaderText": "Emergency",
+    "challengeSectionHeaderText": "Challenge",
+    "customSectionHeaderText": "Custom",
+    "dailyReminderHeader": "Time to take a breather",
+    "dailyReminderFooter": "Your next breathing session begins now",
+    "challengeReminderHeader": "Time to breathe some life into this day",
+    "challengeReminderFooter": "Challenge yourself with a breathing session now",
+    "emailSubSuccessHead": "Success",
+    "emailSubSuccessBody": "Congrats, you've been added to our newsletter to improve your mind and body!",
+    "proSubSuccessHead": "Access Granted",
+    "proSubSuccessBody": "Welcome to the limitless version of Breathing Connection",
+    "customTechniqueSuccessHead": "Success",
+    "customTechniqueSuccessBody": "Click the Back to Home button to view your Breathing Technique under the Custom Techniques section.",
     "pages": [
       {
         "pageIndex": 0,
@@ -54,23 +100,6 @@
         "pageTitle": "Pro License",
         "pageRoute": "/pro"
       }
-    ],
-    "images": [
-      "day.jpg",
-      "night.jpg",
-      "emergency.jpg",
-      "challenge.jpg",
-      "custom-1.jpg",
-      "custom-2.jpg",
-      "custom-3.jpg",
-      "custom-4.jpg"
-    ],
-    "music": [
-      "music.mp3"
-    ],
-    "sounds": [
-      "inhale.wav",
-      "exhale.wav"
     ],
     "inhaleExhaleTypes": [
       {
@@ -165,36 +194,7 @@
         "cardActionColor": "0xFFFFFFFF",
         "bottomNavBgColor": "0xFF304A7D"
       }
-    ],
-    "popupWaitTime": "30",
-    "appBarHeight": "96.0",
-    "homePageTitleText": "Your Breathing Journey",
-    "emailPopupHeaderText": "Stay In Touch",
-    "emailPopupBodyText": "Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!",
-    "emailPopupApproveBtnText": "Subscribe",
-    "emailPopupDenyBtnText": "Close",
-    "emailPageSubmitBtnText": "Subscribe",
-    "proPopupHeaderText": "Breathe Easy",
-    "proPopupBodyText": "Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!",
-    "proPopupApproveBtnText": "Try It Now",
-    "proPopupDenyBtnText": "Close",
-    "proPageSubmitBtnText": "Get It Now",
-    "proPageHeaderText": "Breathe better with Breathing Connection Pro",
-    "amSectionHeaderText": "Morning Session",
-    "pmSectionHeaderText": "Night Session",
-    "emergencySectionHeaderText": "Emergency",
-    "challengeSectionHeaderText": "Challenge",
-    "customSectionHeaderText": "Custom",
-    "dailyReminderHeader": "Time to take a breather",
-    "dailyReminderFooter": "Your next breathing session begins now",
-    "challengeReminderHeader": "Time to breathe some life into this day",
-    "challengeReminderFooter": "Challenge yourself with a breathing session now",
-    "emailSubSuccessHead": "",
-    "emailSubSuccessBody": "",
-    "proSubSuccessHead": "",
-    "proSubSuccessBody": "",
-    "customTechniqueSuccessHead": "Success",
-    "customTechniqueSuccessBody": "Click the Back to Home button to view your Breathing Technique under the Custom Techniques section."
+    ]
   },
   "techniques": [
     {

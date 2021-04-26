@@ -1,19 +1,48 @@
 import 'package:breathing_connection/models/main_data.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
-
-import '../constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainDataService{
+  static final MainDataService _mainDataService = MainDataService._internal();
+  factory MainDataService(){
+    return _mainDataService;
+  }
+  MainDataService._internal();
+  //collection reference
+  final CollectionReference _mainDataCollection = Firestore.instance.collection('main-data');
   static Future<MainData> mainData() async{
     try{
-      //PROD
-      //Response response = await get('$BASE_URL/techniques');
-      //TEST
-      Response response = await Future.delayed(Duration(seconds: 1), (){
-        return Response('{"pages":[{"pageIndex":0,"pageTitle":"Home","pageRoute":"/home"},{"pageIndex":1,"pageTitle":"Technique List","pageRoute":"/technique-list"},{"pageIndex":2,"pageTitle":"App Settings","pageRoute":"/settings"},{"pageIndex":3,"pageTitle":"Pro License","pageRoute":"/pro"}],"images":["day.jpg","night.jpg","emergency.jpg","challenge.jpg","custom-1.jpg","custom-2.jpg","custom-3.jpg","custom-4.jpg"],"music":["music.mp3"],"sounds":["inhale.wav","exhale.wav"],"inhaleExhaleTypes":[{"id":1,"description":"Nose"},{"id":2,"description":"Mouth"},{"id":3,"description":"Lips"},{"id":4,"description":"Force Abdomen"}],"themes":[{"themeID":1,"themeName":"Primary","brandPrimaryColor":"0xFF01579B","brandSecondaryColor":"0xFF00838F","brandAccentColor":"0xFF303030","bgPrimaryColor":"0xFFFFFFFF","bgSecondaryColor":"0xFFE0F7FA","bgAccentColor":"0xFF78909C","textPrimaryColor":"0xFFFFFFFF","textSecondaryColor":"0xFF01579B","textAccentColor":"0xFF000000","decorationPrimaryColor":"0xFF9E9E9E","decorationSecondaryColor":"0xFF90CAF9","errorColor":"0xFFF44336","amTechniqueSectionColor":"0xFF01579B","amTechniqueTextColor":"0xFFFFFFFF","pmTechniqueSectionColor":"0xFFC51162","pmTechniqueTextColor":"0xFFFFFFFF","emergencyTechniqueSectionColor":"0xFFD32F2F","emergencyTechniqueTextColor":"0xFFFFFFFF","challengeTechniqueSectionColor":"0xFF00838F","challengeTechniqueTextColor":"0xFFFFFFFF","customTechniqueSectionColor":"0xFFFF3D00","customTechniqueTextColor":"0xFFFFFFFF","bulletListIconColor":"0xFF4DD0E1","disabledCardBgColor":"0xFF78909C","disabledCardBgAccentColor":"0xFF90A4AE","disabledCardTextColor":"0xFFBDBDBD","disabledCardBorderColor":"0xFF90A4AE","cardBorderColor":"0xFFE0E0E0","cardTitleColor":"0xFF263238","cardSubtitleColor":"0xFF757575","cardBgColor":"0xFFFFFFFF","cardActionColor":"0xFF0D47A1","bottomNavBgColor":"0xFFEEEEEE"},{"themeID":2,"themeName":"Dark","brandPrimaryColor":"0xFF304A7D","brandSecondaryColor":"0xFF00838F","brandAccentColor":"0xFF607D8B","bgPrimaryColor":"0xFF1D2C4C","bgSecondaryColor":"0xFF1D2C4C","bgAccentColor":"0xFF78909C","textPrimaryColor":"0xFFFFFFFF","textSecondaryColor":"0xFFFFFFFF","textAccentColor":"0xFFE0F2F1","decorationPrimaryColor":"0xFF607D8B","decorationSecondaryColor":"0xFF00838F","errorColor":"0xFFF44336","amTechniqueSectionColor":"0xFF01579B","amTechniqueTextColor":"0xFFFFFFFF","pmTechniqueSectionColor":"0xFFC51162","pmTechniqueTextColor":"0xFFFFFFFF","emergencyTechniqueSectionColor":"0xFFD32F2F","emergencyTechniqueTextColor":"0xFFFFFFFF","challengeTechniqueSectionColor":"0xFF00838F","challengeTechniqueTextColor":"0xFFFFFFFF","customTechniqueSectionColor":"0xFFFF3D00","customTechniqueTextColor":"0xFFFFFFFF","bulletListIconColor":"0xFF4DD0E1","disabledCardBgColor":"0xFF78909C","disabledCardBgAccentColor":"0xFF90A4AE","disabledCardTextColor":"0xFFBDBDBD","disabledCardBorderColor":"0xFF90A4AE","cardBorderColor":"0xFF00838F","cardTitleColor":"0xFFFFFFFF","cardSubtitleColor":"0xFFFFFFFF","cardBgColor":"0xFF1D2C4C","cardActionColor":"0xFFFFFFFF","bottomNavBgColor":"0xFF304A7D"}],"popupWaitTime":"30","appBarHeight":"96.0","homePageTitleText":"Your Breathing Journey","emailPopupHeaderText":"Stay In Touch","emailPopupBodyText":"Subscribe to our newsletter to get weekly video trainings, breath-work hacks, meditation tips and much more!","emailPopupApproveBtnText":"Subscribe","emailPopupDenyBtnText":"Close","emailPageSubmitBtnText":"Subscribe","proPopupHeaderText":"Breathe Easy","proPopupBodyText":"Enjoy immersive healing through breath-work and meditation with Breathing Connection Pro!","proPopupApproveBtnText":"Try It Now","proPopupDenyBtnText":"Close","proPageSubmitBtnText":"Get It Now","proPageHeaderText":"Breathe better with Breathing Connection Pro","amSectionHeaderText":"Morning Session","pmSectionHeaderText":"Night Session","emergencySectionHeaderText":"Emergency","challengeSectionHeaderText":"Challenge","customSectionHeaderText":"Custom","dailyReminderHeader":"Time to take a breather","dailyReminderFooter":"Your next breathing session begins now","challengeReminderHeader":"Time to breathe some life into this day","challengeReminderFooter":"Challenge yourself with a breathing session now","emailSubSuccessHead":"","emailSubSuccessBody":"","proSubSuccessHead":"","proSubSuccessBody":"","customTechniqueSuccessHead":"Success","customTechniqueSuccessBody":"Click the Back to Home button to view your Breathing Technique under the Custom Techniques section."}', 200);
-      });
-      return MainData.fromJson(jsonDecode(response.body));
+      //main data instance to return
+      MainData tempMainData = MainData();
+
+      //get main data constants document
+      DocumentSnapshot mainDataConstantsSnapshot = await _mainDataService._mainDataCollection
+          .document('constants').snapshots().first;
+
+      //set constants data in temp object
+      tempMainData = MainData.fromSnapShot(tempMainData, mainDataConstantsSnapshot, 'constants');
+      print(tempMainData.emailPopupBodyText);
+
+      //get main data meta document
+      DocumentSnapshot mainDataMetaSnapshot = await _mainDataService._mainDataCollection
+          .document('meta').snapshots().first;
+      tempMainData = MainData.fromSnapShot(tempMainData, mainDataMetaSnapshot, 'meta');
+
+      //set meta data in temp object
+
+      //get main data assets document
+      DocumentSnapshot mainDataAssetsSnapshot = await _mainDataService._mainDataCollection
+          .document('assets').snapshots().first;
+
+      //set assets data in temp object
+      tempMainData = MainData.fromSnapShot(tempMainData, mainDataAssetsSnapshot, 'assets');
+
+      //get main data colors document
+      DocumentSnapshot mainDataColorsSnapshot = await _mainDataService._mainDataCollection
+          .document('colors').snapshots().first;
+      //set colors data in temp object
+      tempMainData = MainData.fromSnapShot(tempMainData, mainDataColorsSnapshot, 'colors');
+
+      return tempMainData;
     }
     catch(error){
       throw new Exception(error);

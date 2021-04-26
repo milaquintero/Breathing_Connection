@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class NavLink{
@@ -6,7 +8,7 @@ class NavLink{
   String pageTitle;
   String pageRoute;
   NavLink({this.pageIcon, this.pageTitle, this.pageRoute, this.pageIndex});
-  factory NavLink.fromJson(Map<String, dynamic> json){
+  factory NavLink.fromSnapshot(LinkedHashMap json){
     IconData pageIcon;
     switch(json['pageRoute']){
       case '/home':
@@ -25,7 +27,6 @@ class NavLink{
         pageIcon = Icons.flag;
         break;
     }
-
     return NavLink(
       pageIcon: pageIcon,
       pageRoute: json['pageRoute'],
