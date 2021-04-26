@@ -5,20 +5,26 @@ import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
+import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_split_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/main_data.dart';
 
 List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableTechniques, String op, List<String> availableImages){
   List<Technique> techniqueMatches = [];
   for(int techniqueID in techniqueIDs){
-    Technique techniqueMatch = availableTechniques.firstWhere((technique) => technique.techniqueID == techniqueID);
+    Technique techniqueMatch = availableTechniques
+        .firstWhere(
+            (technique) => technique.techniqueID == techniqueID,
+            orElse: () => null
+    );
     //only get default image if technique isn't custom
-    if(op != 'custom'){
+    if(op != 'custom' && techniqueMatch != null){
       techniqueMatch.assetImage = getAssetImage(op, availableImages);
     }
     techniqueMatches.add(techniqueMatch);
@@ -34,7 +40,11 @@ void handleViewTechniqueDetails(Technique selectedTechnique, BuildContext rootCo
 }
 
 String getAssetImage(String patternToMatch, List<String> availableImages){
-  return availableImages.firstWhere((imageUrl)=>imageUrl.contains(patternToMatch));
+  return availableImages
+      .firstWhere(
+          (imageUrl) => imageUrl.contains(patternToMatch),
+          orElse: () => null
+  );
 }
 
 class HomePage extends StatefulWidget {
@@ -55,8 +65,6 @@ class _HomePageState extends State<HomePage> {
   AppTheme appTheme;
   //app main data
   MainData mainData;
-  //list of available techniques
-  List<Technique> availableTechniques;
   //current user data
   User curUser;
   //CDN asset handler
@@ -73,104 +81,12 @@ class _HomePageState extends State<HomePage> {
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //current user data
     curUser = Provider.of<User>(widget.rootContext);
-    //list of available techniques
-    availableTechniques = Provider.of<List<Technique>>(widget.rootContext);
     //app main data
     mainData = Provider.of<MainData>(widget.rootContext);
     //get asset handler for CDN resources
     assetHandler = Provider.of<AssetHandler>(widget.rootContext);
     //screen height
     screenHeight = MediaQuery.of(context).size.height;
-    //add morning section to main content
-    mainContent.add(
-        TechniqueSection(
-            headerText: mainData.amSessionHeaderText,
-            techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
-            textBgColor: appTheme.amTechniqueSectionColor,
-            textColor: appTheme.amTechniqueTextColor,
-            startIcon: Icons.play_circle_fill,
-            headerColor: appTheme.amTechniqueSectionColor,
-            headerTextColor: appTheme.amTechniqueTextColor,
-            decorationColor: appTheme.bgAccentColor,
-            assetURL: assetHandler.imageAssetURL,
-            viewTechniqueDetails: (Technique selectedTechnique){
-              handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-            }
-        )
-    );
-    //add night section to main content
-    mainContent.add(
-        TechniqueSection(
-          headerText: mainData.pmSessionHeaderText,
-          techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
-          textBgColor: appTheme.pmTechniqueSectionColor,
-          textColor: appTheme.pmTechniqueTextColor,
-          startIcon: Icons.play_circle_fill,
-          headerColor: appTheme.pmTechniqueSectionColor,
-          headerTextColor: appTheme.pmTechniqueTextColor,
-          decorationColor: appTheme.bgAccentColor,
-          assetURL: assetHandler.imageAssetURL,
-          viewTechniqueDetails: (Technique selectedTechnique){
-            handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-          },
-        )
-    );
-    //add emergency section to main content
-    mainContent.add(
-        TechniqueSection(
-          headerText: mainData.emergencySessionHeaderText,
-          techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
-          textBgColor: appTheme.emergencyTechniqueSectionColor,
-          textColor: appTheme.emergencyTechniqueTextColor,
-          startIcon: Icons.add_circle,
-          headerColor: appTheme.emergencyTechniqueSectionColor,
-          headerTextColor: appTheme.emergencyTechniqueTextColor,
-          decorationColor: appTheme.bgAccentColor,
-          assetURL: assetHandler.imageAssetURL,
-          viewTechniqueDetails: (Technique selectedTechnique){
-            handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-          },
-        )
-    );
-    //check if user has paid version
-    if(curUser.hasFullAccess){
-      //add challenge section
-      mainContent.add(
-          TechniqueSection(
-            headerText: mainData.challengeSessionHeaderText,
-            techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
-            textBgColor: appTheme.challengeTechniqueSectionColor,
-            textColor: appTheme.challengeTechniqueTextColor,
-            startIcon: Icons.play_circle_fill,
-            headerColor: appTheme.challengeTechniqueSectionColor,
-            headerTextColor: appTheme.challengeTechniqueTextColor,
-            decorationColor: appTheme.bgAccentColor,
-            assetURL: assetHandler.imageAssetURL,
-            viewTechniqueDetails: (Technique selectedTechnique){
-              handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-            },
-          )
-      );
-      if(curUser.customTechniqueIDs.isNotEmpty){
-        //add formatted custom techniques
-        mainContent.add(
-            TechniqueSection(
-              headerText: mainData.customSessionHeaderText,
-              techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
-              textBgColor: appTheme.customTechniqueSectionColor,
-              textColor: appTheme.customTechniqueTextColor,
-              startIcon: Icons.play_circle_fill,
-              headerColor: appTheme.customTechniqueSectionColor,
-              headerTextColor: appTheme.customTechniqueTextColor,
-              decorationColor: appTheme.bgAccentColor,
-              assetURL: assetHandler.imageAssetURL,
-              viewTechniqueDetails: (Technique selectedTechnique){
-                handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
-              },
-            )
-        );
-      }
-    }
     //handle showing email subscription dialog if user isn't signed up (only show if on home page)
     if(!curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
       //screen height
@@ -253,9 +169,92 @@ class _HomePageState extends State<HomePage> {
       mainContent: MediaQuery.removePadding(
         context: context,
         removeTop: true,
-        child: ListView(
-          shrinkWrap: true,
-          children: mainContent,
+        child: StreamBuilder(
+          stream: TechniqueService().techniqueList,
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  TechniqueSection(
+                      headerText: mainData.amSessionHeaderText,
+                      techniques: getTechniques([curUser.amTechniqueID], snapshot.data, 'day', mainData.images),
+                      textBgColor: appTheme.amTechniqueSectionColor,
+                      textColor: appTheme.amTechniqueTextColor,
+                      startIcon: Icons.play_circle_fill,
+                      headerColor: appTheme.amTechniqueSectionColor,
+                      headerTextColor: appTheme.amTechniqueTextColor,
+                      decorationColor: appTheme.bgAccentColor,
+                      assetURL: assetHandler.imageAssetURL,
+                      viewTechniqueDetails: (Technique selectedTechnique){
+                        handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      }
+                  ),
+                  TechniqueSection(
+                    headerText: mainData.pmSessionHeaderText,
+                    techniques: getTechniques([curUser.pmTechniqueID], snapshot.data, 'night', mainData.images),
+                    textBgColor: appTheme.pmTechniqueSectionColor,
+                    textColor: appTheme.pmTechniqueTextColor,
+                    startIcon: Icons.play_circle_fill,
+                    headerColor: appTheme.pmTechniqueSectionColor,
+                    headerTextColor: appTheme.pmTechniqueTextColor,
+                    decorationColor: appTheme.bgAccentColor,
+                    assetURL: assetHandler.imageAssetURL,
+                    viewTechniqueDetails: (Technique selectedTechnique){
+                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                    },
+                  ),
+                  TechniqueSection(
+                    headerText: mainData.emergencySessionHeaderText,
+                    techniques: getTechniques([curUser.emergencyTechniqueID], snapshot.data, 'emergency', mainData.images),
+                    textBgColor: appTheme.emergencyTechniqueSectionColor,
+                    textColor: appTheme.emergencyTechniqueTextColor,
+                    startIcon: Icons.add_circle,
+                    headerColor: appTheme.emergencyTechniqueSectionColor,
+                    headerTextColor: appTheme.emergencyTechniqueTextColor,
+                    decorationColor: appTheme.bgAccentColor,
+                    assetURL: assetHandler.imageAssetURL,
+                    viewTechniqueDetails: (Technique selectedTechnique){
+                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                    },
+                  ),
+                  if (curUser.hasFullAccess) TechniqueSection(
+                    headerText: mainData.challengeSessionHeaderText,
+                    techniques: getTechniques([curUser.challengeTechniqueID], snapshot.data, 'challenge', mainData.images),
+                    textBgColor: appTheme.challengeTechniqueSectionColor,
+                    textColor: appTheme.challengeTechniqueTextColor,
+                    startIcon: Icons.play_circle_fill,
+                    headerColor: appTheme.challengeTechniqueSectionColor,
+                    headerTextColor: appTheme.challengeTechniqueTextColor,
+                    decorationColor: appTheme.bgAccentColor,
+                    assetURL: assetHandler.imageAssetURL,
+                    viewTechniqueDetails: (Technique selectedTechnique){
+                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                    },
+                  ),
+                  if (curUser.hasFullAccess && curUser.customTechniqueIDs.isNotEmpty) TechniqueSection(
+                    headerText: mainData.customSessionHeaderText,
+                    techniques: getTechniques(curUser.customTechniqueIDs, snapshot.data, 'custom', mainData.images),
+                    textBgColor: appTheme.customTechniqueSectionColor,
+                    textColor: appTheme.customTechniqueTextColor,
+                    startIcon: Icons.play_circle_fill,
+                    headerColor: appTheme.customTechniqueSectionColor,
+                    headerTextColor: appTheme.customTechniqueTextColor,
+                    decorationColor: appTheme.bgAccentColor,
+                    assetURL: assetHandler.imageAssetURL,
+                    viewTechniqueDetails: (Technique selectedTechnique){
+                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                    },
+                  )
+                ],
+              );
+            }
+            else{
+              return SpinKitDualRing(
+                color: appTheme.textPrimaryColor,
+              );
+            }
+          }
         ),
       )
     );

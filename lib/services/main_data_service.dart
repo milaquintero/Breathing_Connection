@@ -9,7 +9,7 @@ class MainDataService{
   MainDataService._internal();
   //collection reference
   final CollectionReference _mainDataCollection = Firestore.instance.collection('main-data');
-  static Future<MainData> mainData() async{
+  static Future<MainData> getMainDataRemotely() async{
     try{
       //main data instance to return
       MainData tempMainData = MainData();
@@ -20,7 +20,6 @@ class MainDataService{
 
       //set constants data in temp object
       tempMainData = MainData.fromSnapShot(tempMainData, mainDataConstantsSnapshot, 'constants');
-      print(tempMainData.emailPopupBodyText);
 
       //get main data meta document
       DocumentSnapshot mainDataMetaSnapshot = await _mainDataService._mainDataCollection

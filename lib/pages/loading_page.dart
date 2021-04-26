@@ -33,16 +33,9 @@ class _LoadingPageState extends State<LoadingPage> {
     Provider.of<User>(context, listen: false).setAllProperties(curUser);
   }
 
-  Future<void> getTechniques() async{
-    //get list of available techniques
-    List<Technique> techniques = await TechniqueService.techniqueData();
-    //update techniques in shareable resource
-    Provider.of<List<Technique>>(context, listen: false).addAll(techniques);
-  }
-
   Future <void> getMainData() async{
     //get main data
-    MainData mainData = await MainDataService.mainData();
+    MainData mainData = await MainDataService.getMainDataRemotely();
     //user data
     curUser = Provider.of<User>(context, listen: false);
     //if user has full access remove pro license page from nav links
@@ -61,8 +54,6 @@ class _LoadingPageState extends State<LoadingPage> {
   Future getRequiredResources() async{
     //get current user data
     await getUserData();
-    //get available techniques
-    await getTechniques();
     //get main data only after user data is present
     await getMainData();
     User curUser = Provider.of<User>(context, listen: false);

@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
+import 'package:breathing_connection/services/technique_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,7 +79,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
         ChangeNotifierProvider(create: (context)=> ViewTechniqueDetailsHandler()),
         ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
         ChangeNotifierProvider(create: (context)=>AssetHandler()),
-        Provider<List<Technique>>(create: (context) => []),
+        StreamProvider<List<Technique>>.value(value: TechniqueService().techniqueList, initialData: []),
       ],
       child: MaterialApp(
         onUnknownRoute: (settings){

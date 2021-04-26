@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:breathing_connection/models/inhale_exhale_type.dart';
 
 class Technique{
@@ -20,7 +22,7 @@ class Technique{
     this.exhaleDuration, this.secondHoldDuration, this.assetImage,
     this.exhaleTypeID, this.inhaleTypeID, this.tags, this.categoryDependencies,
     this.associatedUserID});
-  factory Technique.fromJson(Map<String, dynamic> json){
+  factory Technique.fromSnapshot(json){
     Iterable jsonTags = json['tags'] ?? [];
     Iterable jsonCategoryDependencies = json['categoryAvailabilities'] ?? [];
     return Technique(
