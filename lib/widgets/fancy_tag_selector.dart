@@ -49,7 +49,7 @@ class _FancyTagSelectorState extends State<FancyTagSelector> {
                 'Add Tag',
                 style: TextStyle(
                   fontSize: 24,
-                  color: widget.addButtonTextColor
+                  color: widget.addButtonTextColor,
                 ),
               ),
             ),

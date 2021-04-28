@@ -1,6 +1,7 @@
 import 'package:breathing_connection/models/user_form_model.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_instructional_text.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';

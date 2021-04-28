@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:breathing_connection/utility.dart';
 import 'package:breathing_connection/models/daily_reminder_lists.dart';
 import 'package:breathing_connection/models/user_form_model.dart';
 import 'package:breathing_connection/models/user_settings.dart';
@@ -22,7 +22,7 @@ class UserService {
     return user != null ? User(
       userId: user.uid,
       email: user.email,
-      isEmailVerified: user.isEmailVerified
+      isEmailVerified: user.isEmailVerified,
     ) : null;
   }
 
@@ -154,6 +154,9 @@ class UserService {
       //send user email verification after persisting data
       firebaseUser.sendEmailVerification();
 
+      //set flag for displaying email verification dialog in home page
+      Utility.userJustRegistered = true;
+
       return curUser;
     }
     catch(error){
@@ -173,11 +176,13 @@ class UserService {
     }
   }
 
-  static Future<void> handleCustomTechnique(String op, int customTechniqueID) async{
+  Future<void> handleCustomTechnique(String uid, List<int> newCustomTechniqueIDs) async{
     try{
-      if(op == 'add'){
-        //TODO: persist adding technique id to user's custom technique list
-      }
+      //handle setting updated ids for user's customTechniqueIDs
+      _userService._userDataCollection.document(uid)
+          .setData({
+        "customTechniqueIDs": newCustomTechniqueIDs
+      }, merge: true);
     }
     catch(error){
       throw new Exception(error);

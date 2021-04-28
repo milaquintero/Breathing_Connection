@@ -284,13 +284,12 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
 
   Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
     //add technique in technique service first which returns it with techniqueID
-    Technique updatedNewTechnique = await TechniqueService.handleCustomTechnique('add', newTechnique);
-    //update technique list provider with new technique
-    Provider.of<List<Technique>>(context, listen: false).add(updatedNewTechnique);
-    //then add technique id to customTechniques list in user service
-    await UserService.handleCustomTechnique('add', newTechnique.techniqueID);
-    //add technique to user
-    Provider.of<User>(context, listen: false).handleCustomTechnique('add', updatedNewTechnique.techniqueID);
+    Technique updatedNewTechnique =
+      await TechniqueService().handleCustomTechnique(curUser.userId, 'add', newTechnique);
+    //add to current user techniques
+    curUser.customTechniqueIDs.add(updatedNewTechnique.techniqueID);
+    //persist new custom technique id list for user
+    await UserService().handleCustomTechnique(curUser.userId, curUser.customTechniqueIDs);
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
     showDialog(
@@ -307,6 +306,8 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             buttonColor: appTheme.brandPrimaryColor,
             titleText: mainData.customTechniqueSuccessHead,
             subtitleText: mainData.customTechniqueSuccessBody,
+            subtitleTextColor: appTheme.textAccentColor,
+            titleTextColor: appTheme.textAccentColor,
             cbFunction: (){
               //redirect to home page
               Navigator.of(context).pushReplacementNamed('/root');

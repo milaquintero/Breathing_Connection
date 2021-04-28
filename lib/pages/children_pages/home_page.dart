@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'package:breathing_connection/utility.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
-import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_split_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
@@ -59,6 +60,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //timer for email subscription dialog
   Timer emailSubDialogTimer;
+  //timer for email verification dialog
+  Timer emailVerificationTimer;
   //main content
   List<Widget> mainContent = [];
   //screen height
@@ -79,6 +82,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     emailSubDialogTimer?.cancel();
+    emailVerificationTimer?.cancel();
   }
   @override
   void didChangeDependencies() {
@@ -94,11 +98,36 @@ class _HomePageState extends State<HomePage> {
     //available techniques
     availableTechniques = Provider.of<List<Technique>>(context);
   }
-  void handleQueueingPopup(){
+  void handleQueueingPopups() async {
+    //handle showing email confirmation dialog if user hasn't verified
+    if(Utility.userJustRegistered && ModalRoute.of(context).isCurrent){
+      emailVerificationTimer = Timer(Duration(seconds: 2), (){
+        showDialog(
+            context: context,
+            builder: (context){
+              return DialogAlert(
+                titlePadding: EdgeInsets.only(top: 12),
+                subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                buttonText: 'Back to Home',
+                cbFunction: (){
+                  Utility.userJustRegistered = false;
+                },
+                titleText: 'Welcome',
+                subtitleText: 'Please check your email to complete verifying your Breathing Connection account.',
+                headerIcon: Icons.fact_check,
+                headerBgColor: Colors.green[600],
+                buttonColor: appTheme.brandPrimaryColor,
+                titleTextColor: appTheme.textAccentColor,
+                bgColor: appTheme.bgPrimaryColor,
+                subtitleTextColor: appTheme.textAccentColor,
+              );
+            }
+        );
+      });
+    }
     //handle showing email subscription dialog if user isn't signed up (only show if on home page)
-    if(!popupIsQueued && !curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
+    if(!Utility.userJustRegistered && !popupIsQueued && !curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
       popupIsQueued = true;
-      //screen height
       emailSubDialogTimer = Timer(Duration(seconds: mainData.popupWaitTime), (){
         showDialog(
             barrierDismissible: false,
@@ -182,7 +211,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, userSnapshot){
             if(userSnapshot.hasData){
               curUser = userSnapshot.data;
-              handleQueueingPopup();
+              handleQueueingPopups();
               return ListView(
                 shrinkWrap: true,
                 children: [

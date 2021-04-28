@@ -3,12 +3,14 @@ import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/services/technique_service.dart';
+import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/current_theme_handler.dart';
 import 'models/main_data.dart';
 import 'models/current_page_handler.dart';
+import 'models/user.dart';
 import 'pages/top_level_pages/create_custom_technique_page.dart';
 import 'pages/top_level_pages/email_subscription_page.dart';
 import 'pages/top_level_pages/page_not_found.dart';
@@ -78,6 +80,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
         ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
         ChangeNotifierProvider(create: (context)=>AssetHandler()),
         StreamProvider<List<Technique>>.value(value: TechniqueService().techniqueList, initialData: []),
+        StreamProvider<User>.value(value: UserService().userWithData, initialData: null)
       ],
       child: MaterialApp(
         onUnknownRoute: (settings){

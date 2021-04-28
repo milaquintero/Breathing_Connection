@@ -21,18 +21,37 @@ class TechniqueService{
         .snapshots().map(_techniqueFromSnapshot);
   }
 
-  static Future<Technique> handleCustomTechnique(String op, Technique selectedTechnique) async{
+  Future<Technique> handleCustomTechnique(String curUserID, String op, Technique selectedTechnique) async{
     try{
-      //PROD
-      //Response customTechniqueResponse = await get('$BASE_URL/users/$userID');
-      //TEST
       if(op == 'add'){
-        Technique updatedSelectedTechnique = await Future.delayed(Duration(seconds: 1), (){
-          //TODO: persist actual technique
-          selectedTechnique.techniqueID = 11;
-          return selectedTechnique;
+        List<Technique> techniqueListSnapshot = await techniqueList.first;
+        //sort by technique id
+        techniqueListSnapshot.sort((a, b){
+          return a.techniqueID.compareTo(b.techniqueID);
         });
-        return updatedSelectedTechnique;
+        int maxTechniqueListID = techniqueListSnapshot.last.techniqueID;
+        selectedTechnique.techniqueID = (maxTechniqueListID + 1);
+        await _techniqueService._techniqueListCollection.add({
+          "isPaidVersionOnly": true,
+          "techniqueID": selectedTechnique.techniqueID,
+          "title": selectedTechnique.title,
+          "tags": selectedTechnique.tags,
+          "description": selectedTechnique.description,
+          "inhaleDuration": selectedTechnique.inhaleDuration,
+          "firstHoldDuration": selectedTechnique.firstHoldDuration,
+          "exhaleDuration": selectedTechnique.exhaleDuration,
+          "secondHoldDuration": selectedTechnique.secondHoldDuration,
+          "assetImage": selectedTechnique.assetImage,
+          "inhaleTypeID": selectedTechnique.inhaleTypeID,
+          "exhaleTypeID": selectedTechnique.exhaleTypeID,
+          "categoryAvailabilities": ["PM", "AM", "Emergency", "Challenge"],
+          "associatedUserID": curUserID
+        });
+        return selectedTechnique;
+      }
+      else if(op == 'remove'){
+        //TODO: implement removing custom technique from technique-list collection
+        return null;
       }
       else{
         return null;

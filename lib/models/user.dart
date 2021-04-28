@@ -22,7 +22,7 @@ class User with ChangeNotifier{
     this.amTechniqueID, this.pmTechniqueID, this.challengeTechniqueID, this.emergencyTechniqueID,
     this.customTechniqueIDs, this.dailyReminderLists, this.email, this.isEmailVerified});
   factory User.fromJson(json) {
-    Iterable jsonCustomTechniques = json['customTechniques'] ?? [];
+    Iterable jsonCustomTechniques = json['customTechniqueIDs'] ?? [];
     return User(
       userId: json['userId'],
       username: json['username'] ?? '',
@@ -34,9 +34,9 @@ class User with ChangeNotifier{
       challengeTechniqueID: json['challengeTechniqueID'],
       emergencyTechniqueID: json['emergencyTechniqueID'],
       email: json['email'],
-      customTechniqueIDs: jsonCustomTechniques.map((jsonTechnique) => int.parse(jsonTechnique)).toList(),
+      customTechniqueIDs: List<int>.from(jsonCustomTechniques),
       userSettings: UserSettings.fromJson(json['userSettings']),
-      dailyReminderLists: DailyReminderLists.fromJson(json['dailyReminderLists'])
+      dailyReminderLists: DailyReminderLists.fromJson(json['dailyReminderLists']),
     );
   }
   setAllProperties(User user){
