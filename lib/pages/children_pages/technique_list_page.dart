@@ -146,7 +146,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                             buttonText: 'Back to List',
                                             cbFunction: (){},
                                             titleText: changeSuccessful ? 'Success' : 'Error',
-                                            subtitleText: changeSuccessful ? 'Changes to these settings have been saved in your account' : 'Unable to update the technique at this time. Please try again in a few moments',
+                                            subtitleText: changeSuccessful ? 'Changes to your personal techniques have been set in your account' : 'Unable to update the technique at this time. Please try again in a few moments',
                                             headerIcon: changeSuccessful ? Icons.fact_check : Icons.cancel,
                                             headerBgColor: changeSuccessful ? Colors.green[600] : appTheme.errorColor,
                                             buttonColor: appTheme.brandPrimaryColor,

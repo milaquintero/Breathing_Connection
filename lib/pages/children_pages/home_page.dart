@@ -24,11 +24,12 @@ List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableT
             (technique) => technique.techniqueID == techniqueID,
             orElse: () => null
     );
+    Technique mutableTechnique = Technique.clone(techniqueMatch);
     //only get default image if technique isn't custom
     if(op != 'custom' && techniqueMatch != null){
-      techniqueMatch.assetImage = getAssetImage(op, availableImages);
+      mutableTechnique.assetImage = getAssetImage(op, availableImages);
     }
-    techniqueMatches.add(techniqueMatch);
+    techniqueMatches.add(mutableTechnique);
   }
   return techniqueMatches;
 }
@@ -44,7 +45,7 @@ String getAssetImage(String patternToMatch, List<String> availableImages){
   return availableImages
       .firstWhere(
           (imageUrl) => imageUrl.contains(patternToMatch),
-          orElse: () => null
+          orElse: () => ""
   );
 }
 
