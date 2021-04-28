@@ -17,9 +17,10 @@ class User with ChangeNotifier{
   int emergencyTechniqueID;
   List<int> customTechniqueIDs;
   DailyReminderLists dailyReminderLists;
+  bool isEmailVerified;
   User({this.userId, this.username, this.userSettings, this.hasFullAccess, this.isSubscribedToEmails,
     this.amTechniqueID, this.pmTechniqueID, this.challengeTechniqueID, this.emergencyTechniqueID,
-    this.customTechniqueIDs, this.dailyReminderLists, this.email});
+    this.customTechniqueIDs, this.dailyReminderLists, this.email, this.isEmailVerified});
   factory User.fromJson(json) {
     Iterable jsonCustomTechniques = json['customTechniques'] ?? [];
     return User(
@@ -27,6 +28,7 @@ class User with ChangeNotifier{
       username: json['username'] ?? '',
       hasFullAccess: json['hasFullAccess'],
       isSubscribedToEmails: json['isSubscribedToEmails'],
+      isEmailVerified: json['isEmailVerified'],
       amTechniqueID: json['amTechniqueID'],
       pmTechniqueID: json['pmTechniqueID'],
       challengeTechniqueID: json['challengeTechniqueID'],
@@ -42,6 +44,7 @@ class User with ChangeNotifier{
     username = user.username;
     hasFullAccess = user.hasFullAccess;
     isSubscribedToEmails = user.isSubscribedToEmails;
+    isEmailVerified = user.isEmailVerified;
     amTechniqueID = user.amTechniqueID;
     pmTechniqueID = user.pmTechniqueID;
     challengeTechniqueID = user.challengeTechniqueID;

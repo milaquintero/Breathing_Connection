@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import 'app_theme.dart';
+
 class UserSettings{
   bool breathingSound;
   bool backgroundSound;
@@ -44,10 +46,36 @@ class UserSettings{
         dailyReminders = value;
         break;
       case "themeID":
-        themeID = value;
+        AppTheme tempAppTheme = value;
+        themeID = tempAppTheme.themeID;
         break;
       case "challengeMode":
         challengeMode = value;
     }
+  }
+  //compare two user settings and return found changes
+  static List<String> settingsThatChanged(UserSettings newSettings, UserSettings oldSettings){
+    List<String> changes = [];
+    if(newSettings != null){
+      if(newSettings.vibration != oldSettings.vibration){
+        changes.add("vibration");
+      }
+      if(newSettings.challengeMode != oldSettings.challengeMode){
+        changes.add("challengeMode");
+      }
+      if(newSettings.dailyReminders != oldSettings.dailyReminders){
+        changes.add("dailyReminders");
+      }
+      if(newSettings.breathingSound != oldSettings.breathingSound){
+        changes.add("breathingSound");
+      }
+      if(newSettings.backgroundSound != oldSettings.backgroundSound){
+        changes.add("backgroundSound");
+      }
+      if(newSettings.themeID != oldSettings.themeID){
+        changes.add("themeID");
+      }
+    }
+    return changes;
   }
 }

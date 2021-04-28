@@ -21,8 +21,8 @@ class UserService {
   User _userFromFirebaseUser(FirebaseUser user){
     return user != null ? User(
       userId: user.uid,
-      username: user.displayName,
-      email: user.email
+      email: user.email,
+      isEmailVerified: user.isEmailVerified
     ) : null;
   }
 
@@ -52,6 +52,15 @@ class UserService {
       DocumentSnapshot userDataSnapshot = await _userService._userDataCollection
           .document(firebaseUser.uid).snapshots().first;
       User curUser = User.fromJson(userDataSnapshot.data);
+
+      //if user verified email but database isn't up to date then update in database
+      if(!curUser.isEmailVerified && firebaseUser.isEmailVerified){
+        _userService._userDataCollection.document(curUser.userId)
+            .setData({
+          "isEmailVerified": true
+        }, merge: true);
+      }
+
       return curUser;
     }
     catch(error){
@@ -141,6 +150,10 @@ class UserService {
         "customTechniqueIDs": curUser.customTechniqueIDs,
         "dailyReminderLists": curUser.dailyReminderLists.toJson(),
       });
+
+      //send user email verification after persisting data
+      firebaseUser.sendEmailVerification();
+
       return curUser;
     }
     catch(error){
@@ -162,9 +175,6 @@ class UserService {
 
   static Future<void> handleCustomTechnique(String op, int customTechniqueID) async{
     try{
-      //PROD
-      //Response customTechniqueResponse = await get('$BASE_URL/users/$userID');
-      //TEST
       if(op == 'add'){
         //TODO: persist adding technique id to user's custom technique list
       }
@@ -174,7 +184,15 @@ class UserService {
     }
   }
 
-  static Future<void> handleUpdateSettings(UserSettings newSettings){
-    //TODO: persist changes to settings
+  static Future<void> handleUpdateSettings(String uid, UserSettings newSettings){
+    try{
+      _userService._userDataCollection.document(uid)
+          .setData({
+        "userSettings": newSettings.toJson()
+      }, merge: true);
+    }
+    catch(error){
+      throw new Exception(error);
+    }
   }
 }

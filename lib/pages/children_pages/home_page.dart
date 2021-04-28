@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                   height: screenHeight / 4.3,
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Text(
                     mainData.homePageTitleText,
                     style: TextStyle(
@@ -259,9 +259,14 @@ class _HomePageState extends State<HomePage> {
               );
             }
             else{
-              return SpinKitDualRing(
-                color: appTheme.textPrimaryColor,
-                size: 32,
+              return Container(
+                color: Colors.blueGrey[400],
+                child: Center(
+                  child: SpinKitDualRing(
+                    color: appTheme.textPrimaryColor,
+                    size: 32,
+                  ),
+                ),
               );
             }
           }

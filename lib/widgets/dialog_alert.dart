@@ -11,17 +11,19 @@ class DialogAlert extends StatelessWidget {
   final Color titleTextColor;
   final EdgeInsets titlePadding;
   final EdgeInsets subtitlePadding;
+  final Color bgColor;
+  final Color subtitleTextColor;
   DialogAlert({this.buttonText, this.cbFunction,
     this.titleText, this.subtitleText, this.headerIcon,
     this.buttonColor, this.headerBgColor, this.titleTextColor,
-    this.titlePadding, this.subtitlePadding});
+    this.titlePadding, this.subtitlePadding, this.bgColor, this.subtitleTextColor});
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0)
       ),
-      backgroundColor: Colors.grey[50],
+      backgroundColor: bgColor,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
@@ -49,7 +51,7 @@ class DialogAlert extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 18.5,
-                        color: Colors.grey[700]
+                        color: subtitleTextColor ?? Colors.grey[700]
                     ),
                   ),
                 ),

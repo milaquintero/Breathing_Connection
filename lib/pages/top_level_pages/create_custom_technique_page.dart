@@ -245,6 +245,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                         context: context,
                         builder: (context){
                           return DialogAlert(
+                            bgColor: appTheme.bgPrimaryColor,
                             titlePadding: EdgeInsets.only(top: 12),
                             subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
                             headerIcon: Icons.cancel,
@@ -297,6 +298,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
         context: context,
         builder: (context){
           return DialogAlert(
+            bgColor: appTheme.bgPrimaryColor,
             titlePadding: EdgeInsets.only(top: 12),
             subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
             headerIcon: Icons.fact_check,
