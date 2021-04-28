@@ -2,9 +2,9 @@ import 'package:breathing_connection/models/technique.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TechniqueService{
-  static final TechniqueService _mainDataService = TechniqueService._internal();
+  static final TechniqueService _techniqueService = TechniqueService._internal();
   factory TechniqueService(){
-    return _mainDataService;
+    return _techniqueService;
   }
   TechniqueService._internal();
   CollectionReference _techniqueListCollection = Firestore.instance.collection('technique-list');
@@ -17,7 +17,7 @@ class TechniqueService{
   }
 
   Stream<List<Technique>> get techniqueList{
-    return _mainDataService._techniqueListCollection
+    return _techniqueService._techniqueListCollection
         .snapshots().map(_techniqueFromSnapshot);
   }
 

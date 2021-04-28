@@ -9,7 +9,7 @@ class UserSettings{
   bool challengeMode;
   UserSettings({this.breathingSound, this.backgroundSound,
     this.vibration, this.dailyReminders, this.themeID, this.challengeMode});
-  factory UserSettings.fromJson(Map<String, dynamic> json){
+  factory UserSettings.fromJson(json){
     return UserSettings(
       breathingSound: json['breathingSound'],
       backgroundSound: json['backgroundSound'],

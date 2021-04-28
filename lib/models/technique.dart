@@ -16,7 +16,7 @@ class Technique{
   int exhaleTypeID;
   List<String> tags;
   List<String> categoryDependencies;
-  int associatedUserID;
+  String associatedUserID;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
     this.exhaleDuration, this.secondHoldDuration, this.assetImage,

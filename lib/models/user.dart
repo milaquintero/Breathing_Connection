@@ -1,10 +1,13 @@
+import 'dart:collection';
+
 import 'package:breathing_connection/models/daily_reminder_lists.dart';
 import 'package:breathing_connection/models/user_settings.dart';
 import 'package:flutter/cupertino.dart';
 
 class User with ChangeNotifier{
-  int userId;
+  String userId;
   String username;
+  String email;
   bool hasFullAccess;
   bool isSubscribedToEmails;
   UserSettings userSettings;
@@ -16,18 +19,19 @@ class User with ChangeNotifier{
   DailyReminderLists dailyReminderLists;
   User({this.userId, this.username, this.userSettings, this.hasFullAccess, this.isSubscribedToEmails,
     this.amTechniqueID, this.pmTechniqueID, this.challengeTechniqueID, this.emergencyTechniqueID,
-    this.customTechniqueIDs, this.dailyReminderLists});
-  factory User.fromJson(Map<String, dynamic> json) {
+    this.customTechniqueIDs, this.dailyReminderLists, this.email});
+  factory User.fromJson(json) {
     Iterable jsonCustomTechniques = json['customTechniques'] ?? [];
     return User(
-      userId: json['id'],
-      username: json['username'],
+      userId: json['userId'],
+      username: json['username'] ?? '',
       hasFullAccess: json['hasFullAccess'],
       isSubscribedToEmails: json['isSubscribedToEmails'],
       amTechniqueID: json['amTechniqueID'],
       pmTechniqueID: json['pmTechniqueID'],
       challengeTechniqueID: json['challengeTechniqueID'],
       emergencyTechniqueID: json['emergencyTechniqueID'],
+      email: json['email'],
       customTechniqueIDs: jsonCustomTechniques.map((jsonTechnique) => int.parse(jsonTechnique)).toList(),
       userSettings: UserSettings.fromJson(json['userSettings']),
       dailyReminderLists: DailyReminderLists.fromJson(json['dailyReminderLists'])
@@ -45,6 +49,7 @@ class User with ChangeNotifier{
     customTechniqueIDs = user.customTechniqueIDs;
     userSettings = user.userSettings;
     dailyReminderLists = user.dailyReminderLists;
+    email = user.email;
   }
   updateSettings(UserSettings newSettings){
     userSettings = newSettings;

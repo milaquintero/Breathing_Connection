@@ -12,9 +12,11 @@ class FancyScrollablePage extends StatefulWidget {
   final Color decorationPrimaryColor;
   final Color decorationSecondaryColor;
   final double appBarHeight;
+  final bool withAppBar;
   FancyScrollablePage({this.child, this.headerIcon, this.headerColor, this.headerIconColor,
     this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
-    this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight});
+    this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight,
+    this.withAppBar = true});
   @override
   _FancyScrollablePageState createState() => _FancyScrollablePageState();
 }
@@ -26,7 +28,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
     //screen height
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
+      appBar: widget.withAppBar ? AppBar(
         toolbarHeight: widget.appBarHeight,
         title: Text(
           widget.pageTitle,
@@ -36,7 +38,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
         ),
         centerTitle: true,
         backgroundColor: widget.appBarColor,
-      ),
+      ) : null,
       body: Container(
         color: widget.bgColor ?? Colors.blue[50],
         padding: EdgeInsets.symmetric(horizontal: 32),

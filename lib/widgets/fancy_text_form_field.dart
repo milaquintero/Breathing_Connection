@@ -10,10 +10,13 @@ class FancyTextFormField extends StatefulWidget {
   final double maxNum;
   final double minNum;
   final int maxLength;
+  final int minLength;
+  final bool shouldObscureText;
   final Function(String) onFieldSubmitted;
   FancyTextFormField({this.fieldType, this.fieldLabel, this.keyboardType,
     this.onSaved, this.shouldResetIfNull = false, this.isGrouped = false,
-    this.maxNum, this.minNum, this.maxLength, this.onFieldSubmitted});
+    this.maxNum, this.minNum, this.maxLength, this.onFieldSubmitted,
+    this.minLength, this.shouldObscureText = false});
 
   @override
   _FancyTextFormFieldState createState() => _FancyTextFormFieldState();
@@ -35,8 +38,12 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
           fillColor: Colors.white,
           filled: true,
           errorMaxLines: 2,
-          contentPadding: widget.isGrouped ? EdgeInsets.all(8) : EdgeInsets.all(12)
+          contentPadding: widget.isGrouped ? EdgeInsets.all(8) : EdgeInsets.all(12),
+          errorStyle: TextStyle(
+            fontSize: 16,
+          )
         ),
+        obscureText: widget.shouldObscureText,
         onFieldSubmitted: widget.onFieldSubmitted != null ? widget.onFieldSubmitted : (value){
           if(widget.shouldResetIfNull && (value == "" || value == null)){
             if(widget.fieldType == "number"){
@@ -56,6 +63,9 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
           }
           else if(widget.maxLength != null && value.length > widget.maxLength){
             return 'Input must be less than ${widget.maxLength} characters';
+          }
+          else if(widget.minLength != null && value.length < widget.minLength){
+            return 'Input must be greater than ${widget.maxLength} characters';
           }
           else if(widget.fieldType == 'email' && !RegExp(r'(?:[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])').hasMatch(value)){
             return 'Invalid email format';

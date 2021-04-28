@@ -6,15 +6,15 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
-import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/services/main_data_service.dart';
-import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class LoadingPage extends StatefulWidget {
+  final bool shouldRetrieveMainData;
+  LoadingPage({this.shouldRetrieveMainData = false});
   @override
   _LoadingPageState createState() => _LoadingPageState();
 }
@@ -27,17 +27,12 @@ class _LoadingPageState extends State<LoadingPage> {
   User curUser;
   //track when all data is retrieved
   Future asyncDataFuture;
-  Future<void> getUserData() async{
-    //get user data from backend and update shareable resource with user data
-    curUser = await UserService.userData(1);
-    Provider.of<User>(context, listen: false).setAllProperties(curUser);
-  }
 
   Future <void> getMainData() async{
     //get main data
     MainData mainData = await MainDataService.getMainDataRemotely();
     //user data
-    curUser = Provider.of<User>(context, listen: false);
+    curUser = await UserService().userWithData.first;
     //if user has full access remove pro license page from nav links
     if(curUser.hasFullAccess && mainData.pages.isNotEmpty){
       mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
@@ -52,11 +47,9 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future getRequiredResources() async{
-    //get current user data
-    await getUserData();
     //get main data only after user data is present
     await getMainData();
-    User curUser = Provider.of<User>(context, listen: false);
+    User curUser = await UserService().userWithData.first;
     //set asset handler URL based on whether user has full access
     Provider.of<AssetHandler>(context, listen: false).init(curUser.hasFullAccess);
     //get user's selected theme based on themeID from user settings
@@ -80,12 +73,13 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    asyncDataFuture = getRequiredResources();
+    if(widget.shouldRetrieveMainData)
+      asyncDataFuture = getRequiredResources();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return widget.shouldRetrieveMainData ? FutureBuilder(
         builder: (context, AsyncSnapshot<dynamic> snapshot){
           Widget mainContent;
           //show logo with white background as background when loaded
@@ -137,6 +131,15 @@ class _LoadingPageState extends State<LoadingPage> {
           );
         },
         future: asyncDataFuture,
+    ) : Scaffold(
+      backgroundColor: Colors.blueGrey[400],
+      body: Center(
+        child: SpinKitDoubleBounce(
+          size: 100,
+          color: Colors.white,
+        ),
+      ),
+      key: ValueKey(0),
     );
   }
 }

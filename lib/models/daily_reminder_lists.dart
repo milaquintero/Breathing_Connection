@@ -1,13 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DailyReminderLists{
-  List<DateTime> challengeModeTimes;
-  List<DateTime> regularTimes;
+  List<Timestamp> challengeModeTimes;
+  List<Timestamp> regularTimes;
   DailyReminderLists({this.challengeModeTimes, this.regularTimes});
-  factory DailyReminderLists.fromJson(Map<String, dynamic> json){
+  factory DailyReminderLists.fromJson(json){
     Iterable jsonChallengeModeTimes = json['challengeModeTimes'];
     Iterable jsonRegularTimes = json['regularTimes'];
     return DailyReminderLists(
-      challengeModeTimes: jsonChallengeModeTimes.map((jsonChallengeModeTime) => DateTime.tryParse(jsonChallengeModeTime)).toList(),
-      regularTimes: jsonRegularTimes.map((jsonRegularTime) => DateTime.tryParse(jsonRegularTime)).toList(),
+      challengeModeTimes: jsonChallengeModeTimes.map((jsonChallengeModeTime){
+        Timestamp challengeModeTime = jsonChallengeModeTime;
+        return challengeModeTime;
+      }).toList(),
+      regularTimes: jsonRegularTimes.map((jsonRegularTime){
+        Timestamp regularTime = jsonRegularTime;
+        return regularTime;
+      }).toList(),
     );
+  }
+  Map<String, dynamic> toJson(){
+    return {
+      "challengeModeTimes": challengeModeTimes,
+      "regularTimes": regularTimes,
+    };
   }
 }

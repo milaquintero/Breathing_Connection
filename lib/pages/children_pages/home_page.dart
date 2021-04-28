@@ -6,6 +6,7 @@ import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/services/technique_service.dart';
+import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/fancy_split_page.dart';
 import 'package:breathing_connection/widgets/technique_section.dart';
@@ -65,10 +66,14 @@ class _HomePageState extends State<HomePage> {
   AppTheme appTheme;
   //app main data
   MainData mainData;
-  //current user data
-  User curUser;
   //CDN asset handler
   AssetHandler assetHandler;
+  //current user
+  User curUser;
+  //popup is queued flag
+  bool popupIsQueued = false;
+  //available techniques
+  List<Technique> availableTechniques;
   @override
   void dispose() {
     super.dispose();
@@ -79,18 +84,20 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
-    //current user data
-    curUser = Provider.of<User>(widget.rootContext);
     //app main data
     mainData = Provider.of<MainData>(widget.rootContext);
     //get asset handler for CDN resources
     assetHandler = Provider.of<AssetHandler>(widget.rootContext);
     //screen height
     screenHeight = MediaQuery.of(context).size.height;
+    //available techniques
+    availableTechniques = Provider.of<List<Technique>>(context);
+  }
+  void handleQueueingPopup(){
     //handle showing email subscription dialog if user isn't signed up (only show if on home page)
-    if(!curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
+    if(!popupIsQueued && !curUser.isSubscribedToEmails && ModalRoute.of(context).isCurrent){
+      popupIsQueued = true;
       //screen height
-      double screenHeight = MediaQuery.of(context).size.height;
       emailSubDialogTimer = Timer(Duration(seconds: mainData.popupWaitTime), (){
         showDialog(
             barrierDismissible: false,
@@ -116,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             });
-        }
+      }
       );
     }
   }
@@ -170,15 +177,17 @@ class _HomePageState extends State<HomePage> {
         context: context,
         removeTop: true,
         child: StreamBuilder(
-          stream: TechniqueService().techniqueList,
-          builder: (context, snapshot){
-            if(snapshot.hasData){
+          stream: UserService().userWithData,
+          builder: (context, userSnapshot){
+            if(userSnapshot.hasData){
+              curUser = userSnapshot.data;
+              handleQueueingPopup();
               return ListView(
                 shrinkWrap: true,
                 children: [
                   TechniqueSection(
                       headerText: mainData.amSessionHeaderText,
-                      techniques: getTechniques([curUser.amTechniqueID], snapshot.data, 'day', mainData.images),
+                      techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
                       textBgColor: appTheme.amTechniqueSectionColor,
                       textColor: appTheme.amTechniqueTextColor,
                       startIcon: Icons.play_circle_fill,
@@ -192,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TechniqueSection(
                     headerText: mainData.pmSessionHeaderText,
-                    techniques: getTechniques([curUser.pmTechniqueID], snapshot.data, 'night', mainData.images),
+                    techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
                     textBgColor: appTheme.pmTechniqueSectionColor,
                     textColor: appTheme.pmTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -206,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TechniqueSection(
                     headerText: mainData.emergencySessionHeaderText,
-                    techniques: getTechniques([curUser.emergencyTechniqueID], snapshot.data, 'emergency', mainData.images),
+                    techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
                     textBgColor: appTheme.emergencyTechniqueSectionColor,
                     textColor: appTheme.emergencyTechniqueTextColor,
                     startIcon: Icons.add_circle,
@@ -220,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   if (curUser.hasFullAccess) TechniqueSection(
                     headerText: mainData.challengeSessionHeaderText,
-                    techniques: getTechniques([curUser.challengeTechniqueID], snapshot.data, 'challenge', mainData.images),
+                    techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
                     textBgColor: appTheme.challengeTechniqueSectionColor,
                     textColor: appTheme.challengeTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -234,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   if (curUser.hasFullAccess && curUser.customTechniqueIDs.isNotEmpty) TechniqueSection(
                     headerText: mainData.customSessionHeaderText,
-                    techniques: getTechniques(curUser.customTechniqueIDs, snapshot.data, 'custom', mainData.images),
+                    techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
                     textBgColor: appTheme.customTechniqueSectionColor,
                     textColor: appTheme.customTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -252,6 +261,7 @@ class _HomePageState extends State<HomePage> {
             else{
               return SpinKitDualRing(
                 color: appTheme.textPrimaryColor,
+                size: 32,
               );
             }
           }

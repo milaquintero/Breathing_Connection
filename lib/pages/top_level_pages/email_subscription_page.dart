@@ -1,6 +1,7 @@
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/email_form_model.dart';
 import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
 import 'package:breathing_connection/widgets/fancy_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,6 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       appBarHeight: mainData.appBarHeight,
       form: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

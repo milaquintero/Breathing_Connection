@@ -2,10 +2,10 @@ import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/user.dart';
-import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/setting_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsPage extends StatefulWidget {
@@ -16,8 +16,6 @@ class AppSettingsPage extends StatefulWidget {
 }
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
-  //current user data
-  User curUser;
   //selected theme data
   AppTheme appTheme;
   //settings in json format for filtering
@@ -26,57 +24,92 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   List<Widget> mainContent = [];
   //app main data
   MainData mainData;
+  //current user
+  User curUser;
+  //user service
+  UserService _userService = UserService();
   @override
-  Widget build(BuildContext context) {
-    //current user data
-    curUser = Provider.of<User>(widget.rootContext);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     //app main data
     mainData = Provider.of<MainData>(widget.rootContext);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
-    //settings in json format for filtering
-    allSettings = curUser.userSettings.toJson();
-    //build sections on init
-    buildSettingSections();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appTheme.brandPrimaryColor,
-        toolbarHeight: mainData.appBarHeight,
-        title: Text(
-          'App Settings',
-          style: TextStyle(
-              fontSize: 30
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Container(
-        child: ListView(
-          children: mainContent,
-        ),
-      ),
+  }
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: UserService().userWithData,
+      builder: (context, userSnapshot){
+        if(userSnapshot.hasData){
+          curUser = userSnapshot.data;
+          //settings in json format for filtering
+          allSettings = curUser.userSettings.toJson();
+          //build sections on init
+          buildSettingSections();
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: appTheme.brandPrimaryColor,
+              toolbarHeight: mainData.appBarHeight,
+              title: Text(
+                'App Settings',
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              centerTitle: true,
+              elevation: 0,
+              actions: [
+                IconButton(
+                    icon: Icon(
+                      Icons.logout,
+                      size: 32,
+                    ),
+                    onPressed: () async{
+                      await _userService.signOut();
+                      //send back to authentication wrapper
+                      Navigator.pushReplacementNamed(context, '/');
+                    }
+                ),
+              ],
+            ),
+            body: Container(
+              child: ListView(
+                children: mainContent,
+              ),
+            ),
+          );
+        }
+        else{
+          return SpinKitDualRing(
+              color: appTheme.textPrimaryColor,
+              size: 32,
+          );
+        }
+      }
     );
   }
   //update user settings
   void updateUserSettings(rootContext, settingKey, newVal){
+    //TODO: user firebase to do this
     //get user settings from user provider
-    UserSettings newSettings = Provider.of<User>(rootContext, listen: false).userSettings;
+    //UserSettings newSettings = Provider.of<User>(rootContext, listen: false).userSettings;
     //edge case for theme (value received as AppTheme)
-    if(settingKey == 'themeID' && newVal.runtimeType == AppTheme){
+    /*if(settingKey == 'themeID' && newVal.runtimeType == AppTheme){
       //format selected themeID for valid use
       var tempSelectedTheme = newVal as AppTheme;
       //update current theme handler with new theme
       Provider.of<CurrentThemeHandler>(rootContext, listen: false).setCurrentTheme(tempSelectedTheme);
       //change newVal to just the themeID for update in user settings
       newVal = tempSelectedTheme.themeID;
-    }
+    }*/
     //update selected setting in temp variable
-    newSettings.setProperty(settingKey, newVal);
+    //newSettings.setProperty(settingKey, newVal);
+    //TODO: user firebase to do this
     //update actual settings in user provider using function that notifies listeners
-    Provider.of<User>(rootContext, listen: false).updateSettings(newSettings);
+    //Provider.of<User>(rootContext, listen: false).updateSettings(newSettings);
     //persist changes to settings in backend
-    UserService.handleUpdateSettings(newSettings);
+    //UserService.handleUpdateSettings(newSettings);
   }
 
   Iterable<MapEntry<String, dynamic>> filterSettings(Map<String, dynamic> allSettings, List<String>desiredKeys){

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TechniqueCard extends StatefulWidget {
+  final bool userHasFullAccess;
   final Technique technique;
   final Function(String, Technique) changeTechnique;
   final Function(Technique) viewTechniqueDetails;
@@ -19,14 +20,13 @@ class TechniqueCard extends StatefulWidget {
   TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails,
   this.disabledCardTextColor, this.disabledCardBorderColor, this.disabledCardBgColor,
   this.disabledCardBgAccentColor, this.cardTitleColor, this.cardSubtitleColor,
-  this.cardBorderColor, this.cardBgColor, this.cardActionColor});
+  this.cardBorderColor, this.cardBgColor, this.cardActionColor, this.userHasFullAccess});
 
   @override
   _TechniqueCardState createState() => _TechniqueCardState();
 }
 
 class _TechniqueCardState extends State<TechniqueCard> {
-  User curUser;
   bool shouldBeEnabled;
   Color listTileBg;
   Color titleColor;
@@ -37,8 +37,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    curUser = Provider.of<User>(context);
-    shouldBeEnabled = curUser.hasFullAccess || (!curUser.hasFullAccess && !widget.technique.isPaidVersionOnly);
+    shouldBeEnabled = widget.userHasFullAccess || (!widget.userHasFullAccess && !widget.technique.isPaidVersionOnly);
     listTileBg = shouldBeEnabled ? widget.cardBgColor : widget.disabledCardBgColor;
     titleColor = shouldBeEnabled ? widget.cardTitleColor : widget.disabledCardTextColor;
     subtitleColor = shouldBeEnabled ? widget.cardSubtitleColor : widget.disabledCardTextColor;

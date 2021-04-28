@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
+import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,14 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'models/current_theme_handler.dart';
 import 'models/main_data.dart';
 import 'models/current_page_handler.dart';
-import 'pages/create_custom_technique_page.dart';
-import 'pages/email_subscription_page.dart';
-import 'pages/page_not_found.dart';
-import 'pages/root_page.dart';
-import 'pages/technique_details_page.dart';
-import 'pages/loading_page.dart';
+import 'pages/top_level_pages/create_custom_technique_page.dart';
+import 'pages/top_level_pages/email_subscription_page.dart';
+import 'pages/top_level_pages/page_not_found.dart';
+import 'pages/top_level_pages/root_page.dart';
+import 'pages/top_level_pages/technique_details_page.dart';
 import 'models/technique.dart';
-import 'models/user.dart';
 import 'models/view_technique_details_handler.dart';
 
 /// Global [SharedPreferences] object.
@@ -74,7 +73,6 @@ class _BreathingConnectionState extends State<BreathingConnection> {
     return MultiProvider(
       providers: [
         Provider<MainData>(create: (context) => MainData()),
-        ChangeNotifierProvider(create: (context) => User()),
         ChangeNotifierProvider(create: (context) => CurrentPageHandler()),
         ChangeNotifierProvider(create: (context)=> ViewTechniqueDetailsHandler()),
         ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
@@ -90,7 +88,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
           );
         },
         routes: {
-          '/': (context)=>LoadingPage(),
+          '/': (context)=>AuthenticationWrapper(),
           '/root': (context)=>RootPage(),
           '/email-subscription': (context)=>EmailSubscriptionPage(),
           '/create-custom-technique': (context)=>CreateCustomTechniquePage(),
