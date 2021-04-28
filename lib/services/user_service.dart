@@ -149,6 +149,7 @@ class UserService {
         "emergencyTechniqueID": curUser.emergencyTechniqueID,
         "customTechniqueIDs": curUser.customTechniqueIDs,
         "dailyReminderLists": curUser.dailyReminderLists.toJson(),
+        "isEmailVerified": curUser.isEmailVerified
       });
 
       //send user email verification after persisting data

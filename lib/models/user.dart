@@ -28,7 +28,7 @@ class User with ChangeNotifier{
       username: json['username'] ?? '',
       hasFullAccess: json['hasFullAccess'],
       isSubscribedToEmails: json['isSubscribedToEmails'],
-      isEmailVerified: json['isEmailVerified'],
+      isEmailVerified: json['isEmailVerified'] ?? false,
       amTechniqueID: json['amTechniqueID'],
       pmTechniqueID: json['pmTechniqueID'],
       challengeTechniqueID: json['challengeTechniqueID'],
