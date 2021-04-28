@@ -58,18 +58,6 @@ class User with ChangeNotifier{
     userSettings = newSettings;
     notifyListeners();
   }
-  handleChangeTechnique(String op, int selectedTechniqueID, List<String> assetImages){
-    if(op == 'Morning'){
-      amTechniqueID = selectedTechniqueID;
-    }
-    else if(op == 'Evening'){
-      pmTechniqueID = selectedTechniqueID;
-    }
-    else if(op == 'Emergency'){
-      emergencyTechniqueID = selectedTechniqueID;
-    }
-    notifyListeners();
-  }
   handleCustomTechnique(String op, int selectedTechniqueID){
     if(op == 'add'){
       customTechniqueIDs.add(selectedTechniqueID);

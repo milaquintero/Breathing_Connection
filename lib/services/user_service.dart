@@ -184,15 +184,43 @@ class UserService {
     }
   }
 
-  static Future<void> handleUpdateSettings(String uid, UserSettings newSettings){
+  Future handleUpdateSettings(String uid, UserSettings newSettings) async{
     try{
-      _userService._userDataCollection.document(uid)
+      await _userService._userDataCollection.document(uid)
           .setData({
         "userSettings": newSettings.toJson()
       }, merge: true);
     }
     catch(error){
       throw new Exception(error);
+    }
+  }
+
+
+  Future<bool> handleChangeTechnique(String uid, String op, int selectedTechniqueID) async{
+    String changedTechniqueType;
+    if(op == 'Morning'){
+      changedTechniqueType = "amTechniqueID";
+    }
+    else if(op == 'Evening'){
+      changedTechniqueType = "pmTechniqueID";
+    }
+    else if(op == 'Emergency'){
+      changedTechniqueType = "emergencyTechniqueID";
+    }
+    else if(op == 'Challenge'){
+      changedTechniqueType = "challengeTechniqueID";
+    }
+
+    try{
+      _userService._userDataCollection.document(uid)
+          .setData({
+        changedTechniqueType: selectedTechniqueID
+      }, merge: true);
+      return true;
+    }
+    catch(error){
+      return false;
     }
   }
 }

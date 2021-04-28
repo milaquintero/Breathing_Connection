@@ -6,6 +6,7 @@ import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
 import 'package:flutter/material.dart';
@@ -132,13 +133,29 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                   disabledCardBgColor: appTheme.disabledCardBgColor,
                                   disabledCardBorderColor: appTheme.disabledCardBorderColor,
                                   disabledCardTextColor: appTheme.disabledCardTextColor,
-                                  changeTechnique: (String op, Technique selectedTechnique){
-                                    //new technique object needed to avoid original technique obj from being mutated
-                                    Technique mutableTechnique = Technique.clone(selectedTechnique);
-                                    //get list of asset images for technique change method to determine appropriate image selection
-                                    List<String> assetImages = Provider.of<MainData>(widget.rootContext, listen: false).images;
+                                  changeTechnique: (String op, Technique selectedTechnique) async{
                                     //change technique for user
-                                    //Provider.of<User>(widget.rootContext, listen: false).handleChangeTechnique(op, mutableTechnique.techniqueID, assetImages);
+                                    bool changeSuccessful = await UserService().handleChangeTechnique(curUser.userId, op, selectedTechnique.techniqueID);
+                                    //show success alert
+                                    showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return DialogAlert(
+                                            titlePadding: EdgeInsets.only(top: 12),
+                                            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                                            buttonText: 'Back to List',
+                                            cbFunction: (){},
+                                            titleText: changeSuccessful ? 'Success' : 'Error',
+                                            subtitleText: changeSuccessful ? 'Changes to these settings have been saved in your account' : 'Unable to update the technique at this time. Please try again in a few moments',
+                                            headerIcon: changeSuccessful ? Icons.fact_check : Icons.cancel,
+                                            headerBgColor: changeSuccessful ? Colors.green[600] : appTheme.errorColor,
+                                            buttonColor: appTheme.brandPrimaryColor,
+                                            titleTextColor: appTheme.textAccentColor,
+                                            bgColor: appTheme.bgPrimaryColor,
+                                            subtitleTextColor: appTheme.textAccentColor,
+                                          );
+                                        }
+                                    );
                                   },
                                   viewTechniqueDetails: (Technique selectedTechnique){
                                     //set technique being viewed in handler provider

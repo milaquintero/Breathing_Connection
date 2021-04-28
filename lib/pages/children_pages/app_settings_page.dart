@@ -173,7 +173,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     List<String> settingsThatChanged = UserSettings.settingsThatChanged(newSettings, curUser.userSettings);
     if(settingsThatChanged.length != 0){
       //update settings in firestore
-      await UserService.handleUpdateSettings(curUser.userId, newSettings);
+      await UserService().handleUpdateSettings(curUser.userId, newSettings);
       if(settingsThatChanged.contains("themeID")){
         AppTheme selectedTheme = mainData.themes.firstWhere((theme) => newSettings.themeID == theme.themeID);
         //update selected theme in provider if it changed
