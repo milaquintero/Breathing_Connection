@@ -149,7 +149,7 @@ class UserService {
         "emergencyTechniqueID": curUser.emergencyTechniqueID,
         "customTechniqueIDs": curUser.customTechniqueIDs,
         "dailyReminderLists": curUser.dailyReminderLists.toJson(),
-        "isEmailVerified": curUser.isEmailVerified
+        "isEmailVerified": false
       });
 
       //send user email verification after persisting data
@@ -226,6 +226,20 @@ class UserService {
       return true;
     }
     catch(error){
+      return false;
+    }
+  }
+
+  Future<bool> addToEmailList(String uid, bool isSubscribedToEmails) async{
+    try{
+      _userService._userDataCollection
+        .document(uid).setData({
+        "isSubscribedToEmails": isSubscribedToEmails
+      }, merge: true);
+      return true;
+    }
+    catch(error){
+      print(error.toString());
       return false;
     }
   }

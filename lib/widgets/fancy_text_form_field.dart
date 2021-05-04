@@ -13,10 +13,13 @@ class FancyTextFormField extends StatefulWidget {
   final int minLength;
   final bool shouldObscureText;
   final Function(String) onFieldSubmitted;
+  final bool enabled;
+  final dynamic initialValue;
   FancyTextFormField({this.fieldType, this.fieldLabel, this.keyboardType,
     this.onSaved, this.shouldResetIfNull = false, this.isGrouped = false,
     this.maxNum, this.minNum, this.maxLength, this.onFieldSubmitted,
-    this.minLength, this.shouldObscureText = false});
+    this.minLength, this.shouldObscureText = false, this.enabled = true,
+    this.initialValue});
 
   @override
   _FancyTextFormFieldState createState() => _FancyTextFormFieldState();
@@ -29,9 +32,11 @@ class _FancyTextFormFieldState extends State<FancyTextFormField> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: TextFormField(
-        controller: _fancyTextFormFieldController,
+        controller: widget.initialValue == null ? _fancyTextFormFieldController : null,
         onSaved: widget.onSaved,
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        enabled: widget.enabled,
+        initialValue: widget.initialValue,
         decoration: InputDecoration(
           labelText: widget.fieldLabel,
           border: OutlineInputBorder(),

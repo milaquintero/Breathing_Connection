@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class EmailFormModel{
-  String name;
+  String username;
   String email;
-  String birthDate;
-  EmailFormModel({this.name, this.email, this.birthDate});
+  Timestamp birthday;
+  List<String> emailSubscriptionTypes;
+  EmailFormModel({this.username, this.email, this.birthday, this.emailSubscriptionTypes});
   @override
   String toString() {
-    return 'Name: ${this.name}, Email: ${this.email}, Birth Date: ${this.birthDate}';
+    return 'Name: ${this.username}, Email: ${this.email}, Birth Date: ${this.birthday}, Email Subscription Types: ${this.emailSubscriptionTypes}';
   }
 }

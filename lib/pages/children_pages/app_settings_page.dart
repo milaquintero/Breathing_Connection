@@ -87,6 +87,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               ],
             ),
             body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: Container(
@@ -294,6 +295,29 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             });
           },
         )
+    );
+    //add button to manage email subscriptions
+    mainContent.add(
+      TextButton(
+          onPressed: (){
+            Navigator.of(context).pushReplacementNamed("/email-subscription");
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Text(
+                'Manage Email Subscriptions',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: appTheme.textPrimaryColor,
+                  fontSize: 28
+                ),
+            ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: appTheme.brandPrimaryColor,
+            shape: ContinuousRectangleBorder()
+          ),
+      ),
     );
   }
 }

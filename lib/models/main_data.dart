@@ -11,6 +11,7 @@ class MainData{
   List<String> images;
   List<String> music;
   List<String> sounds;
+  List<String> emailSubscriptionTypes;
   List<InhaleExhaleType> inhaleExhaleTypes;
   int popupWaitTime;
   List<AppTheme> themes;
@@ -54,7 +55,7 @@ class MainData{
     this.challengeReminderFooter, this.challengeReminderHeader, this.dailyReminderFooter,
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
-    this.proSubSuccessHead, this.music, this.sounds});
+    this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes});
 
   factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
     if(op == 'constants'){
@@ -99,6 +100,9 @@ class MainData{
           .map((inhaleExhaleType){
         return InhaleExhaleType.fromSnapshot(inhaleExhaleType);
       }).toList();
+      Iterable emailSubscriptionTypes = snapshot['emailSubscriptionTypes'] ?? [];
+      tempMainData.emailSubscriptionTypes = emailSubscriptionTypes
+          .map((emailSubscriptionType) => emailSubscriptionType.toString()).toList();
     }
     else if(op == 'assets'){
       Iterable images = snapshot['images'] ?? [];
@@ -158,5 +162,6 @@ class MainData{
     this.proSubSuccessBody = mainData.proSubSuccessBody;
     this.emailSubSuccessHead = mainData.emailSubSuccessHead;
     this.emailSubSuccessBody = mainData.emailSubSuccessBody;
+    this.emailSubscriptionTypes = mainData.emailSubscriptionTypes;
   }
 }
