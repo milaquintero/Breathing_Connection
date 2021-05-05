@@ -7,8 +7,9 @@ class FancySubscriptionSelector extends StatefulWidget {
   final Color bgColor;
   final Color textColor;
   final Color bgGradientComparisonColor;
+  final Color checkboxColor;
   FancySubscriptionSelector({this.subscriptionSelections, this.callbackFn,
-  this.bgColor, this.textColor, this.bgGradientComparisonColor});
+  this.bgColor, this.textColor, this.bgGradientComparisonColor, this.checkboxColor});
   @override
   _FancySubscriptionSelectorState createState() => _FancySubscriptionSelectorState();
 }
@@ -50,7 +51,7 @@ class _FancySubscriptionSelectorState extends State<FancySubscriptionSelector> {
               Transform.scale(
                 scale: 1.2,
                 child: Checkbox(
-                    activeColor: Colors.lightBlue[900],
+                    activeColor: widget.checkboxColor,
                     value: widget.subscriptionSelections[index].isSelected,
                     onChanged: (newVal){
                       setState(() {

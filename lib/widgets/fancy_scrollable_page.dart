@@ -33,7 +33,8 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
         title: Text(
           widget.pageTitle,
           style: TextStyle(
-              fontSize: 30
+              fontSize: 30,
+              letterSpacing: -0.25
           ),
         ),
         centerTitle: true,

@@ -97,6 +97,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
             'Breathing Techniques',
             style: TextStyle(
                 fontSize: 30,
+                letterSpacing: -0.25
             ),
         ),
         centerTitle: true,

@@ -24,8 +24,8 @@ class EmailService{
     ) : EmailListEntry();
   }
 
-  Future<EmailListEntry> getEmailListEntry(){
-    return _emailService._emailListCollection
+  Future<EmailListEntry> getEmailListEntry() {
+    return  _emailService._emailListCollection
         .document(_uid).snapshots().map(_emailListEntryFromSnapshot).first;
   }
 

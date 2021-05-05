@@ -47,6 +47,23 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       initialDate: DateTime.fromMillisecondsSinceEpoch(emailFormModel.birthday.seconds * 1000),
       firstDate: DateTime(1920),
       lastDate: dateWhenThirteen,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: appTheme.brandPrimaryColor,
+            accentColor: appTheme.brandPrimaryColor,
+            dialogBackgroundColor: appTheme.bgPrimaryColor,
+            colorScheme: ColorScheme.light(
+              primary: appTheme.brandPrimaryColor,
+              onSurface: appTheme.textAccentColor,
+            ),
+            buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.accent
+            ),
+          ),
+          child: child,
+        );
+      }
     );
     if (picked != null)
       setState(() {
@@ -82,7 +99,6 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       setState(() {
         //get email subscription types from main data
         emailSubscriptionTypes = mainData.emailSubscriptionTypes ?? [];
-        shouldEnableBirthday = curEmailListEntry.birthday != null ? false : true;
         //format subscription types for checkboxes
         formattedSubscriptionTypes = emailSubscriptionTypes.map((subscriptionType){
           return SubscriptionType(
@@ -92,6 +108,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
               curEmailListEntry.emailSubscriptionTypes.contains(subscriptionType) : false
           );
         }).toList();
+        shouldEnableBirthday = curEmailListEntry.birthday != null ? false : true;
         //handle loading values for subscription types in form model
         emailFormModel.emailSubscriptionTypes = curEmailListEntry.emailSubscriptionTypes ?? [];
         //load birthday into form
@@ -131,6 +148,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FancyTextFormField(
                     fieldLabel: 'Username',
@@ -156,14 +174,14 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 24, bottom: 24),
+                        padding: EdgeInsets.only(top: 24, bottom: 30),
                         child: Container(
                           padding: EdgeInsets.all(12),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
                                   width: 1,
-                                  color: shouldEnableBirthday ? Colors.black45 : Colors.black12
+                                  color: shouldEnableBirthday ? Colors.black26 : Colors.black12
                               ),
                               borderRadius: BorderRadius.circular(5)
                           ),
@@ -171,7 +189,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                             isBirthdaySelected ? formatTimestampToDisplay(emailFormModel.birthday) : 'Enter your birthday',
                             style: TextStyle(
                                 fontSize: 16,
-                                color: shouldEnableBirthday ? Colors.grey[850] : Colors.black45
+                                color: shouldEnableBirthday ? Colors.grey[850] : Colors.black54
                             ),
                           ),
                         ),
@@ -212,6 +230,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                         bgColor: Colors.grey[850],
                         textColor: appTheme.textPrimaryColor,
                         bgGradientComparisonColor: Colors.blueGrey,
+                        checkboxColor: appTheme.brandPrimaryColor,
                         callbackFn: (subscriptionType, isSelected){
                           if(!emailFormModel.emailSubscriptionTypes.contains(subscriptionType)
                               && isSelected == true){
@@ -228,7 +247,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 46, bottom: 24),
+                    padding: EdgeInsets.only(top: 38, bottom: 24),
                     child: TextButton(
                       onPressed: () async{
                         //validate form

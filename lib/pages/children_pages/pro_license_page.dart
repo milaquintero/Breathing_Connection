@@ -18,6 +18,9 @@ class ProLicensePage extends StatefulWidget {
 class _ProLicensePageState extends State<ProLicensePage> {
   AppTheme appTheme;
   MainData mainData;
+  void _purchase(String op){
+    //TODO: handle purchasing subscription
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -87,17 +90,29 @@ class _ProLicensePageState extends State<ProLicensePage> {
               padding: EdgeInsets.only(top: 12, bottom: 0, left: 20, right: 20),
               child: Column(
                 children: [
-                  FancyTag(
-                    tagName: "\$0.99",
-                    hasFooter: true,
-                    tagFooter: "(BILLED MONTHLY)",
-                    footerFontSize: 14,
+                  GestureDetector(
+                    onTap: (){
+                      //initiate payment for monthly subscription
+                      _purchase('monthly');
+                    },
+                    child: FancyTag(
+                      tagName: "\$1.49",
+                      hasFooter: true,
+                      tagFooter: "(BILLED MONTHLY)",
+                      footerFontSize: 14,
+                    ),
                   ),
-                  FancyTag(
-                    tagName: "\$9.99",
-                    hasFooter: true,
-                    tagFooter: "(BILLED ANNUALLY)",
-                    footerFontSize: 14,
+                  GestureDetector(
+                    onTap: (){
+                      //initiate payment for annual subscription
+                      _purchase('annually');
+                    },
+                    child: FancyTag(
+                      tagName: "\$9.99",
+                      hasFooter: true,
+                      tagFooter: "(BILLED ANNUALLY)",
+                      footerFontSize: 14,
+                    ),
                   ),
                 ],
               ),
@@ -107,7 +122,8 @@ class _ProLicensePageState extends State<ProLicensePage> {
             padding: EdgeInsets.only(top: 8, bottom: 44),
             child: TextButton(
               onPressed: (){
-                //TODO: initiate google play payment
+                //initiate payment for annual subscription
+                _purchase('annually');
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),

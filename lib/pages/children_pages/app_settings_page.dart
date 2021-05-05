@@ -8,7 +8,6 @@ import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/setting_section.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsPage extends StatefulWidget {
@@ -304,13 +303,24 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           },
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 24),
-            child: Text(
-                'Manage Email Subscriptions',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: appTheme.textPrimaryColor,
-                  fontSize: 28
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    'Email Subscriptions',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: appTheme.textPrimaryColor,
+                      fontSize: 30,
+                    ),
                 ),
+                SizedBox(width: 10,),
+                Icon(
+                  Icons.settings_rounded,
+                  size: 32,
+                  color: appTheme.textPrimaryColor,
+                )
+              ],
             ),
           ),
           style: TextButton.styleFrom(
