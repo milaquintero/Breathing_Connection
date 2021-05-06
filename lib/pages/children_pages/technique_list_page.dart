@@ -49,6 +49,10 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //available techniques
     availableTechniques = Provider.of<List<Technique>>(context);
+    //sort available techniques by id
+    availableTechniques.sort((a,b){
+      return a.techniqueID.compareTo(b.techniqueID);
+    });
   }
   void handleQueueingPopup(){
     if(!curUser.hasFullAccess && !popupIsQueued && ModalRoute.of(context).isCurrent){
