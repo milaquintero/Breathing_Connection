@@ -26,95 +26,98 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     //screen height
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: widget.withAppBar ? AppBar(
-        toolbarHeight: widget.appBarHeight,
-        title: Text(
-          widget.pageTitle,
-          style: TextStyle(
-              fontSize: 30,
-              letterSpacing: -0.25
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: widget.withAppBar ? AppBar(
+          toolbarHeight: widget.appBarHeight,
+          title: Text(
+            widget.pageTitle,
+            style: TextStyle(
+                fontSize: 30,
+                letterSpacing: -0.25
+            ),
           ),
-        ),
-        centerTitle: true,
-        backgroundColor: widget.appBarColor,
-      ) : null,
-      body: Container(
-        color: widget.bgColor ?? Colors.blue[50],
-        padding: EdgeInsets.symmetric(horizontal: 32),
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.topCenter,
-          children: [
-            Positioned(
-                bottom: -200,
-                left: -240,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(300),
-                  child: Container(
-                    width: 400,
-                    height: 400,
-                    color: widget.decorationPrimaryColor,
-                  ),
-                )
-            ),
-            Positioned(
-                bottom: -190,
-                left: -250,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(300),
-                  child: Container(
-                    width: 350,
-                    height: 350,
-                    color: widget.bgColor ?? Colors.blue[50],
-                  ),
-                )
-            ),
-            Positioned(
-                bottom: -200,
-                right: -240,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(300),
-                  child: Container(
-                    width: 400,
-                    height: 400,
-                    color: widget.decorationPrimaryColor,
-                  ),
-                )
-            ),
-            Positioned(
-                bottom: 0,
-                right: -280,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(300),
-                  child: Container(
-                    width: 400,
-                    height: 400,
-                    color: widget.decorationSecondaryColor.withOpacity(0.4),
-                  ),
-                )
-            ),
-            ListView(
-              children: [
-                //icon header
-                widget.withIconHeader ? Padding(
-                  padding: EdgeInsets.only(top: 36, bottom: 16),
-                  child: CircleAvatar(
-                    backgroundColor: widget.headerColor,
-                    radius: screenHeight / 10.25,
-                    child: Icon(
-                      widget.headerIcon,
-                      size: screenHeight / 10.25,
-                      color: widget.headerIconColor,
+          centerTitle: true,
+          backgroundColor: widget.appBarColor,
+        ) : null,
+        body: Container(
+          color: widget.bgColor ?? Colors.blue[50],
+          padding: EdgeInsets.symmetric(horizontal: 32),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                  bottom: -200,
+                  left: -240,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(300),
+                    child: Container(
+                      width: 400,
+                      height: 400,
+                      color: widget.decorationPrimaryColor,
                     ),
-                  ),
-                ) : Container(),
-                //add form after icon header
-                widget.child
-              ],
-            ),
-          ],
+                  )
+              ),
+              Positioned(
+                  bottom: -190,
+                  left: -250,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(300),
+                    child: Container(
+                      width: 350,
+                      height: 350,
+                      color: widget.bgColor ?? Colors.blue[50],
+                    ),
+                  )
+              ),
+              Positioned(
+                  bottom: -200,
+                  right: -240,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(300),
+                    child: Container(
+                      width: 400,
+                      height: 400,
+                      color: widget.decorationPrimaryColor,
+                    ),
+                  )
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: -280,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(300),
+                    child: Container(
+                      width: 400,
+                      height: 400,
+                      color: widget.decorationSecondaryColor.withOpacity(0.4),
+                    ),
+                  )
+              ),
+              ListView(
+                children: [
+                  //icon header
+                  widget.withIconHeader ? Padding(
+                    padding: EdgeInsets.only(top: 36, bottom: 16),
+                    child: CircleAvatar(
+                      backgroundColor: widget.headerColor,
+                      radius: screenHeight / 10.25,
+                      child: Icon(
+                        widget.headerIcon,
+                        size: screenHeight / 10.25,
+                        color: widget.headerIconColor,
+                      ),
+                    ),
+                  ) : Container(),
+                  //add form after icon header
+                  widget.child
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

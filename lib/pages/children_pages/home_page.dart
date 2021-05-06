@@ -52,12 +52,12 @@ String getAssetImage(String patternToMatch, List<String> availableImages){
 
 class HomePage extends StatefulWidget {
   final BuildContext rootContext;
-  HomePage({this.rootContext});
+  HomePage({this.rootContext, Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
   //timer for email subscription dialog
   Timer emailSubDialogTimer;
   //timer for email verification dialog
@@ -78,6 +78,10 @@ class _HomePageState extends State<HomePage> {
   bool popupIsQueued = false;
   //available techniques
   List<Technique> availableTechniques;
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   void dispose() {
     super.dispose();

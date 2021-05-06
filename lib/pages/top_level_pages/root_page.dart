@@ -24,7 +24,7 @@ class RootPage extends StatefulWidget {
   _RootPageState createState() => _RootPageState();
 }
 
-class _RootPageState extends State<RootPage> {
+class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   //app main data
   MainData mainData;
   //handler for current page (used by bottom nav)
@@ -35,6 +35,9 @@ class _RootPageState extends State<RootPage> {
   AppTheme appTheme;
   //current user
   User curUser;
+  //page to display
+  Widget _pageToDisplay;
+  Offset _transitionOffset;
   //set a reminder
   void setReminder({int timerId, Function callback, DateTime timeToStart}) async{
     await AndroidAlarmManager.periodic(
@@ -117,6 +120,10 @@ class _RootPageState extends State<RootPage> {
     initWithDependencies();
   }
   @override
+  void dispose() {
+    super.dispose();
+  }
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //handler for current page (used by bottom nav)
@@ -125,32 +132,60 @@ class _RootPageState extends State<RootPage> {
     navLinks = List<NavLink>.from(mainData.pages);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+    //handle switching page with animation
+    int currentIndex = curPage.pageIndex;
+    String currentRoute = navLinks[currentIndex].pageRoute;
+    setState(() {
+      if(currentRoute == '/home'){
+        _pageToDisplay = HomePage(rootContext: context,);
+        _transitionOffset = Offset(-1.5,0.0);
+      }
+      else if(currentRoute == '/technique-list'){
+        _pageToDisplay = TechniqueListPage(rootContext: context);
+        _transitionOffset = Offset(1.5,0.0);
+      }
+      else if(currentRoute == '/settings'){
+        _pageToDisplay = AppSettingsPage(rootContext: context,);
+        _transitionOffset = Offset(-1.5,0.0);
+      }
+      else if(currentRoute == '/pro'){
+        _pageToDisplay = ProLicensePage(rootContext: context,);
+        _transitionOffset = Offset(1.5,0.0);
+      }
+      else{
+        _pageToDisplay = PageNotFound(rootContext: context, hasBottomNav: true,);
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
       value: UserService().userWithData,
       child: Scaffold(
-        body: Builder(
-          builder: (context){
-            int currentIndex = curPage.pageIndex;
-            String currentRoute = navLinks[currentIndex].pageRoute;
-            if(currentRoute == '/home'){
-              return HomePage(rootContext: context,);
-            }
-            else if(currentRoute == '/technique-list'){
-              return TechniqueListPage(rootContext: context);
-            }
-            else if(currentRoute == '/settings'){
-              return AppSettingsPage(rootContext: context,);
-            }
-            else if(currentRoute == '/pro'){
-              return ProLicensePage(rootContext: context,);
-            }
-            else{
-              return PageNotFound(rootContext: context, hasBottomNav: true,);
-            }
+        backgroundColor: appTheme.brandPrimaryColor,
+        body: AnimatedSwitcher(
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return DualTransitionBuilder(
+              animation: animation,
+              forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                final  customAnimation =
+                Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
+                );
+                return SlideTransition(position: customAnimation, child: child,);
+              },
+              reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                final  customAnimation =
+                Tween<double>(begin: 1.0, end: 1.0).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInSine)
+                );
+                return FadeTransition(opacity: customAnimation, child: child,);
+              },
+              child: child,
+            );
           },
+          duration: Duration(seconds: 1),
+          child: _pageToDisplay,
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: curPage.pageIndex,
