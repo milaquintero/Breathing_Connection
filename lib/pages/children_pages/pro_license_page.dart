@@ -42,14 +42,15 @@ class _ProLicensePageState extends State<ProLicensePage> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 36, bottom: 16),
+            padding: EdgeInsets.only(top: 36, bottom: 8),
             child: Text(
               mainData.proPageHeaderText,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: appTheme.textSecondaryColor
+                  color: appTheme.textSecondaryColor,
+                  letterSpacing: 0.25
               ),
             ),
           ),
@@ -119,7 +120,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 8, bottom: 44),
+            padding: EdgeInsets.only(top: 8, bottom: 48),
             child: TextButton(
               onPressed: (){
                 //initiate payment for annual subscription
