@@ -1,7 +1,3 @@
-import 'dart:collection';
-
-import 'package:breathing_connection/models/inhale_exhale_type.dart';
-
 class Technique{
   int techniqueID;
   String title;

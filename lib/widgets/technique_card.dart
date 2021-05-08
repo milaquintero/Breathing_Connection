@@ -1,7 +1,5 @@
 import 'package:breathing_connection/models/technique.dart';
-import 'package:breathing_connection/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TechniqueCard extends StatefulWidget {
   final bool userHasFullAccess;

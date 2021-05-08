@@ -10,7 +10,6 @@ import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
 import 'package:breathing_connection/widgets/technique_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/nav_link.dart';

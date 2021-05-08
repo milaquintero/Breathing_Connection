@@ -1,4 +1,3 @@
-import 'package:breathing_connection/constants.dart';
 import 'package:flutter/material.dart';
 
 class FancyImageSelector extends StatefulWidget {

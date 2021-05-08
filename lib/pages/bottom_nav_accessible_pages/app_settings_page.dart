@@ -1,14 +1,21 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
+import 'package:breathing_connection/models/daily_reminder_lists.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
+import 'package:breathing_connection/pages/top_level_pages/root_page.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
+import 'package:breathing_connection/widgets/dialog_daily_reminder_time_picker.dart';
 import 'package:breathing_connection/widgets/setting_section.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../utility.dart';
 
 class AppSettingsPage extends StatefulWidget {
   final BuildContext rootContext;
@@ -32,6 +39,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   UserService _userService = UserService();
   //temp user settings to track changes
   UserSettings newSettings;
+  //temp daily reminder list to track changes
+  DailyReminderLists tempDailyReminderLists;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -56,6 +65,10 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             newSettings = curUser.userSettings;
             //settings in json format for filtering
             allSettings = curUser.userSettings.toJson();
+          }
+          //daily reminders haven't changed so load from current user
+          if(!DailyReminderLists.haveChanged(tempDailyReminderLists, curUser.dailyReminderLists)){
+            tempDailyReminderLists = curUser.dailyReminderLists;
           }
           //build sections on init
           buildSettingSections();
@@ -167,6 +180,27 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       }
     );
   }
+  void showSuccessMessage() async{
+    await showDialog(
+        context: context,
+        builder: (context){
+      return DialogAlert(
+        titlePadding: EdgeInsets.only(top: 12),
+        subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+        buttonText: 'Back to Settings',
+        cbFunction: (){},
+        titleText: 'Success',
+        subtitleText: 'Changes to these settings have been saved in your account',
+        headerIcon: Icons.fact_check,
+        headerBgColor: Colors.green[600],
+        buttonColor: appTheme.brandPrimaryColor,
+        titleTextColor: appTheme.textAccentColor,
+        bgColor: appTheme.bgPrimaryColor,
+        subtitleTextColor: appTheme.textAccentColor,
+      );
+    }
+    );
+  }
   //update user settings
   void updateUserSettings(rootContext) async{
     //make sure settings have changed before updating in firestore
@@ -183,25 +217,17 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           appTheme = selectedTheme;
         });
       }
-      await showDialog(
-          context: context,
-          builder: (context){
-            return DialogAlert(
-              titlePadding: EdgeInsets.only(top: 12),
-              subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
-              buttonText: 'Back to Settings',
-              cbFunction: (){},
-              titleText: 'Success',
-              subtitleText: 'Changes to these settings have been saved in your account',
-              headerIcon: Icons.fact_check,
-              headerBgColor: Colors.green[600],
-              buttonColor: appTheme.brandPrimaryColor,
-              titleTextColor: appTheme.textAccentColor,
-              bgColor: appTheme.bgPrimaryColor,
-              subtitleTextColor: appTheme.textAccentColor,
-            );
-          }
-      );
+      showSuccessMessage();
+    }
+    else if(DailyReminderLists.haveChanged(tempDailyReminderLists, curUser.dailyReminderLists)){
+      UserService().handleUpdateDailyReminderLists(curUser.userId, tempDailyReminderLists);
+      //cancel all previous alarms
+      Utility.cancelAllAlarms();
+      //update user's daily reminders locally before rescheduling alarms
+      curUser.dailyReminderLists = tempDailyReminderLists;
+      //set new alarms
+      Utility.scheduleDailyReminders(curUser, mainData);
+      showSuccessMessage();
     }
   }
 
@@ -241,6 +267,101 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               newSettings.setProperty(key, newVal);
             });
           },
+        )
+    );
+    //add card to edit daily reminder times
+    mainContent.add(
+        Container(
+          decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    color: appTheme.cardBorderColor,
+                    width: 1.5
+                ),
+              ),
+              gradient: RadialGradient(
+                colors: [Colors.blueGrey, Color.lerp(appTheme.cardBgColor, Colors.blueGrey, 0.25), appTheme.cardBgColor],
+                center: Alignment(0.6, -0.3),
+                focal: Alignment(0.3, -0.1),
+                focalRadius: 12.5,
+              )
+          ),
+          child: Container(
+            margin: EdgeInsets.zero,
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+              leading: Icon(
+                Icons.account_balance_wallet_outlined,
+                size: 32,
+                color: appTheme.cardTitleColor,
+              ),
+              title: Text(
+                'Edit Reminders',
+                style: TextStyle(
+                    fontSize: 28,
+                    color: appTheme.textAccentColor
+                ),
+              ),
+              trailing: GestureDetector(
+                onTap: (){
+                  //handle changing theme with selection dialog
+                  if(curUser != null && curUser.dailyReminderLists != null){
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context){
+                          return DialogDailyReminderTimePicker(
+                            titlePadding: EdgeInsets.only(top: 24, bottom: 6),
+                            headerIcon: Icons.timelapse_rounded,
+                            headerBgColor: appTheme.brandPrimaryColor,
+                            dailyReminderLists: tempDailyReminderLists,
+                            userHasFullAccess: curUser.hasFullAccess,
+                            buttonColor: appTheme.brandPrimaryColor,
+                            cardColor: appTheme.cardBgColor,
+                            textColor: appTheme.textAccentColor,
+                            timeDisplayTextColor: appTheme.textPrimaryColor,
+                            dialogBgColor: appTheme.bgPrimaryColor,
+                            timeDisplayBgColor: appTheme.bgAccentColor,
+                            timeDisplayGradientComparisonColor: appTheme.brandAccentColor,
+                            cbFunction: (String op, int index, Timestamp newTime){
+                              //update selected daily reminder list entry based on operation and index
+                              setState(() {
+                                if(op == 'regularTimes'){
+                                  tempDailyReminderLists.regularTimes[index] = newTime;
+                                }
+                                else if(op == 'challengeModeTimes'){
+                                  tempDailyReminderLists.challengeModeTimes[index] = newTime;
+                                }
+                              });
+                            },
+                          );
+                        }
+                    );
+                  }
+                },
+                child: Container(
+                  width: 53,
+                  height: 50,
+                  child: Material(
+                    elevation: 2,
+                    color: Colors.transparent,
+                    shape: CircleBorder(),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                          color: appTheme.brandPrimaryColor,
+                          shape: BoxShape.circle
+                      ),
+                      child: Icon(
+                        Icons.settings_rounded,
+                        color: appTheme.textPrimaryColor,
+                        size: 28
+                      )
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         )
     );
     //add sound settings section

@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 class AppTheme{
   int themeID;
   String themeName;

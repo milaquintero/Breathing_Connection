@@ -24,4 +24,20 @@ class DailyReminderLists{
       "regularTimes": regularTimes,
     };
   }
+  static bool haveChanged(DailyReminderLists newList, DailyReminderLists oldList){
+    bool listsHaveChanged = false;
+    if(newList != null){
+      for(int i = 0; i < oldList.regularTimes.length; i++){
+        if(oldList.regularTimes[i] != newList.regularTimes[i]){
+          listsHaveChanged = true;
+        }
+      }
+      for(int i = 0; i < oldList.challengeModeTimes.length; i++){
+        if(oldList.challengeModeTimes[i] != newList.challengeModeTimes[i]){
+          listsHaveChanged = true;
+        }
+      }
+    }
+    return listsHaveChanged;
+  }
 }

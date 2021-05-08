@@ -67,7 +67,7 @@ class _SettingCardState extends State<SettingCard> {
             child: ListTile(
               contentPadding: cardPadding,
               leading: Icon(
-                Icons.multitrack_audio_rounded,
+                widget.settingName.toLowerCase().contains('sound') ? Icons.multitrack_audio_rounded : Icons.account_balance_wallet_outlined,
                 size: 32,
                 color: widget.cardIconColor,
               ),

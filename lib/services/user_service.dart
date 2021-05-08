@@ -243,4 +243,16 @@ class UserService {
       return false;
     }
   }
+
+  Future handleUpdateDailyReminderLists(String uid, DailyReminderLists newDailyReminderLists) async{
+    try{
+      await _userService._userDataCollection.document(uid)
+          .setData({
+        "dailyReminderLists": newDailyReminderLists.toJson()
+      }, merge: true);
+    }
+    catch(error){
+      throw new Exception(error);
+    }
+  }
 }

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import 'app_theme.dart';
 
 class UserSettings{

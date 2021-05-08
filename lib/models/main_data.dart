@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/inhale_exhale_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
