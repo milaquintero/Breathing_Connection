@@ -41,6 +41,7 @@ class MainData{
   String proSubSuccessBody;
   String emailSubSuccessHead;
   String emailSubSuccessBody;
+  List<String> disclaimerNotes;
 
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
@@ -53,7 +54,8 @@ class MainData{
     this.challengeReminderFooter, this.challengeReminderHeader, this.dailyReminderFooter,
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
-    this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes});
+    this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes,
+    this.disclaimerNotes});
 
   factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
     if(op == 'constants'){
@@ -86,6 +88,9 @@ class MainData{
       tempMainData.proSubSuccessBody = snapshot.data['proSubSuccessBody'] ?? '';
       tempMainData.emailSubSuccessHead = snapshot.data['emailSubSuccessHead'] ?? '';
       tempMainData.emailSubSuccessBody = snapshot.data['emailSubSuccessBody'] ?? '';
+      Iterable disclaimerNotes = snapshot['disclaimerNotes'] ?? [];
+      tempMainData.disclaimerNotes = disclaimerNotes
+          .map((disclaimerNote) => disclaimerNote.toString()).toList();
     }
     else if(op == 'meta'){
       Iterable pages = snapshot['pages'] ?? [];
@@ -161,5 +166,6 @@ class MainData{
     this.emailSubSuccessHead = mainData.emailSubSuccessHead;
     this.emailSubSuccessBody = mainData.emailSubSuccessBody;
     this.emailSubscriptionTypes = mainData.emailSubscriptionTypes;
+    this.disclaimerNotes = mainData.disclaimerNotes;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/daily_reminder_lists.dart';
@@ -6,7 +5,6 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/user_settings.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
-import 'package:breathing_connection/pages/top_level_pages/root_page.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/dialog_daily_reminder_time_picker.dart';

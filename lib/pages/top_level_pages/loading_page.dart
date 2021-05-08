@@ -59,7 +59,7 @@ class _LoadingPageState extends State<LoadingPage> {
     Provider.of<CurrentThemeHandler>(context, listen: false).setCurrentTheme(selectedTheme);
     //set user to root (defaulting to home tab) after 3 seconds
     dataRetrievalSuccessTimer = Timer(Duration(seconds: 5), (){
-      Navigator.pushReplacementNamed(context, '/root');
+      Navigator.pushReplacementNamed(context, '/disclaimer-page');
     });
     return true;
   }

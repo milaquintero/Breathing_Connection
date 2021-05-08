@@ -2,6 +2,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
+import 'package:breathing_connection/pages/top_level_pages/disclaimer_page.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -90,12 +91,47 @@ class _BreathingConnectionState extends State<BreathingConnection> {
               )
           );
         },
-        routes: {
-          '/': (context)=>AuthenticationWrapper(),
-          '/root': (context)=>RootPage(),
-          '/email-subscription': (context)=>EmailSubscriptionPage(),
-          '/create-custom-technique': (context)=>CreateCustomTechniquePage(),
-          '/technique-details': (context)=>TechniqueDetailsPage(),
+        onGenerateRoute: (settings){
+          Widget selectedPage;
+          switch(settings.name){
+            case '/':
+              selectedPage = AuthenticationWrapper();
+              break;
+            case '/root':
+              selectedPage = RootPage();
+              break;
+            case '/email-subscription':
+              selectedPage = EmailSubscriptionPage();
+              break;
+            case '/create-custom-technique':
+              selectedPage = CreateCustomTechniquePage();
+              break;
+            case '/technique-details':
+              selectedPage = TechniqueDetailsPage();
+              break;
+            case '/disclaimer-page':
+              selectedPage = DisclaimerPage();
+              break;
+            default:
+              selectedPage = PageNotFound();
+              break;
+          }
+          return PageRouteBuilder(
+              pageBuilder: (context, primaryAnimation, secondaryAnimation) => selectedPage,
+              transitionsBuilder: (context, primaryAnimation, secondaryAnimation, child){
+                final  customAnimation =
+                Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                        parent: primaryAnimation,
+                        curve: Curves.easeInSine
+                    )
+                );
+                return FadeTransition(
+                    opacity: customAnimation,
+                    child: child,
+                );
+              }
+          );
         },
         theme: ThemeData(
           fontFamily: 'ZillaSlab'

@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/app_settings_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/home_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/pro_license_page.dart';
@@ -6,8 +5,6 @@ import 'package:breathing_connection/pages/bottom_nav_accessible_pages/technique
 import 'package:breathing_connection/pages/top_level_pages/page_not_found.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/utility.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../main.dart';
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
@@ -108,7 +105,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                 height: 650,
                 width: 650,
                 decoration: BoxDecoration(
-                    color: appTheme.bgSecondaryColor,
+                    color: appTheme.brandPrimaryColor,
                     borderRadius: BorderRadius.circular(300)
                 ),
               ),
@@ -119,7 +116,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                 height: 650,
                 width: 650,
                 decoration: BoxDecoration(
-                    color: appTheme.decorationSecondaryColor,
+                    color: appTheme.brandSecondaryColor,
                     borderRadius: BorderRadius.circular(300)
                 ),
               ),
