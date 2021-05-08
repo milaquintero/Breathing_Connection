@@ -318,11 +318,12 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                             userHasFullAccess: curUser.hasFullAccess,
                             buttonColor: appTheme.brandPrimaryColor,
                             cardColor: appTheme.cardBgColor,
-                            textColor: appTheme.textAccentColor,
+                            textColor: appTheme.textSecondaryColor,
                             timeDisplayTextColor: appTheme.textPrimaryColor,
                             dialogBgColor: appTheme.bgPrimaryColor,
                             timeDisplayBgColor: appTheme.bgAccentColor,
                             timeDisplayGradientComparisonColor: appTheme.brandAccentColor,
+                            timePickerBgColor: appTheme.bgPrimaryColor,
                             cbFunction: (String op, int index, Timestamp newTime){
                               //update selected daily reminder list entry based on operation and index
                               setState(() {

@@ -16,10 +16,12 @@ class DialogDailyReminderTimePicker extends StatefulWidget {
   final Color timeDisplayTextColor;
   final DailyReminderLists dailyReminderLists;
   final Color timeDisplayGradientComparisonColor;
+  final Color timePickerBgColor;
   DialogDailyReminderTimePicker({this.headerIcon, this.titlePadding,
   this.cbFunction, this.headerBgColor, this.dailyReminderLists, this.cardColor,
   this.textColor, this.dialogBgColor, this.userHasFullAccess = false, this.buttonColor,
-  this.timeDisplayBgColor, this.timeDisplayTextColor, this.timeDisplayGradientComparisonColor});
+  this.timeDisplayBgColor, this.timeDisplayTextColor, this.timeDisplayGradientComparisonColor,
+  this.timePickerBgColor});
 
   @override
   _DialogDailyReminderTimePickerState createState() => _DialogDailyReminderTimePickerState();
@@ -60,6 +62,31 @@ class _DialogDailyReminderTimePickerState extends State<DialogDailyReminderTimeP
     TimeOfDay newTime = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(op == 'regularTimes' ? widget.dailyReminderLists.regularTimes[index].toDate() : widget.dailyReminderLists.challengeModeTimes[index].toDate()),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor: widget.textColor,
+              accentColor: widget.textColor,
+              dialogBackgroundColor: widget.textColor,
+              colorScheme: ColorScheme.light(
+                primary: widget.textColor,
+                onPrimary: widget.timePickerBgColor,
+                onSurface: widget.textColor,
+                surface: widget.timePickerBgColor,
+              ),
+              textTheme: TextTheme(
+                overline: TextStyle(
+                  color: widget.textColor,
+                  fontSize: 12
+                )
+              ),
+              buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.accent
+              ),
+            ),
+            child: child,
+          );
+        }
     );
     //run call back with op set to regular times if time changed
     if(timeHasChanged(newTime, op == 'regularTimes' ? widget.dailyReminderLists.regularTimes[index] : widget.dailyReminderLists.challengeModeTimes[index])){
