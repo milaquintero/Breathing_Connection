@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage>{
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 24, bottom: 36),
+            padding: EdgeInsets.only(top: 24, bottom: 32),
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [Colors.blueGrey[400], Color.lerp(appTheme.bgPrimaryColor, Colors.blueGrey[400], 0.5), appTheme.bgPrimaryColor],
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage>{
                   height: screenHeight / 4.3,
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  padding: EdgeInsets.only(top: 20),
                   child: Text(
                     mainData.homePageTitleText,
                     style: TextStyle(
@@ -305,7 +305,138 @@ class _HomePageState extends State<HomePage>{
             }
           }
         ),
-      )
+      ),
+      withFloatingActionButton: true,
+      floatingActionButton: Container(
+        width: 80,
+        height: 80,
+        margin: EdgeInsets.only(top: 19),
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: Colors.transparent,
+                width: 1
+            ),
+            borderRadius: BorderRadius.circular(21),
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            showBottomSheet(
+                elevation: 60,
+                context: context,
+                builder: (context){
+                  return Container(
+                    height: 330,
+                    decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          colors: [appTheme.bgPrimaryColor, Color.lerp(appTheme.brandPrimaryColor, appTheme.bgPrimaryColor, 0.5), appTheme.brandPrimaryColor],
+                          center: Alignment(0.6, -0.3),
+                          focal: Alignment(0.3, -0.1),
+                          focalRadius: 3.5,
+                        ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 32, left: 36, right: 36),
+                            child: Column(
+                              children: [
+                                Text(
+                                    'Your Information',
+                                    style: TextStyle(
+                                      color: appTheme.textPrimaryColor,
+                                      fontSize: 30
+                                    ),
+                                ),
+                                SizedBox(height: 12,),
+                                Text(
+                                  'Username',
+                                  style: TextStyle(
+                                      color: appTheme.disabledCardTextColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 2,),
+                                Text(
+                                  curUser.username,
+                                  style: TextStyle(
+                                    color: appTheme.textPrimaryColor,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                SizedBox(height: 16,),
+                                Text(
+                                  'Email',
+                                  style: TextStyle(
+                                      color: appTheme.disabledCardTextColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 2,),
+                                Text(
+                                  curUser.email,
+                                  style: TextStyle(
+                                    color: appTheme.textPrimaryColor,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 16, bottom: 24),
+                            child: TextButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                                child: Text(
+                                    'Back to Home',
+                                    style: TextStyle(
+                                        color: appTheme.textPrimaryColor,
+                                        fontSize: 24
+                                    ),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.deepOrange[600]
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                  Icons.person,
+                  size: 29,
+              ),
+              Text(
+                  'Profile',
+                  style: TextStyle(
+                    fontSize: 11
+                  ),
+              )
+            ],
+          ),
+          elevation: 7,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.deepOrange[600],
+          foregroundColor: appTheme.textPrimaryColor,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 }

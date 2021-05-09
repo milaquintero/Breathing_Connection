@@ -36,7 +36,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 24, bottom: 32),
+            padding: EdgeInsets.only(top: 24, bottom: 28),
             color: appTheme.bgPrimaryColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -76,14 +76,14 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
                     mainData.disclaimerNotes[index],
                     style: TextStyle(
                         fontSize: 20,
-                        color: appTheme.textPrimaryColor
+                        color: appTheme.textAccentColor
                     ),
                   ),
                 );
               },
             ),
             Padding(
-              padding: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.only(top: 16),
               child: TextButton(
                 onPressed: (){
                   Navigator.of(context).pushReplacementNamed('/root');

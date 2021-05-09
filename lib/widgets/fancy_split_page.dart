@@ -6,9 +6,13 @@ class FancySplitPage extends StatelessWidget {
   final double headerPositionTop;
   final Color headerColor;
   final Color mainContentColor;
+  final bool withFloatingActionButton;
+  final Widget floatingActionButton;
+  final FloatingActionButtonLocation floatingActionButtonLocation;
   FancySplitPage({this.mainContent, this.headerContent,
   this.headerPositionTop, this.mainContentHeight,
-  this.headerColor, this.mainContentColor});
+  this.headerColor, this.mainContentColor, this.withFloatingActionButton = false,
+  this.floatingActionButton, this.floatingActionButtonLocation});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +30,8 @@ class FancySplitPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: withFloatingActionButton ? floatingActionButton : Container(),
+      floatingActionButtonLocation: withFloatingActionButton ? floatingActionButtonLocation : FloatingActionButtonLocation.endFloat,
     );
   }
 }
