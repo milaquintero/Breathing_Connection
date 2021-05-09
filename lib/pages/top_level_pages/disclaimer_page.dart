@@ -36,7 +36,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 24, bottom: 28),
+            padding: EdgeInsets.only(top: 24, bottom: 24),
             color: appTheme.bgPrimaryColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -83,7 +83,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
               },
             ),
             Padding(
-              padding: EdgeInsets.only(top: 16),
+              padding: EdgeInsets.only(top: 12),
               child: TextButton(
                 onPressed: (){
                   Navigator.of(context).pushReplacementNamed('/root');

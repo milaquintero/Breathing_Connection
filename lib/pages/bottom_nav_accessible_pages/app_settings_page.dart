@@ -12,6 +12,7 @@ import 'package:breathing_connection/widgets/setting_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utility.dart';
 
@@ -234,6 +235,35 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             (setting) => desiredKeys.contains(setting.key)
     );
   }
+  
+  void openEmailApp() async{
+    if(await canLaunch("mailto:${mainData.supportEmail}")){
+      //open native mail app with support email in the TO
+      await launch("mailto:${mainData.supportEmail}");
+    }
+    else{
+      //no native mail app is installed so show dialog that gives them the support email & instructions
+      await showDialog(
+          context: context,
+          builder: (context){
+            return DialogAlert(
+              titlePadding: EdgeInsets.only(top: 12),
+              subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+              buttonText: 'Back to Settings',
+              cbFunction: (){},
+              titleText: 'Contact Support',
+              subtitleText: 'No native mail app was found on your device. Please contact support using your browser via email directed towards the following address: ${mainData.supportEmail}',
+              headerIcon: Icons.support_agent,
+              headerBgColor: appTheme.brandPrimaryColor,
+              buttonColor: appTheme.brandPrimaryColor,
+              titleTextColor: appTheme.textAccentColor,
+              bgColor: appTheme.bgPrimaryColor,
+              subtitleTextColor: appTheme.textAccentColor,
+            );
+          }
+      );
+    }
+  }
 
   void buildSettingSections(){
     //reset main content
@@ -447,6 +477,40 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             backgroundColor: appTheme.brandPrimaryColor,
             shape: ContinuousRectangleBorder()
           ),
+      ),
+    );
+    //add button to contact support
+    mainContent.add(
+      TextButton(
+        onPressed: (){
+          openEmailApp();
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Contact Support',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: appTheme.textPrimaryColor,
+                  fontSize: 30,
+                ),
+              ),
+              SizedBox(width: 10,),
+              Icon(
+                Icons.support_agent,
+                size: 32,
+                color: appTheme.textPrimaryColor,
+              )
+            ],
+          ),
+        ),
+        style: TextButton.styleFrom(
+            backgroundColor: appTheme.brandSecondaryColor,
+            shape: ContinuousRectangleBorder()
+        ),
       ),
     );
   }
