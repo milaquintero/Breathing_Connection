@@ -38,7 +38,7 @@ class EmailService{
         "birthday": emailFormModel.birthday,
         "emailSubscriptionTypes": emailFormModel.emailSubscriptionTypes
       }, merge: true);
-      await UserService().addToEmailList(_emailService._uid, emailFormModel.emailSubscriptionTypes.length != 0);
+      await UserService(uid: _emailService._uid).addToEmailList(emailFormModel.emailSubscriptionTypes.length != 0);
       return true;
     }
     catch(error){

@@ -61,4 +61,25 @@ class TechniqueService{
       throw new Exception(error);
     }
   }
+  
+  Future<bool> deleteCustomTechnique(int techniqueIdToDelete) async{
+    try{
+      //query to get technique by id
+      QuerySnapshot techniqueToDeleteQuery = await _techniqueService._techniqueListCollection.where("techniqueID", isEqualTo: techniqueIdToDelete)
+          .getDocuments();
+
+      //store document to be able to delete
+      DocumentSnapshot techniqueToDeleteDoc = techniqueToDeleteQuery.documents.first;
+
+      //delete document from backend
+      await _techniqueService._techniqueListCollection.document(techniqueToDeleteDoc.documentID)
+        .delete();
+
+      return true;
+    }
+    catch(error){
+      throw new Exception(error);
+      return false;
+    }
+  }
 }

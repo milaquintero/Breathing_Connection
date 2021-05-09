@@ -289,7 +289,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     //add to current user techniques
     curUser.customTechniqueIDs.add(updatedNewTechnique.techniqueID);
     //persist new custom technique id list for user
-    await UserService().handleCustomTechnique(curUser.userId, curUser.customTechniqueIDs);
+    await UserService(uid: curUser.userId).handleCustomTechnique(curUser.customTechniqueIDs);
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
     showDialog(

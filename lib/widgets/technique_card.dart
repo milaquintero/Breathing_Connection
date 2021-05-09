@@ -15,10 +15,12 @@ class TechniqueCard extends StatefulWidget {
   final Color cardSubtitleColor;
   final Color cardBgColor;
   final Color cardActionColor;
+  final Function(Technique) deleteCustomTechnique;
   TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails,
   this.disabledCardTextColor, this.disabledCardBorderColor, this.disabledCardBgColor,
   this.disabledCardBgAccentColor, this.cardTitleColor, this.cardSubtitleColor,
-  this.cardBorderColor, this.cardBgColor, this.cardActionColor, this.userHasFullAccess});
+  this.cardBorderColor, this.cardBgColor, this.cardActionColor, this.userHasFullAccess,
+  this.deleteCustomTechnique});
 
   @override
   _TechniqueCardState createState() => _TechniqueCardState();
@@ -55,6 +57,11 @@ class _TechniqueCardState extends State<TechniqueCard> {
     if(widget.technique.categoryDependencies.contains('Challenge')){
       techniqueMenuOptions.add(PopupMenuItem<String>(
           child: Text('Set as Challenge Technique'), value: 'Challenge'));
+    }
+    //add option to permanently delete technique if technique has associated user id (custom technique)
+    if(widget.technique.associatedUserID != null){
+      techniqueMenuOptions.add(PopupMenuItem(
+          child: Text('Permanently delete'), value: 'Delete',));
     }
   }
   @override
@@ -93,7 +100,12 @@ class _TechniqueCardState extends State<TechniqueCard> {
             ),
             itemBuilder: (context) => techniqueMenuOptions,
             onSelected: (op){
-              widget.changeTechnique(op, widget.technique);
+              if(op != 'Delete'){
+                widget.changeTechnique(op, widget.technique);
+              }
+              else{
+                widget.deleteCustomTechnique(widget.technique);
+              }
             },
           ) : null,
           title: Padding(

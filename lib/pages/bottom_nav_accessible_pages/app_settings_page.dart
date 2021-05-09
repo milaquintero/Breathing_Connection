@@ -205,7 +205,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     List<String> settingsThatChanged = UserSettings.settingsThatChanged(newSettings, curUser.userSettings);
     if(settingsThatChanged.length != 0){
       //update settings in firestore
-      await UserService().handleUpdateSettings(curUser.userId, newSettings);
+      await UserService(uid: curUser.userId).handleUpdateSettings(newSettings);
       if(settingsThatChanged.contains("themeID")){
         AppTheme selectedTheme = mainData.themes.firstWhere((theme) => newSettings.themeID == theme.themeID);
         //update selected theme in provider if it changed
@@ -218,7 +218,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       showSuccessMessage();
     }
     else if(DailyReminderLists.haveChanged(tempDailyReminderLists, curUser.dailyReminderLists)){
-      UserService().handleUpdateDailyReminderLists(curUser.userId, tempDailyReminderLists);
+      UserService(uid: curUser.userId).handleUpdateDailyReminderLists(tempDailyReminderLists);
       //cancel all previous alarms
       Utility.cancelAllAlarms();
       //update user's daily reminders locally before rescheduling alarms

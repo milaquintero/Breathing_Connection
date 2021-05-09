@@ -5,6 +5,7 @@ import 'package:breathing_connection/models/main_data.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
+import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/dialog_prompt.dart';
@@ -139,7 +140,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                   disabledCardTextColor: appTheme.disabledCardTextColor,
                                   changeTechnique: (String op, Technique selectedTechnique) async{
                                     //change technique for user
-                                    bool changeSuccessful = await UserService().handleChangeTechnique(curUser.userId, op, selectedTechnique.techniqueID);
+                                    bool changeSuccessful = await UserService(uid: curUser.userId).handleChangeTechnique(op, selectedTechnique.techniqueID);
                                     //show success alert
                                     showDialog(
                                         context: context,
@@ -157,6 +158,46 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                             titleTextColor: appTheme.textAccentColor,
                                             bgColor: appTheme.bgPrimaryColor,
                                             subtitleTextColor: appTheme.textAccentColor,
+                                          );
+                                        }
+                                    );
+                                  },
+                                  deleteCustomTechnique: (Technique selectedTechnique) async{
+                                    //prompt if user wants to permanently delete custom technique
+                                    await showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return DialogPrompt(
+                                            titlePadding: EdgeInsets.only(top: 12),
+                                            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                                            approveButtonText: 'Delete',
+                                            denyButtonText: 'Back to List',
+                                            titleText: 'Confirm Deletion',
+                                            subtitleText: 'Are you sure you want to delete this technique? It will be permanently removed from our services and you will not be able to access once you confirm.',
+                                            headerIcon: Icons.delete_forever,
+                                            headerBgColor: appTheme.errorColor,
+                                            approveButtonColor: appTheme.errorColor,
+                                            denyButtonColor: appTheme.brandPrimaryColor,
+                                            titleColor: appTheme.textAccentColor,
+                                            bgColor: appTheme.bgPrimaryColor,
+                                            subtitleColor: appTheme.textAccentColor,
+                                            cbFunction: () async{
+                                              //remove from custom technique id list for user
+                                              curUser.customTechniqueIDs.removeWhere((customTechniqueID) {
+                                                return customTechniqueID == selectedTechnique.techniqueID;
+                                              });
+                                              //update custom technique id list for user in backend
+                                              bool changeSuccessful = await UserService(uid: curUser.userId).deleteCustomTechniqueID(curUser.customTechniqueIDs);
+                                              //remove from technique list in view
+                                              availableTechniques.removeWhere((availableTechnique){
+                                                return availableTechnique.techniqueID == selectedTechnique.techniqueID;
+                                              });
+                                              //only delete from technique list if previous request was successful
+                                              if(changeSuccessful){
+                                                //update technique list in backend
+                                                changeSuccessful = await TechniqueService().deleteCustomTechnique(selectedTechnique.techniqueID);
+                                              }
+                                            },
                                           );
                                         }
                                     );

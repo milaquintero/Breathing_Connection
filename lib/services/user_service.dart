@@ -1,3 +1,4 @@
+import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/utility.dart';
 import 'package:breathing_connection/models/daily_reminder_lists.dart';
 import 'package:breathing_connection/models/user_form_model.dart';
@@ -8,7 +9,11 @@ import 'package:breathing_connection/models/user.dart';
 //shareable user resource with GET method to retrieve user data
 class UserService {
   static final UserService _userService = UserService._internal();
-  factory UserService(){
+
+  String uid;
+
+  factory UserService({String uid}){
+    _userService.uid = uid;
     return _userService;
   }
   UserService._internal();
@@ -177,7 +182,7 @@ class UserService {
     }
   }
 
-  Future<void> handleCustomTechnique(String uid, List<int> newCustomTechniqueIDs) async{
+  Future<void> handleCustomTechnique(List<int> newCustomTechniqueIDs) async{
     try{
       //handle setting updated ids for user's customTechniqueIDs
       _userService._userDataCollection.document(uid)
@@ -190,7 +195,7 @@ class UserService {
     }
   }
 
-  Future handleUpdateSettings(String uid, UserSettings newSettings) async{
+  Future handleUpdateSettings(UserSettings newSettings) async{
     try{
       await _userService._userDataCollection.document(uid)
           .setData({
@@ -203,7 +208,7 @@ class UserService {
   }
 
 
-  Future<bool> handleChangeTechnique(String uid, String op, int selectedTechniqueID) async{
+  Future<bool> handleChangeTechnique(String op, int selectedTechniqueID) async{
     String changedTechniqueType;
     if(op == 'Morning'){
       changedTechniqueType = "amTechniqueID";
@@ -230,7 +235,7 @@ class UserService {
     }
   }
 
-  Future<bool> addToEmailList(String uid, bool isSubscribedToEmails) async{
+  Future<bool> addToEmailList(bool isSubscribedToEmails) async{
     try{
       _userService._userDataCollection
         .document(uid).setData({
@@ -244,7 +249,7 @@ class UserService {
     }
   }
 
-  Future handleUpdateDailyReminderLists(String uid, DailyReminderLists newDailyReminderLists) async{
+  Future handleUpdateDailyReminderLists(DailyReminderLists newDailyReminderLists) async{
     try{
       await _userService._userDataCollection.document(uid)
           .setData({
@@ -253,6 +258,20 @@ class UserService {
     }
     catch(error){
       throw new Exception(error);
+    }
+  }
+
+  Future<bool> deleteCustomTechniqueID(List<int> newCustomTechniqueIDs) async{
+    try{
+      await _userService._userDataCollection.document(uid)
+          .setData({
+        "customTechniqueIDs": newCustomTechniqueIDs
+      }, merge: true);
+      return true;
+    }
+    catch(error){
+      throw new Exception(error);
+      return false;
     }
   }
 }
