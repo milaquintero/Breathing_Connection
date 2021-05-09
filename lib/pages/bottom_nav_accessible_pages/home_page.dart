@@ -316,7 +316,7 @@ class _HomePageState extends State<HomePage>{
                 color: Colors.transparent,
                 width: 1
             ),
-            borderRadius: BorderRadius.circular(21),
+            borderRadius: BorderRadius.circular(19),
         ),
         child: FloatingActionButton(
           onPressed: () {
@@ -350,11 +350,14 @@ class _HomePageState extends State<HomePage>{
                                       fontSize: 30
                                     ),
                                 ),
-                                SizedBox(height: 12,),
+                                Divider(
+                                  color: appTheme.textPrimaryColor,
+                                ),
+                                SizedBox(height: 4,),
                                 Text(
                                   'Username',
                                   style: TextStyle(
-                                      color: appTheme.disabledCardTextColor,
+                                      color: appTheme.textPrimaryColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold
                                   ),
@@ -363,7 +366,7 @@ class _HomePageState extends State<HomePage>{
                                 Text(
                                   curUser.username,
                                   style: TextStyle(
-                                    color: appTheme.textPrimaryColor,
+                                    color: appTheme.disabledCardTextColor,
                                     fontSize: 24,
                                   ),
                                 ),
@@ -371,7 +374,7 @@ class _HomePageState extends State<HomePage>{
                                 Text(
                                   'Email',
                                   style: TextStyle(
-                                      color: appTheme.disabledCardTextColor,
+                                      color: appTheme.textPrimaryColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold
                                   ),
@@ -380,7 +383,7 @@ class _HomePageState extends State<HomePage>{
                                 Text(
                                   curUser.email,
                                   style: TextStyle(
-                                    color: appTheme.textPrimaryColor,
+                                    color: appTheme.disabledCardTextColor,
                                     fontSize: 24,
                                   ),
                                 ),
@@ -423,14 +426,14 @@ class _HomePageState extends State<HomePage>{
               Text(
                   'Profile',
                   style: TextStyle(
-                    fontSize: 11
+                    fontSize: 12
                   ),
               )
             ],
           ),
           elevation: 7,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(18),
           ),
           backgroundColor: Colors.deepOrange[600],
           foregroundColor: appTheme.textPrimaryColor,
