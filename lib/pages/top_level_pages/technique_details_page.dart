@@ -280,7 +280,7 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                   child: Text(
-                    'Delete',
+                    'Permanently Delete',
                     style: TextStyle(
                         color: appTheme.textPrimaryColor,
                         fontSize: 24
