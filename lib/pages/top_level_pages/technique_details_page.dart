@@ -33,19 +33,19 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
   AppTheme appTheme;
   //current user
   User curUser;
-  //track if technique was deleted
-  bool wasDeleted = false;
   void deleteCustomTechnique() async{
+    //track if technique was deleted
+    bool wasDeleted = false;
     //remove from custom technique id list for user
     curUser.customTechniqueIDs.removeWhere((customTechniqueID) {
       return customTechniqueID == techniqueToDisplay.techniqueID;
     });
     //update custom technique id list for user in backend
-    wasDeleted = await UserService(uid: curUser.userId).deleteCustomTechniqueID(curUser.customTechniqueIDs);
+    wasDeleted = await UserService(uid: curUser.userId).handleCustomTechnique(curUser.customTechniqueIDs);
     //only delete from technique list if previous request was successful
     if(wasDeleted){
       //update technique list in backend
-      wasDeleted = await TechniqueService().deleteCustomTechnique(techniqueToDisplay.techniqueID);
+      await TechniqueService().handleCustomTechnique('remove', techniqueToDisplay);
       //route back to root if technique was deleted
       Navigator.of(context).pushReplacementNamed("/root");
     }

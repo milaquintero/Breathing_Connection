@@ -285,7 +285,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
   Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
     //add technique in technique service first which returns it with techniqueID
     Technique updatedNewTechnique =
-      await TechniqueService().handleCustomTechnique(curUser.userId, 'add', newTechnique);
+      await TechniqueService(uid: curUser.userId).handleCustomTechnique('add', newTechnique);
     //add to current user techniques
     curUser.customTechniqueIDs.add(updatedNewTechnique.techniqueID);
     //persist new custom technique id list for user

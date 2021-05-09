@@ -187,7 +187,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                                 return customTechniqueID == selectedTechnique.techniqueID;
                                               });
                                               //update custom technique id list for user in backend
-                                              bool changeSuccessful = await UserService(uid: curUser.userId).deleteCustomTechniqueID(curUser.customTechniqueIDs);
+                                              bool changeSuccessful = await UserService(uid: curUser.userId).handleCustomTechnique(curUser.customTechniqueIDs);
                                               //remove from technique list in view
                                               availableTechniques.removeWhere((availableTechnique){
                                                 return availableTechnique.techniqueID == selectedTechnique.techniqueID;
@@ -195,7 +195,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                               //only delete from technique list if previous request was successful
                                               if(changeSuccessful){
                                                 //update technique list in backend
-                                                changeSuccessful = await TechniqueService().deleteCustomTechnique(selectedTechnique.techniqueID);
+                                                await TechniqueService(uid: curUser.userId).handleCustomTechnique('remove', selectedTechnique);
                                               }
                                             },
                                           );

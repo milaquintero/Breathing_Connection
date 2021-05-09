@@ -3,7 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TechniqueService{
   static final TechniqueService _techniqueService = TechniqueService._internal();
-  factory TechniqueService(){
+
+  String _uid;
+
+  factory TechniqueService({String uid}){
+    _techniqueService._uid = uid;
     return _techniqueService;
   }
   TechniqueService._internal();
@@ -21,7 +25,7 @@ class TechniqueService{
         .snapshots().map(_techniqueFromSnapshot);
   }
 
-  Future<Technique> handleCustomTechnique(String curUserID, String op, Technique selectedTechnique) async{
+  Future<Technique> handleCustomTechnique(String op, Technique selectedTechnique) async{
     try{
       if(op == 'add'){
         List<Technique> techniqueListSnapshot = await techniqueList.first;
@@ -45,13 +49,23 @@ class TechniqueService{
           "inhaleTypeID": selectedTechnique.inhaleTypeID,
           "exhaleTypeID": selectedTechnique.exhaleTypeID,
           "categoryAvailabilities": ["PM", "AM", "Emergency", "Challenge"],
-          "associatedUserID": curUserID
+          "associatedUserID": _uid
         });
         return selectedTechnique;
       }
       else if(op == 'remove'){
-        //TODO: implement removing custom technique from technique-list collection
-        return null;
+        //query to get technique by id
+        QuerySnapshot techniqueToDeleteQuery = await _techniqueService._techniqueListCollection.where("techniqueID", isEqualTo: selectedTechnique.techniqueID)
+            .getDocuments();
+
+        //store document to be able to delete
+        DocumentSnapshot techniqueToDeleteDoc = techniqueToDeleteQuery.documents.first;
+
+        //delete document from backend
+        await _techniqueService._techniqueListCollection.document(techniqueToDeleteDoc.documentID)
+            .delete();
+
+        return selectedTechnique;
       }
       else{
         return null;
@@ -59,27 +73,6 @@ class TechniqueService{
     }
     catch(error){
       throw new Exception(error);
-    }
-  }
-  
-  Future<bool> deleteCustomTechnique(int techniqueIdToDelete) async{
-    try{
-      //query to get technique by id
-      QuerySnapshot techniqueToDeleteQuery = await _techniqueService._techniqueListCollection.where("techniqueID", isEqualTo: techniqueIdToDelete)
-          .getDocuments();
-
-      //store document to be able to delete
-      DocumentSnapshot techniqueToDeleteDoc = techniqueToDeleteQuery.documents.first;
-
-      //delete document from backend
-      await _techniqueService._techniqueListCollection.document(techniqueToDeleteDoc.documentID)
-        .delete();
-
-      return true;
-    }
-    catch(error){
-      throw new Exception(error);
-      return false;
     }
   }
 }

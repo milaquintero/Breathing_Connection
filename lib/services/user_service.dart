@@ -1,4 +1,3 @@
-import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/utility.dart';
 import 'package:breathing_connection/models/daily_reminder_lists.dart';
 import 'package:breathing_connection/models/user_form_model.dart';
@@ -182,16 +181,18 @@ class UserService {
     }
   }
 
-  Future<void> handleCustomTechnique(List<int> newCustomTechniqueIDs) async{
+  Future<bool> handleCustomTechnique(List<int> newCustomTechniqueIDs) async{
     try{
       //handle setting updated ids for user's customTechniqueIDs
       _userService._userDataCollection.document(uid)
           .setData({
         "customTechniqueIDs": newCustomTechniqueIDs
       }, merge: true);
+      return true;
     }
     catch(error){
-      throw new Exception(error);
+      print(error.toString());
+      return false;
     }
   }
 
@@ -258,20 +259,6 @@ class UserService {
     }
     catch(error){
       throw new Exception(error);
-    }
-  }
-
-  Future<bool> deleteCustomTechniqueID(List<int> newCustomTechniqueIDs) async{
-    try{
-      await _userService._userDataCollection.document(uid)
-          .setData({
-        "customTechniqueIDs": newCustomTechniqueIDs
-      }, merge: true);
-      return true;
-    }
-    catch(error){
-      throw new Exception(error);
-      return false;
     }
   }
 }
