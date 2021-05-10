@@ -114,8 +114,10 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Wrap(
+                        runAlignment: WrapAlignment.spaceBetween,
+                        runSpacing: 5,
+                        spacing: 5,
                         children: [
                           Text(
                               'Inhale: ',
@@ -126,7 +128,7 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                               )
                           ),
                           Text(
-                              '${techniqueToDisplay.inhaleDuration} seconds ',
+                              '${techniqueToDisplay.inhaleDuration} second(s) ',
                               style: TextStyle(
                                   fontSize: 18,
                                   color: appTheme.textPrimaryColor
@@ -136,7 +138,7 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                               '(${inhaleType.description})',
                               style: TextStyle(
                                   fontSize: 18,
-                                  color: appTheme.textPrimaryColor
+                                  color: appTheme.textPrimaryColor,
                               )
                           )
                         ]
@@ -167,8 +169,10 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Wrap(
+                        runAlignment: WrapAlignment.spaceBetween,
+                        runSpacing: 5,
+                        spacing: 5,
                         children: [
                           Text(
                               'Exhale: ',
