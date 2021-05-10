@@ -308,15 +308,15 @@ class _HomePageState extends State<HomePage>{
       ),
       withFloatingActionButton: true,
       floatingActionButton: Container(
-        width: 80,
-        height: 80,
-        margin: EdgeInsets.only(top: 19),
+        width: 95,
+        height: 85,
+        margin: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
             border: Border.all(
                 color: Colors.transparent,
                 width: 1
             ),
-            borderRadius: BorderRadius.circular(19),
+            borderRadius: BorderRadius.circular(21),
         ),
         child: FloatingActionButton(
           onPressed: () {
@@ -337,7 +337,6 @@ class _HomePageState extends State<HomePage>{
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(top: 32, left: 36, right: 36),
@@ -405,7 +404,7 @@ class _HomePageState extends State<HomePage>{
                               ),
                               onPressed: () => Navigator.pop(context),
                               style: TextButton.styleFrom(
-                                  backgroundColor: Colors.deepOrange[600]
+                                  backgroundColor: Colors.deepOrange[700]
                               ),
                             ),
                           )
@@ -418,28 +417,32 @@ class _HomePageState extends State<HomePage>{
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Icon(
                   Icons.person,
-                  size: 29,
+                  size: 36,
+                  color: appTheme.textPrimaryColor,
               ),
               Text(
                   'Profile',
                   style: TextStyle(
-                    fontSize: 12
+                    fontSize: 17,
+                    color: appTheme.textPrimaryColor,
+                    letterSpacing: 0.75
                   ),
               )
             ],
           ),
-          elevation: 7,
+          elevation: 6,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
           ),
-          backgroundColor: Colors.deepOrange[600],
+          backgroundColor: Colors.deepOrange[700],
           foregroundColor: appTheme.textPrimaryColor,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
 }
