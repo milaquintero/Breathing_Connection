@@ -100,6 +100,39 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if(UserSettings.settingsThatChanged(newSettings, curUser.userSettings).length != 0 ||
+                    DailyReminderLists.haveChanged(tempDailyReminderLists, curUser.dailyReminderLists)) Container(
+                  clipBehavior: Clip.hardEdge,
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        colors: [Colors.deepOrange[800], Color.lerp(Colors.deepOrange[900], Colors.deepOrange[900], 0.1), Colors.deepOrange[800]],                        center: Alignment(-10.5, 0.8),
+                        focal: Alignment(0.3, -0.1),
+                        focalRadius: 0.8,
+                      ),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: appTheme.bgAccentColor,
+                          width: 1
+                        )
+                      )
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    leading: Icon(
+                      Icons.info,
+                      size: 32,
+                      color: appTheme.textPrimaryColor,
+                    ),
+                    title: Text(
+                      'Unsaved changes detected',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: appTheme.textPrimaryColor,
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Container(
                     child: ListView(
@@ -183,7 +216,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     await showDialog(
         context: context,
         builder: (context){
-      return DialogAlert(
+          return DialogAlert(
         titlePadding: EdgeInsets.only(top: 12),
         subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
         buttonText: 'Back to Settings',
@@ -197,7 +230,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         bgColor: appTheme.bgPrimaryColor,
         subtitleTextColor: appTheme.textAccentColor,
       );
-    }
+        }
     );
   }
   //update user settings
@@ -215,6 +248,16 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         setState(() {
           appTheme = selectedTheme;
         });
+      }
+      //handle case if daily reminders or challenge mode have been turned on/off
+      if(settingsThatChanged.contains("dailyReminders") || settingsThatChanged.contains("challengeMode")){
+        //set updated settings for daily reminders and challenge mode
+        curUser.userSettings.dailyReminders = newSettings.dailyReminders;
+        curUser.userSettings.challengeMode = newSettings.challengeMode;
+        //cancel all previous alarms
+        Utility.cancelAllAlarms();
+        //handle setting alarms for daily reminders/challenge mode if they're turned on
+        Utility.scheduleDailyReminders(curUser, mainData);
       }
       showSuccessMessage();
     }

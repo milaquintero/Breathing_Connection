@@ -23,51 +23,49 @@ class Utility{
   }
   static void scheduleDailyReminders(User curUser, MainData mainData){
     if(curUser.userSettings.dailyReminders){
-      //schedule reminders for AM/PM if challenge mode isn't on or using free version
-      if(!curUser.userSettings.challengeMode || !curUser.hasFullAccess){
-        //set alarms for challenge times (three times a day)
-        for(Timestamp regularTimestamp in curUser.dailyReminderLists.regularTimes){
-          DateTime now = DateTime.now();
-          DateTime regularTime = regularTimestamp.toDate();
-          BreathingConnection.setNotificationText(
-              header: mainData.dailyReminderHeader,
-              footer: mainData.dailyReminderFooter
-          );
-          setReminder(
-              alarmId: Utility.maxAlarmId,
-              timeToStart: DateTime(
-                  now.year,
-                  now.month,
-                  now.day,
-                  regularTime.hour,
-                  regularTime.minute),
-              callback: BreathingConnection.showNotification
-          );
-          Utility.maxAlarmId++;
-        }
+      //set alarms for regular times (AM/PM)
+      print("setting regular time alarms");
+      for(Timestamp regularTimestamp in curUser.dailyReminderLists.regularTimes){
+        DateTime now = DateTime.now();
+        DateTime regularTime = regularTimestamp.toDate();
+        BreathingConnection.setNotificationText(
+            header: mainData.dailyReminderHeader,
+            footer: mainData.dailyReminderFooter
+        );
+        setReminder(
+            alarmId: Utility.maxAlarmId,
+            timeToStart: DateTime(
+                now.year,
+                now.month,
+                now.day,
+                regularTime.hour,
+                regularTime.minute),
+            callback: BreathingConnection.showNotification
+        );
+        Utility.maxAlarmId++;
       }
-      //check if user has full version and challenge mode is on
-      else{
-        //set alarm for regular times (AM/PM)
-        for(Timestamp challengeModeTimestamp in curUser.dailyReminderLists.challengeModeTimes){
-          DateTime now = DateTime.now();
-          DateTime challengeModeTime = challengeModeTimestamp.toDate();
-          BreathingConnection.setNotificationText(
-              header: mainData.challengeReminderHeader,
-              footer: mainData.challengeReminderFooter
-          );
-          setReminder(
-              alarmId: Utility.maxAlarmId,
-              timeToStart: DateTime(
-                  now.year,
-                  now.month,
-                  now.day,
-                  challengeModeTime.hour,
-                  challengeModeTime.minute),
-              callback: BreathingConnection.showNotification
-          );
-          Utility.maxAlarmId++;
-        }
+    }
+    if(curUser.hasFullAccess && curUser.userSettings.challengeMode){
+      //set alarms for challenge mode (three times a day)
+      for(Timestamp challengeModeTimestamp in curUser.dailyReminderLists.challengeModeTimes){
+        print("setting challenge mode alarms");
+        DateTime now = DateTime.now();
+        DateTime challengeModeTime = challengeModeTimestamp.toDate();
+        BreathingConnection.setNotificationText(
+            header: mainData.challengeReminderHeader,
+            footer: mainData.challengeReminderFooter
+        );
+        setReminder(
+            alarmId: Utility.maxAlarmId,
+            timeToStart: DateTime(
+                now.year,
+                now.month,
+                now.day,
+                challengeModeTime.hour,
+                challengeModeTime.minute),
+            callback: BreathingConnection.showNotification
+        );
+        Utility.maxAlarmId++;
       }
     }
   }
@@ -81,7 +79,7 @@ class Utility{
         startAt: timeToStart,
         exact: true,
         wakeup: true,
-        rescheduleOnReboot: true
+        rescheduleOnReboot: false
     );
   }
 }
