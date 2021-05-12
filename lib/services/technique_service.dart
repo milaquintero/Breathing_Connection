@@ -49,7 +49,9 @@ class TechniqueService{
           "inhaleTypeID": selectedTechnique.inhaleTypeID,
           "exhaleTypeID": selectedTechnique.exhaleTypeID,
           "categoryAvailabilities": ["PM", "AM", "Emergency", "Challenge"],
-          "associatedUserID": _uid
+          "associatedUserID": _uid,
+          "associatedVideo": selectedTechnique.associatedVideo,
+          "minSessionDurationInMinutes": selectedTechnique.minSessionDurationInMinutes
         });
         return selectedTechnique;
       }

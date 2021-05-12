@@ -82,9 +82,9 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
               techniqueToDisplay.title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 44,
+                  fontSize: 48,
                   fontWeight: FontWeight.bold,
-                  color: appTheme.textSecondaryColor
+                  color: appTheme.textSecondaryColor,
               ),
             ),
           ),
@@ -200,7 +200,7 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4, bottom: 12),
+                    padding: EdgeInsets.only(top: 4, bottom: 4),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -214,6 +214,29 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                           ),
                           Text(
                               '${techniqueToDisplay.secondHoldDuration} seconds',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: appTheme.textPrimaryColor
+                              )
+                          )
+                        ]
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 12),
+                    child: Wrap(
+                        runAlignment: WrapAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              'Minimum Session Duration: ',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: appTheme.textPrimaryColor
+                              )
+                          ),
+                          Text(
+                              'Sessions for this technique must be at least ${techniqueToDisplay.minSessionDurationInMinutes} minutes',
                               style: TextStyle(
                                   fontSize: 18,
                                   color: appTheme.textPrimaryColor

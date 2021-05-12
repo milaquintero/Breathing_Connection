@@ -71,20 +71,18 @@ class _TechniqueCardState extends State<TechniqueCard> {
         border: Border(
             top: BorderSide(
               color: borderColor,
-              width: 1.25
+              width: 1.5
             )
         ),
+        gradient: RadialGradient(
+          colors: [Colors.blueGrey, Color.lerp(widget.cardBgColor, Colors.blueGrey, 0.25), widget.cardBgColor],
+          center: Alignment(0.6, -0.3),
+          focal: Alignment(0.3, -0.1),
+          focalRadius: 12.5,
+        )
       ),
       child: Container(
         margin: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [Colors.blueGrey, Color.lerp(listTileBg, Colors.blueGrey, 0.25), listTileBg],
-            center: Alignment(0.6, -0.3),
-            focal: Alignment(0.3, -0.1),
-            focalRadius: 10.5,
-          )
-        ),
         child: ListTile(
           enabled: shouldBeEnabled,
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 36),
@@ -113,7 +111,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
             child: Text(
                 widget.technique.title,
                 style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 28,
                     color: titleColor,
                 ),
             ),

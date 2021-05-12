@@ -47,10 +47,10 @@ class _ProLicensePageState extends State<ProLicensePage> {
               mainData.proPageHeaderText,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 48,
                   fontWeight: FontWeight.bold,
                   color: appTheme.textSecondaryColor,
-                  letterSpacing: 0.25
+                  letterSpacing: -0.75
               ),
             ),
           ),

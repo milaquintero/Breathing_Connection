@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
             return FancyScrollablePage(
               withIconHeader: false,
               pageTitle: 'Profile',
-              bgColor: appTheme.bgPrimaryColor,
+              bgColor: appTheme.bgSecondaryColor,
               appBarColor: appTheme.brandPrimaryColor,
               decorationPrimaryColor: appTheme.decorationPrimaryColor,
               decorationSecondaryColor: appTheme.decorationSecondaryColor,
@@ -146,7 +146,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: EdgeInsets.only(top: 16, bottom: 8),
                         child: TextButton(
-                          onPressed: () => signOut,
+                          onPressed: () {
+                            signOut();
+                          },
                           child: Text(
                             'Sign Out',
                             style: TextStyle(

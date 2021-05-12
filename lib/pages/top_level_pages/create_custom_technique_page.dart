@@ -102,6 +102,17 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   customTechniqueFormModel.description = description;
                 }
             ),
+            FancyTextFormField(
+                fieldLabel: 'Minimum Session Duration in Minutes',
+                fieldType: 'number',
+                keyboardType: TextInputType.number,
+                shouldResetIfNull: true,
+                maxNum: 120,
+                minNum: 1,
+                onSaved: (firstHoldDuration){
+                  customTechniqueFormModel.minSessionDurationInMinutes = int.parse(firstHoldDuration);
+                }
+            ),
             //Breathing Rhythm
             FancyInstructionalText(
               icon: Icons.nature,
@@ -232,7 +243,9 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       categoryDependencies: ["AM", "PM", "Emergency", "Challenge"],
                       inhaleTypeID: customTechniqueFormModel.inhaleTypeID,
                       exhaleTypeID: customTechniqueFormModel.exhaleTypeID,
-                      isPaidVersionOnly: true
+                      isPaidVersionOnly: true,
+                      minSessionDurationInMinutes: customTechniqueFormModel.minSessionDurationInMinutes,
+                      associatedVideo: "custom"
                     );
                     //add new technique to user in backend and reflect in app
                     addCustomTechnique(newTechnique, homePageLink, screenHeight, context);

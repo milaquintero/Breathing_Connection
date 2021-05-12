@@ -11,10 +11,11 @@ class CustomTechniqueFormModel{
   int associatedUserID;
   int inhaleTypeID;
   int exhaleTypeID;
+  int minSessionDurationInMinutes;
   CustomTechniqueFormModel({this.title, this.assetImage, this.isPaidVersionOnly = true,
   this.secondHoldDuration, this.exhaleDuration, this.inhaleDuration, this.firstHoldDuration,
   this.description, this.selectedTags, this.associatedUserID,
-  this.exhaleTypeID, this.inhaleTypeID});
+  this.exhaleTypeID, this.inhaleTypeID, this.minSessionDurationInMinutes});
   setProperty(property, value){
     if(property == 'inhaleDuration'){
       this.inhaleDuration = value;
