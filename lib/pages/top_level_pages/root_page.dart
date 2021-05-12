@@ -1,6 +1,7 @@
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/app_settings_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/home_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/pro_license_page.dart';
+import 'package:breathing_connection/pages/bottom_nav_accessible_pages/profile_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/technique_list_page.dart';
 import 'package:breathing_connection/pages/top_level_pages/page_not_found.dart';
 import 'package:breathing_connection/services/user_service.dart';
@@ -84,6 +85,10 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
       else if(currentRoute == '/pro'){
         _pageToDisplay = ProLicensePage(rootContext: context,);
         _transitionOffset = Offset(1.5,0.0);
+      }
+      else if(currentRoute == '/profile'){
+        _pageToDisplay = ProfilePage(rootContext: context,);
+        _transitionOffset = Offset(-1.5,0.0);
       }
       else{
         _pageToDisplay = PageNotFound(rootContext: context, hasBottomNav: true,);

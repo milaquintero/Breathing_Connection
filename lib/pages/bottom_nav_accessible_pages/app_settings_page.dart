@@ -83,19 +83,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               ),
               centerTitle: true,
               elevation: 0,
-              actions: [
-                IconButton(
-                    icon: Icon(
-                      Icons.logout,
-                      size: 32,
-                    ),
-                    onPressed: () async{
-                      await _userService.signOut();
-                      //send back to authentication wrapper
-                      Navigator.pushReplacementNamed(context, '/');
-                    }
-                ),
-              ],
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,12 +97,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         focal: Alignment(0.3, -0.1),
                         focalRadius: 0.8,
                       ),
-                      border: Border(
-                        bottom: BorderSide(
-                          color: appTheme.bgAccentColor,
-                          width: 1
-                        )
-                      )
                   ),
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),

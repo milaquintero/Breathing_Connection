@@ -50,6 +50,13 @@ String getAssetImage(String patternToMatch, List<String> availableImages){
   );
 }
 
+void handleBeginTechniqueInEnvironment(Technique selectedTechnique, BuildContext rootContext){
+  //set technique being viewed in handler provider
+  Provider.of<ViewTechniqueDetailsHandler>(rootContext, listen: false).setTechnique(selectedTechnique);
+  //send to technique details page
+  Navigator.of(rootContext).pushNamed('/environment');
+}
+
 class HomePage extends StatefulWidget {
   final BuildContext rootContext;
   HomePage({this.rootContext, Key key}) : super(key: key);
@@ -204,7 +211,6 @@ class _HomePageState extends State<HomePage>{
           ),
         ],
       ),
-      mainContentHeight: screenHeight / 2.05,
       mainContentColor: appTheme.brandPrimaryColor,
       //remove padding automatically added by ListView
       mainContent: MediaQuery.removePadding(
@@ -231,6 +237,9 @@ class _HomePageState extends State<HomePage>{
                       assetURL: assetHandler.imageAssetURL,
                       viewTechniqueDetails: (Technique selectedTechnique){
                         handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      },
+                      beginTechniqueInEnvironment: (Technique selectedTechnique){
+                        handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
                       }
                   ),
                   TechniqueSection(
@@ -306,143 +315,6 @@ class _HomePageState extends State<HomePage>{
           }
         ),
       ),
-      withFloatingActionButton: true,
-      floatingActionButton: Container(
-        width: 95,
-        height: 85,
-        margin: EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-            border: Border.all(
-                color: Colors.transparent,
-                width: 1
-            ),
-            borderRadius: BorderRadius.circular(21),
-        ),
-        child: FloatingActionButton(
-          onPressed: () {
-            showBottomSheet(
-                elevation: 60,
-                context: context,
-                builder: (context){
-                  return Container(
-                    height: 330,
-                    decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          colors: [appTheme.bgPrimaryColor, Color.lerp(appTheme.brandPrimaryColor, appTheme.bgPrimaryColor, 0.5), appTheme.brandPrimaryColor],
-                          center: Alignment(0.6, -0.3),
-                          focal: Alignment(0.3, -0.1),
-                          focalRadius: 3.5,
-                        ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 32, left: 36, right: 36),
-                            child: Column(
-                              children: [
-                                Text(
-                                    'Your Information',
-                                    style: TextStyle(
-                                      color: appTheme.textPrimaryColor,
-                                      fontSize: 30
-                                    ),
-                                ),
-                                Divider(
-                                  color: appTheme.textPrimaryColor,
-                                ),
-                                SizedBox(height: 4,),
-                                Text(
-                                  'Username',
-                                  style: TextStyle(
-                                      color: appTheme.textPrimaryColor,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                SizedBox(height: 2,),
-                                Text(
-                                  curUser.username,
-                                  style: TextStyle(
-                                    color: appTheme.disabledCardTextColor,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                                SizedBox(height: 16,),
-                                Text(
-                                  'Email',
-                                  style: TextStyle(
-                                      color: appTheme.textPrimaryColor,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                SizedBox(height: 2,),
-                                Text(
-                                  curUser.email,
-                                  style: TextStyle(
-                                    color: appTheme.disabledCardTextColor,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 16, bottom: 24),
-                            child: TextButton(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                                child: Text(
-                                    'Back to Home',
-                                    style: TextStyle(
-                                        color: appTheme.textPrimaryColor,
-                                        fontSize: 24
-                                    ),
-                                ),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.deepOrange[700]
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }
-            );
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                  Icons.person,
-                  size: 36,
-                  color: appTheme.textPrimaryColor,
-              ),
-              Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: appTheme.textPrimaryColor,
-                    letterSpacing: 0.75
-                  ),
-              )
-            ],
-          ),
-          elevation: 6,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          backgroundColor: Colors.deepOrange[700],
-          foregroundColor: appTheme.textPrimaryColor,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
 }

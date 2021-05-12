@@ -13,11 +13,13 @@ class Technique{
   List<String> tags;
   List<String> categoryDependencies;
   String associatedUserID;
+  int minSessionDurationInMinutes;
+  String associatedVideo;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
     this.exhaleDuration, this.secondHoldDuration, this.assetImage,
     this.exhaleTypeID, this.inhaleTypeID, this.tags, this.categoryDependencies,
-    this.associatedUserID});
+    this.associatedUserID, this.minSessionDurationInMinutes, this.associatedVideo});
   factory Technique.fromSnapshot(json){
     Iterable jsonTags = json['tags'] ?? [];
     Iterable jsonCategoryDependencies = json['categoryAvailabilities'] ?? [];
@@ -35,7 +37,9 @@ class Technique{
       exhaleTypeID: json['exhaleTypeID'],
       associatedUserID: json['associatedUserID'],
       tags: jsonTags.map((jsonTag) => jsonTag.toString()).toList(),
-      categoryDependencies: jsonCategoryDependencies.map((jsonCategory) => jsonCategory.toString()).toList()
+      categoryDependencies: jsonCategoryDependencies.map((jsonCategory) => jsonCategory.toString()).toList(),
+      minSessionDurationInMinutes: json['minSessionDurationInMinutes'],
+      associatedVideo: json['associatedVideo']
     );
   }
   factory Technique.clone(Technique immutableTechnique){
@@ -53,7 +57,9 @@ class Technique{
         exhaleTypeID: immutableTechnique.exhaleTypeID,
         tags: immutableTechnique.tags,
         categoryDependencies: immutableTechnique.categoryDependencies,
-        associatedUserID: immutableTechnique.associatedUserID
+        associatedUserID: immutableTechnique.associatedUserID,
+        minSessionDurationInMinutes: immutableTechnique.minSessionDurationInMinutes,
+        associatedVideo: immutableTechnique.associatedVideo
     );
   }
   static Map<String, dynamic> toJson(Technique selectedTechnique){
@@ -71,6 +77,8 @@ class Technique{
     techniqueMap['tags'] = selectedTechnique.tags;
     techniqueMap['categoryDependencies'] = selectedTechnique.categoryDependencies;
     techniqueMap['associatedUserID'] = selectedTechnique.associatedUserID;
+    techniqueMap['minSessionDurationInMinutes'] = selectedTechnique.minSessionDurationInMinutes;
+    techniqueMap['associatedVideo'] = selectedTechnique.associatedVideo;
     return techniqueMap;
   }
 

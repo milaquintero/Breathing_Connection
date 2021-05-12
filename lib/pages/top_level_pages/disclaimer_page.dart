@@ -17,6 +17,7 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
   double screenHeight;
   //main data
   MainData mainData;
+  List<Widget> disclaimerNotes = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -26,6 +27,18 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
     screenHeight = MediaQuery.of(context).size.height;
     //app main data
     mainData = Provider.of<MainData>(context);
+    disclaimerNotes = mainData.disclaimerNotes.map((disclaimerNote){
+      return Padding(
+        padding: EdgeInsets.only(bottom: 16),
+        child: Text(
+          disclaimerNote,
+          style: TextStyle(
+              fontSize: 20,
+              color: appTheme.textAccentColor
+          ),
+        ),
+      );
+    }).toList();
   }
   @override
   Widget build(BuildContext context) {
@@ -59,31 +72,17 @@ class _DisclaimerPageState extends State<DisclaimerPage> {
           ),
         ],
       ),
-      mainContentHeight: screenHeight / 2.05,
       mainContentColor: appTheme.bgPrimaryColor,
       mainContent: Container(
         padding: EdgeInsets.symmetric(horizontal: 28),
         child: ListView(
           shrinkWrap: true,
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: mainData.disclaimerNotes.length,
-              itemBuilder: (context, index){
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    mainData.disclaimerNotes[index],
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: appTheme.textAccentColor
-                    ),
-                  ),
-                );
-              },
+            Column(
+              children: disclaimerNotes,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.only(top: 12, bottom: 12),
               child: TextButton(
                 onPressed: (){
                   Navigator.of(context).pushReplacementNamed('/root');

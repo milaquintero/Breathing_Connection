@@ -10,12 +10,13 @@ class TechniqueSection extends StatefulWidget {
   final Color headerTextColor;
   final IconData startIcon;
   final Function(Technique) viewTechniqueDetails;
+  final Function(Technique) beginTechniqueInEnvironment;
   final Color decorationColor;
   final String assetURL;
   TechniqueSection({this.headerText, this.techniques,
     this.textBgColor, this.textColor, this.startIcon,
     this.headerColor, this.headerTextColor, this.viewTechniqueDetails,
-    this.decorationColor, this.assetURL});
+    this.decorationColor, this.assetURL, this.beginTechniqueInEnvironment});
 
   @override
   _TechniqueSectionState createState() => _TechniqueSectionState();
@@ -163,7 +164,9 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                                                 color: widget.textColor,
                                                 size: screenHeight / 18,
                                               ),
-                                              onPressed: (){}
+                                              onPressed: (){
+                                                widget.beginTechniqueInEnvironment(widget.techniques[index]);
+                                              }
                                           ),
                                         ],
                                       ),

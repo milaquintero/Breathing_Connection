@@ -43,6 +43,7 @@ class MainData{
   String emailSubSuccessBody;
   List<String> disclaimerNotes;
   String supportEmail;
+  int maxSessionDurationInMinutes;
 
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
@@ -56,7 +57,7 @@ class MainData{
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
     this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes,
-    this.disclaimerNotes, this.supportEmail});
+    this.disclaimerNotes, this.supportEmail, this.maxSessionDurationInMinutes});
 
   factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
     if(op == 'constants'){
@@ -93,6 +94,7 @@ class MainData{
       tempMainData.disclaimerNotes = disclaimerNotes
           .map((disclaimerNote) => disclaimerNote.toString()).toList();
       tempMainData.supportEmail = snapshot.data['supportEmail'] ?? '';
+      tempMainData.maxSessionDurationInMinutes = snapshot.data['maxSessionDurationInMinutes'] ?? 60;
     }
     else if(op == 'meta'){
       Iterable pages = snapshot['pages'] ?? [];
@@ -170,5 +172,6 @@ class MainData{
     this.emailSubscriptionTypes = mainData.emailSubscriptionTypes;
     this.disclaimerNotes = mainData.disclaimerNotes;
     this.supportEmail = mainData.supportEmail;
+    this.maxSessionDurationInMinutes = mainData.maxSessionDurationInMinutes;
   }
 }

@@ -3,6 +3,7 @@ import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/pages/top_level_pages/disclaimer_page.dart';
+import 'package:breathing_connection/pages/top_level_pages/environment_page.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -112,8 +113,11 @@ class _BreathingConnectionState extends State<BreathingConnection> {
             case '/disclaimer-page':
               selectedPage = DisclaimerPage();
               break;
+            case '/environment':
+              selectedPage = EnvironmentPage();
+              break;
             default:
-              selectedPage = PageNotFound();
+              selectedPage = PageNotFound(rootContext: context, hasBottomNav: false,);
               break;
           }
           return PageRouteBuilder(

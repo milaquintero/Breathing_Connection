@@ -49,3 +49,5 @@ package.json
 /node_modules/
 
 /lib/constants.dart
+
+/android/key.properties

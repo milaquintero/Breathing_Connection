@@ -32,28 +32,28 @@ class _PageNotFoundState extends State<PageNotFound> {
     //screen height
     screenHeight = MediaQuery.of(context).size.height;
     //selected theme data
-    appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
+    appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
   }
   @override
   Widget build(BuildContext context) {
     return FancyScrollablePage(
       pageTitle: 'Page Not Found',
-      appBarColor: appTheme.bgAccentColor,
+      appBarColor: appTheme.bgPrimaryColor,
       bgColor: appTheme.errorColor,
-      decorationPrimaryColor: appTheme.decorationPrimaryColor,
-      decorationSecondaryColor: appTheme.errorColor,
+      decorationPrimaryColor: appTheme.brandSecondaryColor,
+      decorationSecondaryColor: appTheme.brandPrimaryColor,
       appBarHeight: mainData.appBarHeight,
       child: Container(
-        height: screenHeight / 1.95,
-        margin: EdgeInsets.only(top: screenHeight / 8, left: 16, right: 16),
-        padding: EdgeInsets.only(top: 16, bottom: 20, left: 20, right: 20),
+        margin: EdgeInsets.only(top: 144, left: 20, right: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 50, left: 8, right: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: appTheme.bgAccentColor,
+            color: appTheme.bgPrimaryColor,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
               padding: EdgeInsets.only(top: 12),
@@ -62,7 +62,7 @@ class _PageNotFoundState extends State<PageNotFound> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: screenHeight / 11,
-                    color: appTheme.textPrimaryColor
+                    color: appTheme.textSecondaryColor
                 ),
               ),
             ),
@@ -73,7 +73,7 @@ class _PageNotFoundState extends State<PageNotFound> {
                 style: TextStyle(
                     fontSize: 28,
                     fontStyle: FontStyle.italic,
-                    color: appTheme.textPrimaryColor
+                    color: appTheme.textSecondaryColor
                 ),
               ),
             ),
@@ -95,8 +95,8 @@ class _PageNotFoundState extends State<PageNotFound> {
                 }
                 //return to root (default home)
                 else{
-                  Provider.of<CurrentPageHandler>(widget.rootContext, listen: false).setPageIndex(0);
-                  Navigator.pushReplacementNamed(widget.rootContext, '/root');
+                  Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
+                  Navigator.pushReplacementNamed(context, '/root');
                 }
               },
               child: Padding(

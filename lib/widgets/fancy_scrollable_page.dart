@@ -13,10 +13,11 @@ class FancyScrollablePage extends StatefulWidget {
   final Color decorationSecondaryColor;
   final double appBarHeight;
   final bool withAppBar;
+  final List<Widget> actions;
   FancyScrollablePage({this.child, this.headerIcon, this.headerColor, this.headerIconColor,
     this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
     this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight,
-    this.withAppBar = true});
+    this.withAppBar = true, this.actions});
   @override
   _FancyScrollablePageState createState() => _FancyScrollablePageState();
 }
@@ -41,6 +42,7 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
           ),
           centerTitle: true,
           backgroundColor: widget.appBarColor,
+          actions: widget.actions ?? [],
         ) : null,
         body: Container(
           color: widget.bgColor ?? Colors.blue[50],

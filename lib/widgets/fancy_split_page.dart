@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 class FancySplitPage extends StatelessWidget {
   final Widget mainContent;
   final Widget headerContent;
-  final double mainContentHeight;
   final double headerPositionTop;
   final Color headerColor;
   final Color mainContentColor;
@@ -10,7 +9,7 @@ class FancySplitPage extends StatelessWidget {
   final Widget floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   FancySplitPage({this.mainContent, this.headerContent,
-  this.headerPositionTop, this.mainContentHeight,
+  this.headerPositionTop,
   this.headerColor, this.mainContentColor, this.withFloatingActionButton = false,
   this.floatingActionButton, this.floatingActionButtonLocation});
   @override

@@ -23,6 +23,9 @@ class NavLink{
       case '/pro':
         pageIcon = Icons.add_moderator;
         break;
+      case '/profile':
+        pageIcon = Icons.person;
+        break;
       default:
         pageIcon = Icons.flag;
         break;
