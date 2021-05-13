@@ -69,6 +69,30 @@ class TechniqueService{
 
         return selectedTechnique;
       }
+      else if(op == 'edit'){
+        //query to get technique by id
+        QuerySnapshot techniqueToEditQuery = await _techniqueService._techniqueListCollection.where("techniqueID", isEqualTo: selectedTechnique.techniqueID)
+            .getDocuments();
+
+        //store document to be able to delete
+        DocumentSnapshot techniqueToEditDoc = techniqueToEditQuery.documents.first;
+
+        //update document from backend
+        await _techniqueService._techniqueListCollection.document(techniqueToEditDoc.documentID)
+            .setData({
+          "title": selectedTechnique.title,
+          "tags": selectedTechnique.tags,
+          "description": selectedTechnique.description,
+          "inhaleDuration": selectedTechnique.inhaleDuration,
+          "firstHoldDuration": selectedTechnique.firstHoldDuration,
+          "exhaleDuration": selectedTechnique.exhaleDuration,
+          "secondHoldDuration": selectedTechnique.secondHoldDuration,
+          "assetImage": selectedTechnique.assetImage,
+          "inhaleTypeID": selectedTechnique.inhaleTypeID,
+          "exhaleTypeID": selectedTechnique.exhaleTypeID,
+          "minSessionDurationInMinutes": selectedTechnique.minSessionDurationInMinutes
+        }, merge: true);
+      }
       else{
         return null;
       }

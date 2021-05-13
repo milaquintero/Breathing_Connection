@@ -9,10 +9,12 @@ class FancyImageSelector extends StatefulWidget {
   final Color btnTextColorUnselected;
   final Color bgGradientComparisonColor;
   final String assetURL;
+  final String initValue;
   FancyImageSelector({this.images, this.onChange,
     this.btnColorSelected, this.btnColorUnselected,
     this.btnTextColorSelected, this.btnTextColorUnselected,
-    this.bgGradientComparisonColor, this.assetURL});
+    this.bgGradientComparisonColor, this.assetURL,
+    this.initValue});
 
   @override
   _FancyImageSelectorState createState() => _FancyImageSelectorState();
@@ -20,6 +22,15 @@ class FancyImageSelector extends StatefulWidget {
 
 class _FancyImageSelectorState extends State<FancyImageSelector> {
   String selectedImage;
+  @override
+  void initState() {
+    super.initState();
+    if(widget.initValue != null){
+      setState(() {
+        selectedImage = widget.initValue;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

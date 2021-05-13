@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
+import 'package:breathing_connection/models/route_arguments.dart';
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/pages/top_level_pages/disclaimer_page.dart';
 import 'package:breathing_connection/pages/top_level_pages/environment_page.dart';
@@ -94,6 +95,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
         },
         onGenerateRoute: (settings){
           Widget selectedPage;
+          final RouteArguments arguments = settings.arguments as RouteArguments;
           switch(settings.name){
             case '/':
               selectedPage = AuthenticationWrapper();
@@ -105,7 +107,10 @@ class _BreathingConnectionState extends State<BreathingConnection> {
               selectedPage = EmailSubscriptionPage();
               break;
             case '/create-custom-technique':
-              selectedPage = CreateCustomTechniquePage();
+              selectedPage = CreateCustomTechniquePage(
+                isEditing: arguments?.isEditing ?? false,
+                selectedTechnique: arguments?.selectedTechnique ?? null,
+              );
               break;
             case '/technique-details':
               selectedPage = TechniqueDetailsPage();

@@ -20,6 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateCustomTechniquePage extends StatefulWidget {
+  final bool isEditing;
+  final Technique selectedTechnique;
+  CreateCustomTechniquePage({this.isEditing = false, this.selectedTechnique});
   @override
   _CreateCustomTechniquePageState createState() => _CreateCustomTechniquePageState();
 }
@@ -62,6 +65,13 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
         value: inhaleExhaleType.inhaleExhaleTypeID,
       );
     }).toList();
+    //if editing, load data that doesn't get auto stored into model by form
+    if(widget.isEditing){
+      customTechniqueFormModel.assetImage = widget.selectedTechnique.assetImage;
+      customTechniqueFormModel.selectedTags = widget.selectedTechnique.tags;
+      customTechniqueFormModel.inhaleTypeID = widget.selectedTechnique.inhaleTypeID;
+      customTechniqueFormModel.exhaleTypeID = widget.selectedTechnique.exhaleTypeID;
+    }
   }
 
   @override
@@ -89,6 +99,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
               fieldType: 'text',
               maxLength: 25,
               keyboardType: TextInputType.name,
+              initialValue: widget.isEditing ? widget.selectedTechnique.title : null,
               onSaved: (title){
                 customTechniqueFormModel.title = title;
               },
@@ -98,6 +109,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 fieldType: 'text',
                 maxLength: 150,
                 keyboardType: TextInputType.emailAddress,
+                initialValue: widget.isEditing ? widget.selectedTechnique.description : null,
                 onSaved: (description){
                   customTechniqueFormModel.description = description;
                 }
@@ -109,6 +121,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 shouldResetIfNull: true,
                 maxNum: 120,
                 minNum: 1,
+                initialValue: widget.isEditing ? widget.selectedTechnique.minSessionDurationInMinutes.toString() : null,
                 onSaved: (firstHoldDuration){
                   customTechniqueFormModel.minSessionDurationInMinutes = int.parse(firstHoldDuration);
                 }
@@ -131,6 +144,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 shouldResetIfNull: true,
                 maxNum: 9,
                 minNum: 0,
+                initialValue: widget.isEditing ? widget.selectedTechnique.inhaleDuration.toString() : null,
                 onSaved: (inhaleDuration){
                   customTechniqueFormModel.inhaleDuration = int.parse(inhaleDuration);
                 }
@@ -138,6 +152,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             FancyDropdownFormField(
                 title: 'Inhale Type',
                 options: inhaleExhaleTypeOptions,
+                initValue: widget.isEditing ? widget.selectedTechnique.inhaleTypeID : null,
                 onChanged: (selectedInhaleTypeID){
                   customTechniqueFormModel.inhaleTypeID = selectedInhaleTypeID;
                 }
@@ -149,6 +164,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 shouldResetIfNull: true,
                 maxNum: 9,
                 minNum: 0,
+                initialValue: widget.isEditing ? widget.selectedTechnique.firstHoldDuration.toString() : null,
                 onSaved: (firstHoldDuration){
                   customTechniqueFormModel.firstHoldDuration = int.parse(firstHoldDuration);
                 }
@@ -160,6 +176,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 shouldResetIfNull: true,
                 maxNum: 9,
                 minNum: 0,
+                initialValue: widget.isEditing ? widget.selectedTechnique.exhaleDuration.toString() : null,
                 onSaved: (exhaleDuration){
                   customTechniqueFormModel.exhaleDuration = int.parse(exhaleDuration);
                 }
@@ -167,6 +184,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
             FancyDropdownFormField(
                 title: 'Exhale Type',
                 options: inhaleExhaleTypeOptions,
+                initValue: widget.isEditing ? widget.selectedTechnique.exhaleTypeID : null,
                 onChanged: (selectedExhaleTypeID){
                   customTechniqueFormModel.exhaleTypeID = selectedExhaleTypeID;
                 }
@@ -178,6 +196,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 shouldResetIfNull: true,
                 maxNum: 9,
                 minNum: 0,
+                initialValue: widget.isEditing ? widget.selectedTechnique.secondHoldDuration.toString() : null,
                 onSaved: (secondHoldDuration){
                   customTechniqueFormModel.secondHoldDuration = int.parse(secondHoldDuration);
                 }
@@ -201,6 +220,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   btnTextColorSelected: appTheme.textPrimaryColor,
                   btnTextColorUnselected: appTheme.textPrimaryColor,
                   bgGradientComparisonColor: appTheme.bgAccentColor,
+                  initValue: widget.isEditing ? widget.selectedTechnique.assetImage : null,
                   assetURL: assetHandler.imageAssetURL,
                   onChange: (assetImage){
                     customTechniqueFormModel.assetImage = assetImage;
@@ -212,6 +232,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
               child: FancyTagSelector(
                   addButtonColor: appTheme.brandPrimaryColor,
                   addButtonTextColor: appTheme.textPrimaryColor,
+                  initValue: widget.isEditing ? widget.selectedTechnique.tags : [],
                   onChange: (selectedTags){
                     customTechniqueFormModel.selectedTags = selectedTags;
                   }
@@ -230,7 +251,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                     //custom techniques are always paid version only
                     //associatedUserID for custom techniques is id of user who created it
                     //all category assignments are allowed for custom techniques
-                    Technique newTechnique = Technique(
+                    Technique tempTechnique = Technique(
                       title: customTechniqueFormModel.title,
                       description: customTechniqueFormModel.description,
                       inhaleDuration: customTechniqueFormModel.inhaleDuration,
@@ -247,8 +268,15 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                       minSessionDurationInMinutes: customTechniqueFormModel.minSessionDurationInMinutes,
                       associatedVideo: "custom"
                     );
-                    //add new technique to user in backend and reflect in app
-                    addCustomTechnique(newTechnique, homePageLink, screenHeight, context);
+                    //check if editing or creating
+                    if(widget.isEditing){
+                      tempTechnique.techniqueID = widget.selectedTechnique.techniqueID;
+                      handleCustomTechnique('edit', tempTechnique, homePageLink, screenHeight, context);
+                    }
+                    else{
+                      //add new technique to user in backend and reflect in app
+                      handleCustomTechnique('create', tempTechnique, homePageLink, screenHeight, context);
+                    }
                   }
                   //show alert if asset image wasn't selected
                   else{
@@ -277,7 +305,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: Text(
-                    'Create Technique',
+                    widget.isEditing ? 'Edit Technique' : 'Create Technique',
                     style: TextStyle(
                         color: appTheme.textPrimaryColor,
                         fontSize: 24
@@ -285,7 +313,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                   ),
                 ),
                 style: TextButton.styleFrom(
-                    backgroundColor: appTheme.brandSecondaryColor
+                    backgroundColor: appTheme.brandPrimaryColor
                 ),
               ),
             )
@@ -295,14 +323,19 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
     );
   }
 
-  Future<void> addCustomTechnique(Technique newTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
-    //add technique in technique service first which returns it with techniqueID
-    Technique updatedNewTechnique =
-      await TechniqueService(uid: curUser.userId).handleCustomTechnique('add', newTechnique);
-    //add to current user techniques
-    curUser.customTechniqueIDs.add(updatedNewTechnique.techniqueID);
-    //persist new custom technique id list for user
-    await UserService(uid: curUser.userId).handleCustomTechnique(curUser.customTechniqueIDs);
+  Future<void> handleCustomTechnique(String op, Technique selectedTechnique, NavLink homePageLink, double screenHeight, BuildContext context) async{
+    if(op == 'create'){
+      //add technique in technique service first which returns it with techniqueID
+      Technique updatedNewTechnique =
+      await TechniqueService(uid: curUser.userId).handleCustomTechnique('add', selectedTechnique);
+      //add to current user techniques
+      curUser.customTechniqueIDs.add(updatedNewTechnique.techniqueID);
+      //persist new custom technique id list for user
+      await UserService(uid: curUser.userId).handleCustomTechnique(curUser.customTechniqueIDs);
+    }
+    else if(op == 'edit'){
+      await TechniqueService(uid: curUser.userId).handleCustomTechnique('edit', selectedTechnique);
+    }
     //redirect to home page
     Provider.of<CurrentPageHandler>(context, listen: false).pageIndex = homePageLink.pageIndex;
     showDialog(

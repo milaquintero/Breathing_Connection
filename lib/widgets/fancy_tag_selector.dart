@@ -7,7 +7,9 @@ class FancyTagSelector extends StatefulWidget {
   final Function onChange;
   final Color addButtonColor;
   final Color addButtonTextColor;
-  FancyTagSelector({this.onChange, this.addButtonColor, this.addButtonTextColor});
+  final List<String> initValue;
+  FancyTagSelector({this.onChange, this.addButtonColor, this.addButtonTextColor,
+  this.initValue});
   @override
   _FancyTagSelectorState createState() => _FancyTagSelectorState();
 }
@@ -15,6 +17,15 @@ class FancyTagSelector extends StatefulWidget {
 class _FancyTagSelectorState extends State<FancyTagSelector> {
   List<String> selectedTags = [];
   String inputText = "";
+  @override
+  void initState() {
+    super.initState();
+    if(widget.initValue != null){
+      setState(() {
+        selectedTags = List.of(widget.initValue);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,6 +41,7 @@ class _FancyTagSelectorState extends State<FancyTagSelector> {
             onFieldSubmitted: (String selectedTag){
               inputText = selectedTag;
             },
+            required: false
           ),
         ),
         TextButton(

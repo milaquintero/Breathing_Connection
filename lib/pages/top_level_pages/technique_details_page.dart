@@ -1,6 +1,7 @@
 import 'package:breathing_connection/models/app_theme.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/route_arguments.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/services/technique_service.dart';
@@ -275,49 +276,75 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
             margin: EdgeInsets.only(top: 68, bottom: 24),
             subtitleAlignment: TextAlign.justify,
           ),
-          if(techniqueToDisplay.associatedUserID != null) Padding(
-            padding: EdgeInsets.only(top: 28, bottom: 60),
-            child: TextButton(
-                onPressed: () async{
-                  //prompt if user wants to permanently delete custom technique
-                  await showDialog(
-                      context: context,
-                      builder: (context){
-                        return DialogPrompt(
-                          titlePadding: EdgeInsets.only(top: 12),
-                          subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
-                          approveButtonText: 'Delete',
-                          denyButtonText: 'Back to List',
-                          titleText: 'Confirm Deletion',
-                          subtitleText: 'Are you sure you want to delete this technique? It will be permanently removed from our services and you will not be able to access once you confirm.',
-                          headerIcon: Icons.delete_forever,
-                          headerBgColor: appTheme.errorColor,
-                          approveButtonColor: appTheme.errorColor,
-                          denyButtonColor: appTheme.brandPrimaryColor,
-                          titleColor: appTheme.textAccentColor,
-                          bgColor: appTheme.bgPrimaryColor,
-                          subtitleColor: appTheme.textAccentColor,
-                          cbFunction: () async{
-                            deleteCustomTechnique();
-                          },
-                        );
-                      }
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                  child: Text(
-                    'Permanently Delete',
-                    style: TextStyle(
-                        color: appTheme.textPrimaryColor,
-                        fontSize: 24
+          if(techniqueToDisplay.associatedUserID != null) Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 28, bottom: 0),
+                child: TextButton(
+                    onPressed: () async{
+                      //send to custom technique page with edit mode on
+                      Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: techniqueToDisplay));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 36, vertical: 2),
+                      child: Text(
+                        'Edit Technique',
+                        style: TextStyle(
+                            color: appTheme.textPrimaryColor,
+                            fontSize: 24
+                        ),
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                        backgroundColor: appTheme.brandPrimaryColor
+                    ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 28, bottom: 60),
+                child: TextButton(
+                  onPressed: () async{
+                    //prompt if user wants to permanently delete custom technique
+                    await showDialog(
+                        context: context,
+                        builder: (context){
+                          return DialogPrompt(
+                            titlePadding: EdgeInsets.only(top: 12),
+                            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                            approveButtonText: 'Delete',
+                            denyButtonText: 'Back to List',
+                            titleText: 'Confirm Deletion',
+                            subtitleText: 'Are you sure you want to delete this technique? It will be permanently removed from our services and you will not be able to access once you confirm.',
+                            headerIcon: Icons.delete_forever,
+                            headerBgColor: appTheme.errorColor,
+                            approveButtonColor: appTheme.errorColor,
+                            denyButtonColor: appTheme.brandPrimaryColor,
+                            titleColor: appTheme.textAccentColor,
+                            bgColor: appTheme.bgPrimaryColor,
+                            subtitleColor: appTheme.textAccentColor,
+                            cbFunction: () async{
+                              deleteCustomTechnique();
+                            },
+                          );
+                        }
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                    child: Text(
+                      'Permanently Delete',
+                      style: TextStyle(
+                          color: appTheme.textPrimaryColor,
+                          fontSize: 24
+                      ),
                     ),
                   ),
+                  style: TextButton.styleFrom(
+                      backgroundColor: appTheme.errorColor
+                  ),
                 ),
-                style: TextButton.styleFrom(
-                    backgroundColor: appTheme.errorColor
-                ),
-            ),
+              ),
+            ],
           )
         ],
       ),

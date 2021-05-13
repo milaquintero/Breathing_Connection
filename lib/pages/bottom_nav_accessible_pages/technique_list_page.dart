@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
+import 'package:breathing_connection/models/route_arguments.dart';
 import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
@@ -138,7 +139,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                   disabledCardBgColor: appTheme.disabledCardBgColor,
                                   disabledCardBorderColor: appTheme.disabledCardBorderColor,
                                   disabledCardTextColor: appTheme.disabledCardTextColor,
-                                  changeTechnique: (String op, Technique selectedTechnique) async{
+                                  changePersonalTechnique: (String op, Technique selectedTechnique) async{
                                     //change technique for user
                                     bool changeSuccessful = await UserService(uid: curUser.userId).handleChangeTechnique(op, selectedTechnique.techniqueID);
                                     //show success alert
@@ -207,7 +208,11 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                     Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
                                     //send to technique details page
                                     Navigator.of(context).pushNamed('/technique-details');
-                                  }
+                                  },
+                                  editCustomTechnique: availableTechniques[index].associatedUserID != null ? (Technique selectedTechnique){
+                                    //send to custom technique page with edit mode on
+                                    Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: selectedTechnique));
+                                  } : (Technique selectedTechnique){}
                               );
                             }
                             else {

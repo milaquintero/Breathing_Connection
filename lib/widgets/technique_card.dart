@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class TechniqueCard extends StatefulWidget {
   final bool userHasFullAccess;
   final Technique technique;
-  final Function(String, Technique) changeTechnique;
+  final Function(String, Technique) changePersonalTechnique;
   final Function(Technique) viewTechniqueDetails;
+  final Function(Technique) editCustomTechnique;
   final Color disabledCardBgColor;
   final Color disabledCardBgAccentColor;
   final Color disabledCardTextColor;
@@ -16,11 +17,11 @@ class TechniqueCard extends StatefulWidget {
   final Color cardBgColor;
   final Color cardActionColor;
   final Function(Technique) deleteCustomTechnique;
-  TechniqueCard({this.technique, this.changeTechnique, this.viewTechniqueDetails,
+  TechniqueCard({this.technique, this.changePersonalTechnique, this.viewTechniqueDetails,
   this.disabledCardTextColor, this.disabledCardBorderColor, this.disabledCardBgColor,
   this.disabledCardBgAccentColor, this.cardTitleColor, this.cardSubtitleColor,
   this.cardBorderColor, this.cardBgColor, this.cardActionColor, this.userHasFullAccess,
-  this.deleteCustomTechnique});
+  this.deleteCustomTechnique, this.editCustomTechnique});
 
   @override
   _TechniqueCardState createState() => _TechniqueCardState();
@@ -58,8 +59,10 @@ class _TechniqueCardState extends State<TechniqueCard> {
       techniqueMenuOptions.add(PopupMenuItem<String>(
           child: Text('Set as Challenge Technique'), value: 'Challenge'));
     }
-    //add option to permanently delete technique if technique has associated user id (custom technique)
+    //add option to permanently delete and edit technique if technique has associated user id (custom technique)
     if(widget.technique.associatedUserID != null){
+      techniqueMenuOptions.add(PopupMenuItem(
+        child: Text('Edit Technique'), value: 'Edit',));
       techniqueMenuOptions.add(PopupMenuItem(
           child: Text('Permanently delete'), value: 'Delete',));
     }
@@ -98,8 +101,11 @@ class _TechniqueCardState extends State<TechniqueCard> {
             ),
             itemBuilder: (context) => techniqueMenuOptions,
             onSelected: (op){
-              if(op != 'Delete'){
-                widget.changeTechnique(op, widget.technique);
+              if(op != 'Delete' && op != 'Edit'){
+                widget.changePersonalTechnique(op, widget.technique);
+              }
+              else if(op == 'Edit'){
+                widget.editCustomTechnique(widget.technique);
               }
               else{
                 widget.deleteCustomTechnique(widget.technique);

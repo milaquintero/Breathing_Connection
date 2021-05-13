@@ -4,7 +4,9 @@ class FancyDropdownFormField extends StatelessWidget {
   final List<DropdownMenuItem<dynamic>> options;
   final String title;
   final Function(dynamic) onChanged;
-  FancyDropdownFormField({this.options, this.title, this.onChanged});
+  final dynamic initValue;
+  FancyDropdownFormField({this.options, this.title, this.onChanged,
+  this.initValue});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +21,7 @@ class FancyDropdownFormField extends StatelessWidget {
         ),
         items: options,
         onChanged: onChanged,
+        value: initValue ?? null,
         validator: (value) {
           if(value == null){
             return 'This field is required';
