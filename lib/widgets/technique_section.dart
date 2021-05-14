@@ -95,14 +95,14 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                     itemBuilder: (context, index){
                       return Container(
                         padding: EdgeInsets.symmetric(horizontal: screenHeight / 18.5),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "${widget.assetURL}/${widget.techniques[index].assetImage}"
-                                ),
-                                fit: BoxFit.cover,
+                        decoration: widget.techniques[index].assetImage != null ? BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                "${widget.assetURL}/${widget.techniques[index].assetImage}"
                             ),
-                        ),
+                            fit: BoxFit.cover,
+                          ),
+                        ) : BoxDecoration(),
                         height: screenHeight / 3,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

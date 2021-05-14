@@ -261,4 +261,18 @@ class UserService {
       throw new Exception(error);
     }
   }
+
+  Future<bool> updateAccountType(String op) async{
+    try{
+      await _userService._userDataCollection.document(uid)
+          .setData({
+        "hasFullAccess": op == 'pro' ? true : false
+      }, merge: true);
+      return true;
+    }
+    catch(error){
+      print(error.toString());
+      return false;
+    }
+  }
 }

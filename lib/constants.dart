@@ -10,7 +10,5 @@ const FREE_VERSION_ASSET_URL = "$BASE_ASSET_URL/free-version";
 const PRO_VERSION_ASSET_URL = "$BASE_ASSET_URL/pro-version";
 //prod CDN image assets url
 const IMAGE_ASSET_DIR = "images";
-//prod CDN music assets url
-const MUSIC_ASSET_DIR = "music";
-//prod CDN sound assets url
-const SOUND_ASSET_DIR = "sound";
+//prod CDN image assets url
+const VIDEO_ASSET_DIR = "videos";

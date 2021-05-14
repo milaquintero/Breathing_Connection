@@ -11,6 +11,7 @@ import 'package:breathing_connection/widgets/dialog_daily_reminder_time_picker.d
 import 'package:breathing_connection/widgets/setting_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -289,6 +290,37 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     }
   }
 
+  void unsubscribeFromPro() async{
+    await showDialog(
+        context: context,
+        builder: (context){
+      return DialogAlert(
+        titlePadding: EdgeInsets.only(top: 12),
+        subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+        buttonText: 'Go to Google Play',
+        cbFunction: () async{
+          String appPackageName = "com.hylicmerit.breathing_connection";
+          try {
+            launch("market://details?id=" + appPackageName);
+          } on PlatformException {
+            launch("https://play.google.com/store/apps/details?id=" + appPackageName);
+          } finally {
+            launch("https://play.google.com/store/apps/details?id=" + appPackageName);
+          }
+        },
+        titleText: 'End Pro License',
+        subtitleText: 'To end your subscription, you must unsubscribe in the Google Play Score. Once you click the button below, go to the subscription settings for Breathing Connection and end it there. Best of luck in your breathing journey!',
+        headerIcon: Icons.assistant_direction,
+        headerBgColor: appTheme.brandPrimaryColor,
+        buttonColor: appTheme.brandPrimaryColor,
+        titleTextColor: appTheme.textAccentColor,
+        bgColor: appTheme.bgPrimaryColor,
+        subtitleTextColor: appTheme.textAccentColor,
+      );
+    }
+    );
+  }
+
   void buildSettingSections(){
     //reset main content
     mainContent = [];
@@ -537,5 +569,41 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         ),
       ),
     );
+    if(curUser.hasFullAccess){
+      //add button to unsubscribe from pro version
+      mainContent.add(
+        TextButton(
+          onPressed: (){
+            unsubscribeFromPro();
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'End Pro License',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: appTheme.textPrimaryColor,
+                    fontSize: 30,
+                  ),
+                ),
+                SizedBox(width: 10,),
+                Icon(
+                  Icons.support_agent,
+                  size: 32,
+                  color: appTheme.textPrimaryColor,
+                )
+              ],
+            ),
+          ),
+          style: TextButton.styleFrom(
+              backgroundColor: appTheme.errorColor,
+              shape: ContinuousRectangleBorder()
+          ),
+        ),
+      );
+    }
   }
 }

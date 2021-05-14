@@ -8,38 +8,36 @@ class FancyBulletList extends StatelessWidget {
   FancyBulletList({this.bulletIcon, this.bulletIconColor, this.listItems, this.textColor});
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: listItems.length,
-        itemBuilder: (context, index){
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  bulletIcon,
-                  size: 32,
-                  color: bulletIconColor,
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Text(
-                    listItems[index],
-                    style: TextStyle(
+    return Column(
+      children: listItems.map((listItem){
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                bulletIcon,
+                size: 32,
+                color: bulletIconColor,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: Text(
+                  listItem,
+                  style: TextStyle(
                       fontSize: 21,
                       color: textColor
-                    ),
                   ),
-                )
-              ],
-            ),
-          );
-        }
+                ),
+              )
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

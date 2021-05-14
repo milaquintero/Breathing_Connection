@@ -1,13 +1,19 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/models/route_arguments.dart';
+import 'package:breathing_connection/pages/authentication_pages/subscription_store.dart';
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/pages/top_level_pages/disclaimer_page.dart';
 import 'package:breathing_connection/pages/top_level_pages/environment_page.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/current_theme_handler.dart';
@@ -30,6 +36,10 @@ const String notificationFooterKey = 'footer';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  //required if platform is android
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    InAppPurchaseConnection.enablePendingPurchases();
+  }
   prefs = await SharedPreferences.getInstance();
   //set defaults to empty string for notifications
   if (!prefs.containsKey(notificationHeaderKey)) {
@@ -74,6 +84,10 @@ class _BreathingConnectionState extends State<BreathingConnection> {
     AndroidAlarmManager.initialize();
   }
   @override
+  void dispose() {
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -82,6 +96,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
         ChangeNotifierProvider(create: (context)=> ViewTechniqueDetailsHandler()),
         ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
         ChangeNotifierProvider(create: (context)=>AssetHandler()),
+        ChangeNotifierProvider(create: (context)=>SubscriptionStore()),
         StreamProvider<List<Technique>>.value(value: TechniqueService().techniqueList, initialData: []),
         StreamProvider<User>.value(value: UserService().userWithData, initialData: null)
       ],

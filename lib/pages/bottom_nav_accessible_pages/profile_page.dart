@@ -98,10 +98,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.only(top: 32, left: 32, right: 32, bottom: 24),
                 decoration: BoxDecoration(
                     gradient: RadialGradient(
-                      colors: [Colors.grey[900], Color.lerp(Colors.blueGrey[400], Colors.grey[900], 0.5), appTheme.disabledCardBgColor],
+                      colors: [Colors.grey[900], Color.lerp(Colors.blueGrey[400], Colors.grey[900], 0.9), appTheme.disabledCardBgColor],
                       center: Alignment(0.6, -0.3),
                       focal: Alignment(0.3, -0.1),
-                      focalRadius: 3.5,
+                      focalRadius: 4.5,
                     ),
                     borderRadius: BorderRadius.circular(10),
                 ),

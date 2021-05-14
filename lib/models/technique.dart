@@ -44,22 +44,22 @@ class Technique{
   }
   factory Technique.clone(Technique immutableTechnique){
     return Technique(
-        title: immutableTechnique.title,
-        techniqueID: immutableTechnique.techniqueID,
-        description: immutableTechnique.description,
-        isPaidVersionOnly: immutableTechnique.isPaidVersionOnly,
-        firstHoldDuration: immutableTechnique.firstHoldDuration,
-        inhaleDuration: immutableTechnique.inhaleDuration,
-        secondHoldDuration: immutableTechnique.secondHoldDuration,
-        exhaleDuration: immutableTechnique.exhaleDuration,
-        assetImage: immutableTechnique.assetImage,
-        inhaleTypeID: immutableTechnique.inhaleTypeID,
-        exhaleTypeID: immutableTechnique.exhaleTypeID,
-        tags: immutableTechnique.tags,
-        categoryDependencies: immutableTechnique.categoryDependencies,
-        associatedUserID: immutableTechnique.associatedUserID,
-        minSessionDurationInMinutes: immutableTechnique.minSessionDurationInMinutes,
-        associatedVideo: immutableTechnique.associatedVideo
+        title: immutableTechnique?.title ?? '',
+        techniqueID: immutableTechnique?.techniqueID ?? 1,
+        description: immutableTechnique?.description ?? '',
+        isPaidVersionOnly: immutableTechnique?.isPaidVersionOnly ?? false,
+        firstHoldDuration: immutableTechnique?.firstHoldDuration ?? 1,
+        inhaleDuration: immutableTechnique?.inhaleDuration ?? 1,
+        secondHoldDuration: immutableTechnique?.secondHoldDuration ?? 1,
+        exhaleDuration: immutableTechnique?.exhaleDuration ?? 1,
+        assetImage: immutableTechnique?.assetImage ?? '',
+        inhaleTypeID: immutableTechnique?.inhaleTypeID ?? 1,
+        exhaleTypeID: immutableTechnique?.exhaleTypeID ?? 1,
+        tags: immutableTechnique?.tags ?? [],
+        categoryDependencies: immutableTechnique?.categoryDependencies ?? [],
+        associatedUserID: immutableTechnique?.associatedUserID ?? null,
+        minSessionDurationInMinutes: immutableTechnique?.minSessionDurationInMinutes ?? 5,
+        associatedVideo: immutableTechnique?.associatedVideo ?? ''
     );
   }
   static Map<String, dynamic> toJson(Technique selectedTechnique){

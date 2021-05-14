@@ -13,6 +13,8 @@ class Utility{
     return Color(int.parse(formattedColor, radix: 16));
   }
   static bool userJustRegistered = false;
+  //track if in app purchase API is available for device
+  static bool iapIsAvailable = true;
   //track max alarm id to be able to cancel them if daily reminder times change
   static int maxAlarmId = 0;
   static void cancelAllAlarms(){
@@ -24,7 +26,6 @@ class Utility{
   static void scheduleDailyReminders(User curUser, MainData mainData){
     if(curUser.userSettings.dailyReminders){
       //set alarms for regular times (AM/PM)
-      print("setting regular time alarms");
       for(Timestamp regularTimestamp in curUser.dailyReminderLists.regularTimes){
         DateTime now = DateTime.now();
         DateTime regularTime = regularTimestamp.toDate();
@@ -48,7 +49,6 @@ class Utility{
     if(curUser.hasFullAccess && curUser.userSettings.challengeMode){
       //set alarms for challenge mode (three times a day)
       for(Timestamp challengeModeTimestamp in curUser.dailyReminderLists.challengeModeTimes){
-        print("setting challenge mode alarms");
         DateTime now = DateTime.now();
         DateTime challengeModeTime = challengeModeTimestamp.toDate();
         BreathingConnection.setNotificationText(

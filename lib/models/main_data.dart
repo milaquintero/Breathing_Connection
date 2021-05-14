@@ -44,6 +44,7 @@ class MainData{
   List<String> disclaimerNotes;
   String supportEmail;
   int maxSessionDurationInMinutes;
+  List<String> availableProducts;
 
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
@@ -57,7 +58,8 @@ class MainData{
     this.dailyReminderHeader, this.customTechniqueSuccessBody, this.customTechniqueSuccessHead,
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
     this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes,
-    this.disclaimerNotes, this.supportEmail, this.maxSessionDurationInMinutes});
+    this.disclaimerNotes, this.supportEmail, this.maxSessionDurationInMinutes,
+    this.availableProducts});
 
   factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
     if(op == 'constants'){
@@ -110,6 +112,9 @@ class MainData{
       Iterable emailSubscriptionTypes = snapshot['emailSubscriptionTypes'] ?? [];
       tempMainData.emailSubscriptionTypes = emailSubscriptionTypes
           .map((emailSubscriptionType) => emailSubscriptionType.toString()).toList();
+      Iterable availableProducts = snapshot['availableProducts'] ?? [];
+      tempMainData.availableProducts = availableProducts
+          .map((availableProduct) => availableProduct.toString()).toList();
     }
     else if(op == 'assets'){
       Iterable images = snapshot['images'] ?? [];
@@ -173,5 +178,6 @@ class MainData{
     this.disclaimerNotes = mainData.disclaimerNotes;
     this.supportEmail = mainData.supportEmail;
     this.maxSessionDurationInMinutes = mainData.maxSessionDurationInMinutes;
+    this.availableProducts = mainData.availableProducts;
   }
 }

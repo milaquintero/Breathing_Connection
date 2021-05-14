@@ -4,11 +4,8 @@ import 'package:flutter/cupertino.dart';
 class AssetHandler extends ChangeNotifier{
   String baseAssetURL;
   String imageAssetURL;
-  String musicAssetURL;
   String videoAssetURL;
-  String soundAssetURL;
-  AssetHandler({this.imageAssetURL, this.baseAssetURL, this.musicAssetURL, this.soundAssetURL,
-  this.videoAssetURL});
+  AssetHandler({this.imageAssetURL, this.baseAssetURL, this.videoAssetURL});
   void init(bool userHasFullAccess){
     //set up pro version asset access
     if(userHasFullAccess){
@@ -20,8 +17,7 @@ class AssetHandler extends ChangeNotifier{
     }
     //set image, music and sound asset urls
     imageAssetURL = "$baseAssetURL/$IMAGE_ASSET_DIR";
-    musicAssetURL = "$baseAssetURL/$MUSIC_ASSET_DIR";
-    soundAssetURL = "$baseAssetURL/$SOUND_ASSET_DIR";
+    videoAssetURL = "$baseAssetURL/$VIDEO_ASSET_DIR";
     notifyListeners();
   }
 }
