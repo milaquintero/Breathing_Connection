@@ -10,6 +10,7 @@ import 'package:breathing_connection/models/technique.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/models/view_technique_details_handler.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
+import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -96,10 +97,6 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
     homePage = navLinks.firstWhere((page) => page.pageRoute == '/home');
     //get technique data
     techniqueToDisplay = Provider.of<ViewTechniqueDetailsHandler>(context).techniqueBeingViewed;
-    //get inhale/exhale data from list in main data based on inhaleExhaleTypeID
-    mainData = Provider.of<MainData>(context);
-    inhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.inhaleTypeID);
-    exhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.exhaleTypeID);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
     //current user data
@@ -117,178 +114,192 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appTheme.bgPrimaryColor,
-      body: SafeArea(
-        child: FutureBuilder(
-          future: _initializeVideoPlayerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return OrientationBuilder(
-                builder: (context, orientation) {
-                  //handle portrait mode
-                  if(orientation == Orientation.portrait){
-                    //pause content if switched back to portrait mode
-                    if(_timer != null && secondsElapsedDuringSession != 0){
-                      pauseContent();
-                    }
-                    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 46),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if(secondsElapsedDuringSession == 0) Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 24),
-                                child: Text(
-                                  'Session Duration',
-                                  style: TextStyle(
-                                      fontSize: 34,
-                                      color: appTheme.textSecondaryColor
+    return StreamBuilder(
+        stream: MainDataService().mainData,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            //get inhale/exhale data from list in main data based on inhaleExhaleTypeID
+            mainData = snapshot.data;
+            inhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.inhaleTypeID);
+            exhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.exhaleTypeID);
+            return Scaffold(
+              backgroundColor: appTheme.bgPrimaryColor,
+              body: SafeArea(
+                child: FutureBuilder(
+                  future: _initializeVideoPlayerFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return OrientationBuilder(
+                        builder: (context, orientation) {
+                          //handle portrait mode
+                          if(orientation == Orientation.portrait){
+                            //pause content if switched back to portrait mode
+                            if(_timer != null && secondsElapsedDuringSession != 0){
+                              pauseContent();
+                            }
+                            SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 46),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  if(secondsElapsedDuringSession == 0) Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: 24),
+                                        child: Text(
+                                          'Session Duration',
+                                          style: TextStyle(
+                                              fontSize: 34,
+                                              color: appTheme.textSecondaryColor
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "$sessionLengthInMinutes minutes",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: appTheme.textSecondaryColor
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 16, bottom: 16),
+                                        child: Slider(
+                                          activeColor: appTheme.textSecondaryColor,
+                                          value: double.parse(sessionLengthInMinutes.toString()),
+                                          min: double.parse(techniqueToDisplay.minSessionDurationInMinutes.toString()),
+                                          max: double.parse(mainData.maxSessionDurationInMinutes.toString()),
+                                          divisions: ((mainData.maxSessionDurationInMinutes - techniqueToDisplay.minSessionDurationInMinutes) / techniqueToDisplay.minSessionDurationInMinutes).round(),
+                                          label: sessionLengthInMinutes.round().toString(),
+                                          onChanged: (double value) {
+                                            setState(() {
+                                              sessionLengthInMinutes = value.round();
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              Text(
-                                  "$sessionLengthInMinutes minutes",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: appTheme.textSecondaryColor
+                                  if(secondsElapsedDuringSession < sessionLengthInMinutes) Text(
+                                    'Rotate your device to landscape mode to begin the session.',
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        color: appTheme.textSecondaryColor
+                                    ),
                                   ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 16, bottom: 16),
-                                child: Slider(
-                                  activeColor: appTheme.textSecondaryColor,
-                                  value: double.parse(sessionLengthInMinutes.toString()),
-                                  min: double.parse(techniqueToDisplay.minSessionDurationInMinutes.toString()),
-                                  max: double.parse(mainData.maxSessionDurationInMinutes.toString()),
-                                  divisions: ((mainData.maxSessionDurationInMinutes - techniqueToDisplay.minSessionDurationInMinutes) / techniqueToDisplay.minSessionDurationInMinutes).round(),
-                                  label: sessionLengthInMinutes.round().toString(),
-                                  onChanged: (double value) {
-                                    setState(() {
-                                      sessionLengthInMinutes = value.round();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          if(secondsElapsedDuringSession < sessionLengthInMinutes) Text(
-                            'Rotate your device to landscape mode to begin the session.',
-                            style: TextStyle(
-                              fontSize: 28,
-                              color: appTheme.textSecondaryColor
-                            ),
-                          ),
-                          if(secondsElapsedDuringSession == sessionLengthInMinutes) Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 24),
-                                child: Text(
-                                  'Session Complete',
-                                  style: TextStyle(
-                                      fontSize: 34,
-                                      color: appTheme.textSecondaryColor
+                                  if(secondsElapsedDuringSession == sessionLengthInMinutes) Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: 24),
+                                        child: Text(
+                                          'Session Complete',
+                                          style: TextStyle(
+                                              fontSize: 34,
+                                              color: appTheme.textSecondaryColor
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Press the button below to return to the home page.',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          color: appTheme.textSecondaryColor,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              Text(
-                                'Press the button below to return to the home page.',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: appTheme.textSecondaryColor,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                          if(secondsElapsedDuringSession == 0) Text(
-                            'Once the session begins you will not be able to change the session duration.',
-                            style: TextStyle(
-                                fontSize: 28,
-                                color: appTheme.textSecondaryColor
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 40, bottom: 28),
-                            child: TextButton(
-                              onPressed: (){
-                                sendToHomePage();
-                              },
-                              child: Text(
-                                'Back to Home',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white
-                                ),
-                              ),
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.deepOrange[600],
-                                padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  //handle landscape mode
-                  else{
-                    //start/resume timer
-                    if(secondsElapsedDuringSession < sessionLengthInMinutes){
-                      playContent();
-                    }
-                    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-                    return Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        SizedBox.expand(
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: SizedBox(
-                              width: _videoController.value.size?.width ?? 0,
-                              height: _videoController.value.size?.height ?? 0,
-                              child: secondsElapsedDuringSession < sessionLengthInMinutes ?
-                              VideoPlayer(_videoController) : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Session Complete',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 84
+                                  if(secondsElapsedDuringSession == 0) Text(
+                                    'Once the session begins you will not be able to change the session duration.',
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        color: appTheme.textSecondaryColor
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 40, bottom: 28),
+                                    child: TextButton(
+                                      onPressed: (){
+                                        sendToHomePage();
+                                      },
+                                      child: Text(
+                                        'Back to Home',
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.white
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.deepOrange[600],
+                                        padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
                                       ),
                                     ),
-                                    SizedBox(height: 52,),
-                                    Text(
-                                      'Rotate your device back to portrait mode.',
-                                      style: TextStyle(
-                                        fontSize: 56,
-                                        color: appTheme.textSecondaryColor,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                )
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                },
-              );
-            } else {
-              return LoadingPage();
-            }
-          },
-        ),
-      ),
+                            );
+                          }
+                          //handle landscape mode
+                          else{
+                            //start/resume timer
+                            if(secondsElapsedDuringSession < sessionLengthInMinutes){
+                              playContent();
+                            }
+                            SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+                            return Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                SizedBox.expand(
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: SizedBox(
+                                      width: _videoController.value.size?.width ?? 0,
+                                      height: _videoController.value.size?.height ?? 0,
+                                      child: secondsElapsedDuringSession < sessionLengthInMinutes ?
+                                      VideoPlayer(_videoController) : Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Session Complete',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 84
+                                                ),
+                                              ),
+                                              SizedBox(height: 52,),
+                                              Text(
+                                                'Rotate your device back to portrait mode.',
+                                                style: TextStyle(
+                                                  fontSize: 56,
+                                                  color: appTheme.textSecondaryColor,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          )
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        },
+                      );
+                    } else {
+                      return LoadingPage();
+                    }
+                  },
+                ),
+              ),
+            );
+          }
+          else{
+            return LoadingPage();
+          }
+        }
     );
   }
 }

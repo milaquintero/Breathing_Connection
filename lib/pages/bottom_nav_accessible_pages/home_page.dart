@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage>{
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
     //get asset handler for CDN resources
     assetHandler = Provider.of<AssetHandler>(widget.rootContext);
     //screen height

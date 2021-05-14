@@ -92,6 +92,7 @@ class TechniqueService{
           "exhaleTypeID": selectedTechnique.exhaleTypeID,
           "minSessionDurationInMinutes": selectedTechnique.minSessionDurationInMinutes
         }, merge: true);
+        return selectedTechnique;
       }
       else{
         return null;

@@ -30,19 +30,13 @@ class _LoadingPageState extends State<LoadingPage> {
 
   Future <void> getMainData() async{
     //get main data
-    MainData mainData = await MainDataService.getMainDataRemotely();
+    MainData mainData = await MainDataService().mainData.first;
     //user data
     curUser = await UserService().userWithData.first;
-    //if user has full access remove pro license page from nav links
-    if(curUser.hasFullAccess && mainData.pages.isNotEmpty){
-      mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
-    }
-    //update main data in shareable resource
-    Provider.of<MainData>(context, listen: false).setMainData(mainData);
     //start bottom nav in home page
     NavLink homePageLink = mainData.pages.firstWhere((link){
       return link.pageRoute == '/home';
-    });
+    }, orElse: null);
     Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(homePageLink.pageIndex);
   }
 
@@ -53,7 +47,7 @@ class _LoadingPageState extends State<LoadingPage> {
     //set asset handler URL based on whether user has full access
     Provider.of<AssetHandler>(context, listen: false).init(curUser.hasFullAccess);
     //get user's selected theme based on themeID from user settings
-    MainData mainData = Provider.of<MainData>(context, listen: false);
+    MainData mainData = await MainDataService().mainData.first;
     selectedTheme = mainData.themes.firstWhere((theme) => theme.themeID == curUser.userSettings.themeID);
     //load user's latest selected theme
     Provider.of<CurrentThemeHandler>(context, listen: false).setCurrentTheme(selectedTheme);

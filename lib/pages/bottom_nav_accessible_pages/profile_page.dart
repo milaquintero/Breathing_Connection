@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
     //app theme
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
   }
   @override
   Widget build(BuildContext context) {

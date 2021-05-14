@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
@@ -9,6 +8,7 @@ import 'package:breathing_connection/pages/authentication_pages/subscription_sto
 import 'package:breathing_connection/pages/authentication_wrapper.dart';
 import 'package:breathing_connection/pages/top_level_pages/disclaimer_page.dart';
 import 'package:breathing_connection/pages/top_level_pages/environment_page.dart';
+import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/foundation.dart';
@@ -91,14 +91,14 @@ class _BreathingConnectionState extends State<BreathingConnection> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<MainData>(create: (context) => MainData()),
         ChangeNotifierProvider(create: (context) => CurrentPageHandler()),
         ChangeNotifierProvider(create: (context)=> ViewTechniqueDetailsHandler()),
         ChangeNotifierProvider(create: (context)=>CurrentThemeHandler()),
         ChangeNotifierProvider(create: (context)=>AssetHandler()),
         ChangeNotifierProvider(create: (context)=>SubscriptionStore()),
         StreamProvider<List<Technique>>.value(value: TechniqueService().techniqueList, initialData: []),
-        StreamProvider<User>.value(value: UserService().userWithData, initialData: null)
+        StreamProvider<User>.value(value: UserService().userWithData, initialData: null),
+        StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: null,),
       ],
       child: MaterialApp(
         onUnknownRoute: (settings){

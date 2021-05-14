@@ -45,7 +45,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //available techniques

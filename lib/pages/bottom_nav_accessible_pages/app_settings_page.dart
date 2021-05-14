@@ -35,8 +35,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   MainData mainData;
   //current user
   User curUser;
-  //user service
-  UserService _userService = UserService();
   //temp user settings to track changes
   UserSettings newSettings;
   //temp daily reminder list to track changes
@@ -45,7 +43,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
   }

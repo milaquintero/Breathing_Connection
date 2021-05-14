@@ -6,6 +6,7 @@ import 'package:breathing_connection/models/subscription_type.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/services/email_service.dart';
+import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_form_page.dart';
@@ -80,8 +81,6 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
-    //app main data
-    mainData = Provider.of<MainData>(context, listen: false);
     dateWhenThirteen = DateTime(
       now.year - 13,
       now.month,
@@ -127,225 +126,236 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: UserService().userWithData,
-      builder: (context, userSnapshot){
-        if(userSnapshot.hasData){
-          curUser = userSnapshot.data;
-          displayCurSubscriptionSelections();
-          return FancyFormPage(
-            pageTitle: 'Email Subscription',
-            headerIcon: Icons.email,
-            headerColor: appTheme.brandPrimaryColor,
-            headerIconColor: appTheme.textPrimaryColor,
-            bgColor: appTheme.bgSecondaryColor,
-            decorationPrimaryColor: appTheme.decorationPrimaryColor,
-            decorationSecondaryColor: appTheme.decorationSecondaryColor,
-            withIconHeader: true,
-            appBarColor: appTheme.brandPrimaryColor,
-            appBarHeight: mainData.appBarHeight,
-            form: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FancyTextFormField(
-                    fieldLabel: 'Username',
-                    fieldType: 'text',
-                    initialValue: curUser.username,
-                    keyboardType: TextInputType.name,
-                    onSaved: (name){
-                      emailFormModel.username = name;
-                    },
-                    enabled: false,
-                  ),
-                  FancyTextFormField(
-                    fieldLabel: 'Email',
-                    fieldType: 'email',
-                    initialValue: curUser.email,
-                    keyboardType: TextInputType.emailAddress,
-                    onSaved: (email){
-                      emailFormModel.email = email;
-                    },
-                    enabled: false,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 24, bottom: 30),
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  width: 1,
-                                  color: shouldEnableBirthday ? Colors.black26 : Colors.black12
+      stream: MainDataService().mainData,
+      builder: (context, snapshot){
+        if(snapshot.hasData){
+          mainData = snapshot.data;
+          return StreamBuilder(
+            stream: UserService().userWithData,
+            builder: (context, userSnapshot){
+              if(userSnapshot.hasData){
+                curUser = userSnapshot.data;
+                displayCurSubscriptionSelections();
+                return FancyFormPage(
+                  pageTitle: 'Email Subscription',
+                  headerIcon: Icons.email,
+                  headerColor: appTheme.brandPrimaryColor,
+                  headerIconColor: appTheme.textPrimaryColor,
+                  bgColor: appTheme.bgSecondaryColor,
+                  decorationPrimaryColor: appTheme.decorationPrimaryColor,
+                  decorationSecondaryColor: appTheme.decorationSecondaryColor,
+                  withIconHeader: true,
+                  appBarColor: appTheme.brandPrimaryColor,
+                  appBarHeight: mainData.appBarHeight,
+                  form: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        FancyTextFormField(
+                          fieldLabel: 'Username',
+                          fieldType: 'text',
+                          initialValue: curUser.username,
+                          keyboardType: TextInputType.name,
+                          onSaved: (name){
+                            emailFormModel.username = name;
+                          },
+                          enabled: false,
+                        ),
+                        FancyTextFormField(
+                          fieldLabel: 'Email',
+                          fieldType: 'email',
+                          initialValue: curUser.email,
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (email){
+                            emailFormModel.email = email;
+                          },
+                          enabled: false,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 24, bottom: 30),
+                              child: Container(
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        width: 1,
+                                        color: shouldEnableBirthday ? Colors.black26 : Colors.black12
+                                    ),
+                                    borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Text(
+                                  isBirthdaySelected ? formatTimestampToDisplay(emailFormModel.birthday) : 'Enter your birthday',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: shouldEnableBirthday ? Colors.grey[850] : Colors.black54
+                                  ),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(5)
-                          ),
-                          child: Text(
-                            isBirthdaySelected ? formatTimestampToDisplay(emailFormModel.birthday) : 'Enter your birthday',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: shouldEnableBirthday ? Colors.grey[850] : Colors.black54
                             ),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: shouldEnableBirthday ? () => _selectDate(context) : (){},
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                          child: Text(
-                            'Select Birthday',
-                            style: TextStyle(
-                                color: shouldEnableBirthday ? appTheme.textPrimaryColor : appTheme.disabledCardTextColor,
-                                fontSize: 24
+                            TextButton(
+                              onPressed: shouldEnableBirthday ? () => _selectDate(context) : (){},
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                                child: Text(
+                                  'Select Birthday',
+                                  style: TextStyle(
+                                      color: shouldEnableBirthday ? appTheme.textPrimaryColor : appTheme.disabledCardTextColor,
+                                      fontSize: 24
+                                  ),
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: shouldEnableBirthday ? appTheme.brandPrimaryColor : appTheme.disabledCardBgColor,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: shouldEnableBirthday ? appTheme.brandPrimaryColor : appTheme.disabledCardBgColor,
+                        if(formattedSubscriptionTypes != null) Column(
+                          children: [
+                            FancyInstructionalText(
+                              icon: Icons.alternate_email,
+                              iconBgColor: appTheme.brandPrimaryColor,
+                              iconColor: Colors.grey[50],
+                              bgColor: Colors.grey[850],
+                              textColor: Colors.grey[50],
+                              margin: EdgeInsets.only(top: 88, bottom: 12),
+                              bgGradientComparisonColor: Colors.blueGrey,
+                              title: 'Subscriptions',
+                              subtitle: "Select the topics you'd like to subscribe to.",
+                            ),
+                            FancySubscriptionSelector(
+                              subscriptionSelections: formattedSubscriptionTypes,
+                              bgColor: Colors.grey[850],
+                              textColor: appTheme.textPrimaryColor,
+                              bgGradientComparisonColor: Colors.blueGrey,
+                              checkboxColor: appTheme.brandPrimaryColor,
+                              callbackFn: (subscriptionType, isSelected){
+                                if(!emailFormModel.emailSubscriptionTypes.contains(subscriptionType)
+                                    && isSelected == true){
+                                  emailFormModel.emailSubscriptionTypes.add(subscriptionType);
+                                }
+                                else if(emailFormModel.emailSubscriptionTypes.contains(subscriptionType)
+                                    && isSelected != true){
+                                  emailFormModel.emailSubscriptionTypes.removeWhere((selectedSubscriptionType){
+                                    return selectedSubscriptionType == subscriptionType;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  if(formattedSubscriptionTypes != null) Column(
-                    children: [
-                      FancyInstructionalText(
-                        icon: Icons.alternate_email,
-                        iconBgColor: appTheme.brandPrimaryColor,
-                        iconColor: Colors.grey[50],
-                        bgColor: Colors.grey[850],
-                        textColor: Colors.grey[50],
-                        margin: EdgeInsets.only(top: 88, bottom: 12),
-                        bgGradientComparisonColor: Colors.blueGrey,
-                        title: 'Subscriptions',
-                        subtitle: "Select the topics you'd like to subscribe to.",
-                      ),
-                      FancySubscriptionSelector(
-                        subscriptionSelections: formattedSubscriptionTypes,
-                        bgColor: Colors.grey[850],
-                        textColor: appTheme.textPrimaryColor,
-                        bgGradientComparisonColor: Colors.blueGrey,
-                        checkboxColor: appTheme.brandPrimaryColor,
-                        callbackFn: (subscriptionType, isSelected){
-                          if(!emailFormModel.emailSubscriptionTypes.contains(subscriptionType)
-                              && isSelected == true){
-                            emailFormModel.emailSubscriptionTypes.add(subscriptionType);
-                          }
-                          else if(emailFormModel.emailSubscriptionTypes.contains(subscriptionType)
-                              && isSelected != true){
-                            emailFormModel.emailSubscriptionTypes.removeWhere((selectedSubscriptionType){
-                              return selectedSubscriptionType == subscriptionType;
-                            });
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 38, bottom: 24),
-                    child: TextButton(
-                      onPressed: () async{
-                        //validate form
-                        if(_formKey.currentState.validate() && isBirthdaySelected){
-                          //store valid entries into model
-                          _formKey.currentState.save();
-                          //add user to email list in firestore
-                          bool isSuccessful = await EmailService(curUser.userId).addToEmailList(emailFormModel);
-                          //show success message
-                          if(isSuccessful){
-                            await showDialog(
-                                context: context,
-                                builder: (context){
-                                  return DialogAlert(
-                                    titlePadding: EdgeInsets.only(top: 12),
-                                    subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
-                                    buttonText: 'Back to Main',
-                                    cbFunction: (){
-                                      Navigator.of(context).pushReplacementNamed("/root");
-                                    },
-                                    titleText: mainData.emailSubSuccessHead,
-                                    subtitleText: mainData.emailSubSuccessBody,
-                                    headerIcon: Icons.fact_check,
-                                    headerBgColor: Colors.green[600],
-                                    buttonColor: appTheme.brandPrimaryColor,
-                                    titleTextColor: appTheme.textAccentColor,
-                                    bgColor: appTheme.bgPrimaryColor,
-                                    subtitleTextColor: appTheme.textAccentColor,
+                        Padding(
+                          padding: EdgeInsets.only(top: 38, bottom: 24),
+                          child: TextButton(
+                            onPressed: () async{
+                              //validate form
+                              if(_formKey.currentState.validate() && isBirthdaySelected){
+                                //store valid entries into model
+                                _formKey.currentState.save();
+                                //add user to email list in firestore
+                                bool isSuccessful = await EmailService(curUser.userId).addToEmailList(emailFormModel);
+                                //show success message
+                                if(isSuccessful){
+                                  await showDialog(
+                                      context: context,
+                                      builder: (context){
+                                        return DialogAlert(
+                                          titlePadding: EdgeInsets.only(top: 12),
+                                          subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                                          buttonText: 'Back to Main',
+                                          cbFunction: (){
+                                            Navigator.of(context).pushReplacementNamed("/root");
+                                          },
+                                          titleText: mainData.emailSubSuccessHead,
+                                          subtitleText: mainData.emailSubSuccessBody,
+                                          headerIcon: Icons.fact_check,
+                                          headerBgColor: Colors.green[600],
+                                          buttonColor: appTheme.brandPrimaryColor,
+                                          titleTextColor: appTheme.textAccentColor,
+                                          bgColor: appTheme.bgPrimaryColor,
+                                          subtitleTextColor: appTheme.textAccentColor,
+                                        );
+                                      }
                                   );
                                 }
-                            );
-                          }
-                        }
-                        else{
-                          await showDialog(
-                              context: context,
-                              builder: (context){
-                                return DialogAlert(
-                                  titlePadding: EdgeInsets.only(top: 12),
-                                  subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
-                                  buttonText: 'Close',
-                                  cbFunction: (){},
-                                  titleText: 'Invalid Data',
-                                  subtitleText: 'Please complete the form before submitting',
-                                  headerIcon: Icons.cancel,
-                                  headerBgColor: appTheme.errorColor,
-                                  buttonColor: appTheme.errorColor,
-                                  titleTextColor: appTheme.textAccentColor,
-                                  bgColor: appTheme.bgPrimaryColor,
-                                  subtitleTextColor: appTheme.textAccentColor,
+                              }
+                              else{
+                                await showDialog(
+                                    context: context,
+                                    builder: (context){
+                                      return DialogAlert(
+                                        titlePadding: EdgeInsets.only(top: 12),
+                                        subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                                        buttonText: 'Close',
+                                        cbFunction: (){},
+                                        titleText: 'Invalid Data',
+                                        subtitleText: 'Please complete the form before submitting',
+                                        headerIcon: Icons.cancel,
+                                        headerBgColor: appTheme.errorColor,
+                                        buttonColor: appTheme.errorColor,
+                                        titleTextColor: appTheme.textAccentColor,
+                                        bgColor: appTheme.bgPrimaryColor,
+                                        subtitleTextColor: appTheme.textAccentColor,
+                                      );
+                                    }
                                 );
                               }
-                          );
-                        }
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                        child: Text(
-                          mainData.emailPageSubmitBtnText,
-                          style: TextStyle(
-                              color: appTheme.textPrimaryColor,
-                              fontSize: 24
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                              child: Text(
+                                mainData.emailPageSubmitBtnText,
+                                style: TextStyle(
+                                    color: appTheme.textPrimaryColor,
+                                    fontSize: 24
+                                ),
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                                backgroundColor: appTheme.brandPrimaryColor
+                            ),
                           ),
                         ),
-                      ),
-                      style: TextButton.styleFrom(
-                          backgroundColor: appTheme.brandPrimaryColor
-                      ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 16, bottom: 68),
+                          child: TextButton(
+                            onPressed: () async{
+                              Navigator.of(context).pushReplacementNamed("/root");
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                              child: Text(
+                                'Return to Main',
+                                style: TextStyle(
+                                    color: appTheme.textPrimaryColor,
+                                    fontSize: 24
+                                ),
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                                backgroundColor: appTheme.errorColor
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16, bottom: 68),
-                    child: TextButton(
-                      onPressed: () async{
-                        Navigator.of(context).pushReplacementNamed("/root");
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                        child: Text(
-                          'Return to Main',
-                          style: TextStyle(
-                              color: appTheme.textPrimaryColor,
-                              fontSize: 24
-                          ),
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                          backgroundColor: appTheme.errorColor
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                );
+              }
+              else{
+                return LoadingPage(shouldRetrieveMainData: false,);
+              }
+            },
           );
         }
         else{
-          return LoadingPage(shouldRetrieveMainData: false,);
+          return LoadingPage();
         }
       },
     );

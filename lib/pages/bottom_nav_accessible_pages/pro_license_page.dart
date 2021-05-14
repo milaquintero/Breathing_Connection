@@ -1,16 +1,10 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:breathing_connection/models/app_theme.dart';
-import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/current_theme_handler.dart';
 import 'package:breathing_connection/models/main_data.dart';
-import 'package:breathing_connection/models/nav_link.dart';
 import 'package:breathing_connection/models/user.dart';
 import 'package:breathing_connection/pages/authentication_pages/subscription_store.dart';
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/services/user_service.dart';
-import 'package:breathing_connection/widgets/dialog_alert.dart';
 import 'package:breathing_connection/widgets/fancy_bullet_list.dart';
 import 'package:breathing_connection/widgets/fancy_scrollable_page.dart';
 import 'package:breathing_connection/widgets/fancy_tag.dart';
@@ -71,7 +65,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //app main data
-    mainData = Provider.of<MainData>(widget.rootContext);
+    mainData = Provider.of<MainData>(context);
     //subscription store data
     subscriptionStore = Provider.of<SubscriptionStore>(widget.rootContext);
   }

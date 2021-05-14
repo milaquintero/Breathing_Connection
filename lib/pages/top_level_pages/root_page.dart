@@ -7,7 +7,9 @@ import 'package:breathing_connection/pages/bottom_nav_accessible_pages/home_page
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/pro_license_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/profile_page.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/technique_list_page.dart';
+import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/pages/top_level_pages/page_not_found.dart';
+import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:breathing_connection/utility.dart';
 import 'package:breathing_connection/models/app_theme.dart';
@@ -32,7 +34,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   //handler for current page (used by bottom nav)
   CurrentPageHandler curPage;
   //list of links for side nav
-  List<NavLink> navLinks;
+  List<NavLink> navLinks = [];
   //app theme data
   AppTheme appTheme;
   //current user
@@ -54,6 +56,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   StreamSubscription _subscription;
   //subscription store data
   SubscriptionStore subscriptionStore;
+  //track if data has already been initialized (init depends on main data available products)
+  bool areDependenciesInitialized = false;
   void _initializePurchaseData() async{
     Utility.iapIsAvailable = await _iap.isAvailable();
     if(Utility.iapIsAvailable){
@@ -162,42 +166,35 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
     }
   }
   Future<void> initWithDependencies() async{
-    //get user's selected theme based on themeID from user settings
-    await getUserWithData();
-    //cancel all previous alarms
-    Utility.cancelAllAlarms();
-    //schedule daily reminders if setting is on
-    Utility.scheduleDailyReminders(curUser, mainData);
-    //initialize purchase data
-    _initializePurchaseData();
-
+    if(!areDependenciesInitialized){
+      //get user's selected theme based on themeID from user settings
+      await getUserWithData();
+      //cancel all previous alarms
+      Utility.cancelAllAlarms();
+      //schedule daily reminders if setting is on
+      Utility.scheduleDailyReminders(curUser, mainData);
+      //initialize purchase data
+      _initializePurchaseData();
+      //if user has full access remove pro license page from nav links
+      if(curUser.hasFullAccess && mainData.pages.isNotEmpty){
+        mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
+      }
+      //list of links for side nav
+      navLinks = List<NavLink>.from(mainData.pages);
+      //update flag
+      areDependenciesInitialized = true;
+    }
   }
-  @override
-  void initState(){
-    super.initState();
-    //app main data
-    mainData = Provider.of<MainData>(context, listen: false);
-    //initial setup with async dependencies
-    initWithDependencies();
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void updatePageInView(){
     //handler for current page (used by bottom nav)
     curPage = Provider.of<CurrentPageHandler>(context);
-    //list of links for side nav
-    navLinks = List<NavLink>.from(mainData.pages);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
-    //handle switching page with animation
-    int currentIndex = curPage.pageIndex;
-    String currentRoute = navLinks[currentIndex].pageRoute;
-    setState(() {
+    if(navLinks.isNotEmpty && curPage != null && appTheme != null){
+      //handle switching page with animation
+      int currentIndex = curPage.pageIndex;
+      String currentRoute = navLinks[currentIndex].pageRoute;
+
       if(currentRoute == '/home'){
         _pageToDisplay = HomePage(rootContext: context,);
         _transitionOffset = Offset(-1.5,0.0);
@@ -221,93 +218,121 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
       else{
         _pageToDisplay = PageNotFound(rootContext: context, hasBottomNav: true,);
       }
-    });
+    }
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
   }
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: UserService().userWithData,
-      child: Scaffold(
-        backgroundColor: appTheme.brandPrimaryColor,
-        body: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Positioned(
-              top: 150,
-              child: Container(
-                height: 650,
-                width: 650,
-                decoration: BoxDecoration(
-                    color: appTheme.brandPrimaryColor,
-                    borderRadius: BorderRadius.circular(300)
-                ),
+    return StreamBuilder(
+      stream: MainDataService().mainData,
+      builder: (context, snapshot){
+        if(snapshot.hasData){
+          //app main data
+          mainData = snapshot.data;
+          /*
+          initial setup with async dependencies
+          flag prevents from running more than once
+          depends on main data
+          */
+          initWithDependencies();
+          //update displayed page
+          updatePageInView();
+          return MultiProvider(
+            providers: [
+              StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: mainData),
+              StreamProvider<User>.value(value: UserService().userWithData, initialData: curUser)
+            ],
+            child: Scaffold(
+              backgroundColor: appTheme.brandPrimaryColor,
+              body: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Positioned(
+                    top: 150,
+                    child: Container(
+                      height: 650,
+                      width: 650,
+                      decoration: BoxDecoration(
+                          color: appTheme.brandPrimaryColor,
+                          borderRadius: BorderRadius.circular(300)
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: -75,
+                    child: Container(
+                      height: 650,
+                      width: 650,
+                      decoration: BoxDecoration(
+                          color: appTheme.brandSecondaryColor,
+                          borderRadius: BorderRadius.circular(300)
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: -325,
+                    child: Container(
+                      height: 650,
+                      width: 650,
+                      decoration: BoxDecoration(
+                          color: appTheme.decorationPrimaryColor,
+                          borderRadius: BorderRadius.circular(300)
+                      ),
+                    ),
+                  ),
+                  AnimatedSwitcher(
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return DualTransitionBuilder(
+                        animation: animation,
+                        forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                          final  customAnimation =
+                          Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
+                              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
+                          );
+                          return SlideTransition(position: customAnimation, child: child,);
+                        },
+                        reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                          final  customAnimation =
+                          Tween<double>(begin: 1.0, end: 1.0).animate(
+                              CurvedAnimation(parent: animation, curve: Curves.easeInSine)
+                          );
+                          return FadeTransition(opacity: customAnimation, child: child,);
+                        },
+                        child: child,
+                      );
+                    },
+                    duration: Duration(milliseconds: 500),
+                    child: _pageToDisplay,
+                  ),
+                ],
               ),
+              bottomNavigationBar: navLinks.isNotEmpty ? BottomNavigationBar(
+                currentIndex: curPage.pageIndex,
+                elevation: 0,
+                backgroundColor: appTheme.bottomNavBgColor,
+                type : BottomNavigationBarType.fixed,
+                selectedItemColor: appTheme.textSecondaryColor,
+                unselectedItemColor: appTheme.disabledCardBorderColor,
+                items: navLinks.map((link)=> BottomNavigationBarItem(
+                    icon: Icon(link.pageIcon),
+                    label: link.pageTitle
+                )
+                ).toList(),
+                onTap: (index){
+                  Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(index);
+                },
+              ) : Container(),
             ),
-            Positioned(
-              top: -75,
-              child: Container(
-                height: 650,
-                width: 650,
-                decoration: BoxDecoration(
-                    color: appTheme.brandSecondaryColor,
-                    borderRadius: BorderRadius.circular(300)
-                ),
-              ),
-            ),
-            Positioned(
-              top: -325,
-              child: Container(
-                height: 650,
-                width: 650,
-                decoration: BoxDecoration(
-                  color: appTheme.decorationPrimaryColor,
-                  borderRadius: BorderRadius.circular(300)
-                ),
-              ),
-            ),
-            AnimatedSwitcher(
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return DualTransitionBuilder(
-                  animation: animation,
-                  forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                    final  customAnimation =
-                    Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
-                        CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
-                    );
-                    return SlideTransition(position: customAnimation, child: child,);
-                  },
-                  reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                    final  customAnimation =
-                    Tween<double>(begin: 1.0, end: 1.0).animate(
-                        CurvedAnimation(parent: animation, curve: Curves.easeInSine)
-                    );
-                    return FadeTransition(opacity: customAnimation, child: child,);
-                  },
-                  child: child,
-                );
-              },
-              duration: Duration(milliseconds: 500),
-              child: _pageToDisplay,
-            ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: curPage.pageIndex,
-          elevation: 0,
-          backgroundColor: appTheme.bottomNavBgColor,
-          type : BottomNavigationBarType.fixed,
-          selectedItemColor: appTheme.textSecondaryColor,
-          unselectedItemColor: appTheme.disabledCardBorderColor,
-          items: navLinks.map((link)=> BottomNavigationBarItem(
-              icon: Icon(link.pageIcon),
-              label: link.pageTitle
-          )
-          ).toList(),
-          onTap: (index){
-            Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(index);
-          },
-        ),
-      ),
+          );
+        }
+        else{
+          return LoadingPage();
+        }
+      },
     );
   }
 }
