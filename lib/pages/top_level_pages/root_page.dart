@@ -124,8 +124,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
               titlePadding: EdgeInsets.only(top: 12),
               subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
               buttonText: 'Back to Home',
-              titleText: op == 'pro' ? mainData.proSubSuccessHead : 'License Ended',
-              subtitleText: op == 'pro' ? mainData.proSubSuccessBody : 'Your PRO Subscription has ended. We hope you enjoyed the features, and wish you the best of luck in your breathing journey!',
+              titleText: op == 'pro' ? mainData.proSubSuccessHead : mainData.proSubEndHead,
+              subtitleText: op == 'pro' ? mainData.proSubSuccessBody : mainData.proSubEndBody,
               headerIcon: Icons.support_agent,
               headerBgColor: appTheme.brandPrimaryColor,
               buttonColor: appTheme.brandPrimaryColor,
@@ -268,7 +268,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                       height: 650,
                       width: 650,
                       decoration: BoxDecoration(
-                          color: appTheme.brandSecondaryColor,
+                          color: appTheme.decorationPrimaryColor,
                           borderRadius: BorderRadius.circular(300)
                       ),
                     ),
@@ -279,7 +279,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                       height: 650,
                       width: 650,
                       decoration: BoxDecoration(
-                          color: appTheme.decorationPrimaryColor,
+                          color: appTheme.brandSecondaryColor,
                           borderRadius: BorderRadius.circular(300)
                       ),
                     ),

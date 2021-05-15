@@ -1,4 +1,0 @@
-{
-  "/users/:id": "/users/:id",
-  "/techniques/:techniqueID": "/techniques?techniqueID=:techniqueID"
-}

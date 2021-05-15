@@ -45,6 +45,9 @@ class MainData{
   String supportEmail;
   int maxSessionDurationInMinutes;
   List<String> availableProducts;
+  String storeNotAvailableText;
+  String proSubEndHead;
+  String proSubEndBody;
 
   MainData({this.pages, this.images, this.inhaleExhaleTypes,
     this.popupWaitTime, this.themes, this.appBarHeight, this.emailPageSubmitBtnText,
@@ -59,7 +62,7 @@ class MainData{
     this.emailSubSuccessBody, this.emailSubSuccessHead, this.proSubSuccessBody,
     this.proSubSuccessHead, this.music, this.sounds, this.emailSubscriptionTypes,
     this.disclaimerNotes, this.supportEmail, this.maxSessionDurationInMinutes,
-    this.availableProducts});
+    this.availableProducts, this.storeNotAvailableText, this.proSubEndHead, this.proSubEndBody});
 
   factory MainData.fromSnapShot(MainData tempMainData, DocumentSnapshot snapshot, String op){
     if(op == 'constants'){
@@ -97,6 +100,9 @@ class MainData{
           .map((disclaimerNote) => disclaimerNote.toString()).toList();
       tempMainData.supportEmail = snapshot.data['supportEmail'] ?? '';
       tempMainData.maxSessionDurationInMinutes = snapshot.data['maxSessionDurationInMinutes'] ?? 60;
+      tempMainData.storeNotAvailableText = snapshot.data['storeNotAvailableText'] ?? '';
+      tempMainData.proSubEndHead = snapshot.data['proSubEndHead'] ?? '';
+      tempMainData.proSubEndBody = snapshot.data['proSubEndBody'] ?? '';
     }
     else if(op == 'meta'){
       Iterable pages = snapshot['pages'] ?? [];
@@ -179,5 +185,8 @@ class MainData{
     this.supportEmail = mainData.supportEmail;
     this.maxSessionDurationInMinutes = mainData.maxSessionDurationInMinutes;
     this.availableProducts = mainData.availableProducts;
+    this.storeNotAvailableText = mainData.storeNotAvailableText;
+    this.proSubEndHead = mainData.proSubEndHead;
+    this.proSubEndBody = mainData.proSubEndBody;
   }
 }

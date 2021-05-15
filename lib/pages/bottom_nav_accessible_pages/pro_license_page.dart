@@ -185,7 +185,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 0, left: 16, right: 16),
                     child: Text(
-                      'Your device does not support our purchase management technology. Please update your device or try again on a different device.,',
+                      mainData.storeNotAvailableText,
                       style: TextStyle(
                         fontSize: 22,
                         color: appTheme.textPrimaryColor,

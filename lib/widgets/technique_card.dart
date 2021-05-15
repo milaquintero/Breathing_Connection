@@ -92,7 +92,6 @@ class _TechniqueCardState extends State<TechniqueCard> {
           onTap: (){},
           leading: shouldBeEnabled ? PopupMenuButton(
             child: IconButton(
-              onPressed: (){},
               icon: Icon(
                 Icons.more_vert,
                 size: 36,

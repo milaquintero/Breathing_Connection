@@ -255,6 +255,9 @@ class _HomePageState extends State<HomePage>{
                     viewTechniqueDetails: (Technique selectedTechnique){
                       handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
                     },
+                    beginTechniqueInEnvironment: (Technique selectedTechnique){
+                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                    }
                   ),
                   TechniqueSection(
                     headerText: mainData.emergencySessionHeaderText,
@@ -269,6 +272,9 @@ class _HomePageState extends State<HomePage>{
                     viewTechniqueDetails: (Technique selectedTechnique){
                       handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
                     },
+                    beginTechniqueInEnvironment: (Technique selectedTechnique){
+                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                    }
                   ),
                   if (curUser.hasFullAccess) TechniqueSection(
                     headerText: mainData.challengeSessionHeaderText,
@@ -283,6 +289,9 @@ class _HomePageState extends State<HomePage>{
                     viewTechniqueDetails: (Technique selectedTechnique){
                       handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
                     },
+                    beginTechniqueInEnvironment: (Technique selectedTechnique){
+                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                    }
                   ),
                   if (curUser.hasFullAccess && curUser.customTechniqueIDs.isNotEmpty) TechniqueSection(
                     headerText: mainData.customSessionHeaderText,
@@ -297,6 +306,9 @@ class _HomePageState extends State<HomePage>{
                     viewTechniqueDetails: (Technique selectedTechnique){
                       handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
                     },
+                    beginTechniqueInEnvironment: (Technique selectedTechnique){
+                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                    }
                   )
                 ],
               );
