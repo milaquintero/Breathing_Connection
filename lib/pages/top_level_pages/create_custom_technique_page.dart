@@ -129,7 +129,7 @@ class _CreateCustomTechniquePageState extends State<CreateCustomTechniquePage> {
                         minNum: 1,
                         initialValue: widget.isEditing ? widget.selectedTechnique.minSessionDurationInMinutes.toString() : null,
                         onSaved: (firstHoldDuration){
-                          customTechniqueFormModel.minSessionDurationInMinutes = int.parse(firstHoldDuration);
+                          customTechniqueFormModel.minSessionDurationInMinutes = double.parse(firstHoldDuration);
                         }
                     ),
                     //Breathing Rhythm

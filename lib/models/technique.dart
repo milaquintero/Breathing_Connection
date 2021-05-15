@@ -13,7 +13,7 @@ class Technique{
   List<String> tags;
   List<String> categoryDependencies;
   String associatedUserID;
-  int minSessionDurationInMinutes;
+  double minSessionDurationInMinutes;
   String associatedVideo;
   Technique({this.techniqueID, this.title, this.description, this.isPaidVersionOnly,
     this.inhaleDuration, this.firstHoldDuration,
@@ -38,7 +38,7 @@ class Technique{
       associatedUserID: json['associatedUserID'],
       tags: jsonTags.map((jsonTag) => jsonTag.toString()).toList(),
       categoryDependencies: jsonCategoryDependencies.map((jsonCategory) => jsonCategory.toString()).toList(),
-      minSessionDurationInMinutes: json['minSessionDurationInMinutes'],
+      minSessionDurationInMinutes: double.parse(json['minSessionDurationInMinutes'].toString() ?? "0.0"),
       associatedVideo: json['associatedVideo']
     );
   }

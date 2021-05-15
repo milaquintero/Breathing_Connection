@@ -11,7 +11,7 @@ class CustomTechniqueFormModel{
   int associatedUserID;
   int inhaleTypeID;
   int exhaleTypeID;
-  int minSessionDurationInMinutes;
+  double minSessionDurationInMinutes;
   CustomTechniqueFormModel({this.title, this.assetImage, this.isPaidVersionOnly = true,
   this.secondHoldDuration, this.exhaleDuration, this.inhaleDuration, this.firstHoldDuration,
   this.description, this.selectedTags, this.associatedUserID,
