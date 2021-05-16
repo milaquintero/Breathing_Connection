@@ -310,17 +310,17 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                         alignment: Alignment.topCenter,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(top: 48),
+                                            padding: EdgeInsets.only(top: 68),
                                             child: Text(
                                               'Starting Session',
                                               style: TextStyle(
                                                   color: appTheme.textSecondaryColor,
-                                                  fontSize: 56
+                                                  fontSize: 64
                                               ),
                                             ),
                                           ),
                                           Container(
-                                            margin: EdgeInsets.only(top: 80),
+                                            margin: EdgeInsets.only(top: 112),
                                             child: Stack(
                                               alignment: Alignment.center,
                                               children: [
@@ -330,12 +330,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                     countdown.toString(),
                                                     style: TextStyle(
                                                         color: appTheme.textSecondaryColor,
-                                                        fontSize: 84
+                                                        fontSize: 72
                                                     ),
                                                   ),
                                                 ),
                                                 SpinKitDualRing(
-                                                  size: 160,
+                                                  size: 120,
                                                   color: appTheme.brandPrimaryColor,
                                                 ),
                                               ],
