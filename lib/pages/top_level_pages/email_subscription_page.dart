@@ -1,4 +1,5 @@
 import 'package:breathing_connection/models/app_theme.dart';
+import 'package:breathing_connection/models/current_page_handler.dart';
 import 'package:breathing_connection/models/email_form_model.dart';
 import 'package:breathing_connection/models/email_list_entry.dart';
 import 'package:breathing_connection/models/main_data.dart';
@@ -270,6 +271,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                                           subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
                                           buttonText: 'Back to Main',
                                           cbFunction: (){
+                                            Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
                                             Navigator.of(context).pushReplacementNamed("/root");
                                           },
                                           titleText: mainData.emailSubSuccessHead,

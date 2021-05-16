@@ -42,9 +42,6 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   //page to display
   Widget _pageToDisplay;
   Offset _transitionOffset;
-  Future<void> getUserWithData() async{
-    curUser = await UserService().userWithData.first;
-  }
 
   //in app purchase connection instance
   InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
@@ -167,14 +164,12 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   }
   Future<void> initWithDependencies() async{
     if(!areDependenciesInitialized){
-      //get user's selected theme based on themeID from user settings
-      await getUserWithData();
+      //initialize purchase data
+      _initializePurchaseData();
       //cancel all previous alarms
       Utility.cancelAllAlarms();
       //schedule daily reminders if setting is on
       Utility.scheduleDailyReminders(curUser, mainData);
-      //initialize purchase data
-      _initializePurchaseData();
       //if user has full access remove pro license page from nav links
       if(curUser.hasFullAccess && mainData.pages.isNotEmpty){
         mainData.pages.removeWhere((page) => page.pageRoute == '/pro');
@@ -187,7 +182,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   }
   void updatePageInView(){
     //handler for current page (used by bottom nav)
-    curPage = Provider.of<CurrentPageHandler>(context);
+    curPage = Provider.of<CurrentPageHandler>(context, listen: true);
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
     if(navLinks.isNotEmpty && curPage != null && appTheme != null){
@@ -221,6 +216,11 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
     }
   }
   @override
+  void initState() {
+    super.initState();
+    areDependenciesInitialized = false;
+  }
+  @override
   void dispose() {
     super.dispose();
     _subscription?.cancel();
@@ -228,88 +228,99 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: MainDataService().mainData,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          //app main data
-          mainData = snapshot.data;
-          /*
+        stream: UserService().userWithData,
+        builder: (context, userSnapshot){
+          if(userSnapshot.hasData){
+            curUser = userSnapshot.data;
+            return StreamBuilder(
+              stream: MainDataService().mainData,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  //app main data
+                  mainData = snapshot.data;
+                  /*
           initial setup with async dependencies
           flag prevents from running more than once
           depends on main data
           */
-          initWithDependencies();
-          //update displayed page
-          updatePageInView();
-          return MultiProvider(
-            providers: [
-              StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: mainData),
-              StreamProvider<User>.value(value: UserService().userWithData, initialData: curUser)
-            ],
-            child: Scaffold(
-              backgroundColor: appTheme.brandPrimaryColor,
-              body: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandPrimaryColor, Colors.blueGrey[400], 0.1), appTheme.brandPrimaryColor],
-                        center: Alignment(-10.5, 0.8),
-                        focal: Alignment(0.3, -0.1),
-                        focalRadius: 3.5,
+                  initWithDependencies();
+                  //update displayed page
+                  updatePageInView();
+                  return MultiProvider(
+                    providers: [
+                      StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: mainData),
+                      StreamProvider<User>.value(value: UserService().userWithData, initialData: curUser)
+                    ],
+                    child: Scaffold(
+                      backgroundColor: appTheme.brandPrimaryColor,
+                      body: Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: RadialGradient(
+                                colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandPrimaryColor, Colors.blueGrey[400], 0.1), appTheme.brandPrimaryColor],
+                                center: Alignment(-10.5, 0.8),
+                                focal: Alignment(0.3, -0.1),
+                                focalRadius: 3.5,
+                              ),
+                            ),
+                          ),
+                          AnimatedSwitcher(
+                            transitionBuilder: (Widget child, Animation<double> animation) {
+                              return DualTransitionBuilder(
+                                animation: animation,
+                                forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                                  final  customAnimation =
+                                  Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
+                                      CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
+                                  );
+                                  return SlideTransition(position: customAnimation, child: child,);
+                                },
+                                reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                                  final  customAnimation =
+                                  Tween<double>(begin: 1.0, end: 1.0).animate(
+                                      CurvedAnimation(parent: animation, curve: Curves.easeInSine)
+                                  );
+                                  return FadeTransition(opacity: customAnimation, child: child,);
+                                },
+                                child: child,
+                              );
+                            },
+                            duration: Duration(milliseconds: 500),
+                            child: _pageToDisplay,
+                          ),
+                        ],
                       ),
+                      bottomNavigationBar: navLinks.isNotEmpty ? BottomNavigationBar(
+                        currentIndex: curPage.pageIndex,
+                        elevation: 0,
+                        backgroundColor: appTheme.bottomNavBgColor,
+                        type : BottomNavigationBarType.fixed,
+                        selectedItemColor: appTheme.textSecondaryColor,
+                        unselectedItemColor: appTheme.disabledCardBorderColor,
+                        items: navLinks.map((link)=> BottomNavigationBarItem(
+                            icon: Icon(link.pageIcon),
+                            label: link.pageTitle
+                        )
+                        ).toList(),
+                        onTap: (index){
+                          Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(index);
+                        },
+                      ) : Container(),
                     ),
-                  ),
-                  AnimatedSwitcher(
-                    transitionBuilder: (Widget child, Animation<double> animation) {
-                      return DualTransitionBuilder(
-                        animation: animation,
-                        forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                          final  customAnimation =
-                          Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
-                              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
-                          );
-                          return SlideTransition(position: customAnimation, child: child,);
-                        },
-                        reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                          final  customAnimation =
-                          Tween<double>(begin: 1.0, end: 1.0).animate(
-                              CurvedAnimation(parent: animation, curve: Curves.easeInSine)
-                          );
-                          return FadeTransition(opacity: customAnimation, child: child,);
-                        },
-                        child: child,
-                      );
-                    },
-                    duration: Duration(milliseconds: 500),
-                    child: _pageToDisplay,
-                  ),
-                ],
-              ),
-              bottomNavigationBar: navLinks.isNotEmpty ? BottomNavigationBar(
-                currentIndex: curPage.pageIndex,
-                elevation: 0,
-                backgroundColor: appTheme.bottomNavBgColor,
-                type : BottomNavigationBarType.fixed,
-                selectedItemColor: appTheme.textSecondaryColor,
-                unselectedItemColor: appTheme.disabledCardBorderColor,
-                items: navLinks.map((link)=> BottomNavigationBarItem(
-                    icon: Icon(link.pageIcon),
-                    label: link.pageTitle
-                )
-                ).toList(),
-                onTap: (index){
-                  Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(index);
-                },
-              ) : Container(),
-            ),
-          );
+                  );
+                }
+                else{
+                  return LoadingPage();
+                }
+              },
+            );
+          }
+          else{
+            return LoadingPage();
+          }
         }
-        else{
-          return LoadingPage();
-        }
-      },
     );
   }
 }

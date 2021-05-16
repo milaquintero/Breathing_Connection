@@ -43,8 +43,10 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   VideoPlayerController _videoController;
   //video player future
   Future<void> _initializeVideoPlayerFuture;
-  //track user selected session length (default to 5 min)
+  //track user selected session length in minutes (default to 5 min)
   int sessionLengthInMinutes = 5;
+  //track user selected session length in seconds (default to 5 min)
+  int sessionLengthInSeconds = 300;
   //nav links for available bottom nav pages
   List<NavLink> navLinks;
   //stores match for nav link home page
@@ -63,19 +65,35 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   AssetHandler assetHandler;
   //track if dependencies are loaded
   bool dependenciesAreLoaded = false;
+  //breathing rhythm counter (custom technique)
+  int breathingRhythmCounter = 0;
+  //current breathing rhythm section display (custom technique)
+  String breathingRhythmSectionDisplay = "";
+  //list of seconds that match inhale (custom technique)
+  List<int> inhaleMatches;
+  //list of seconds that match inhale (custom technique)
+  List<int> firstHoldMatches;
+  //list of seconds that match inhale (custom technique)
+  List<int> exhaleMatches;
+  //list of seconds that match inhale (custom technique)
+  List<int> secondHoldMatches;
+  //total breathing rhythm duration (custom technique)
+  int breathingRhythmLength;
+  //count for each individual breathing rhythm section (custom technique)
+  int breathingRhythmSectionCounter = 0;
   void sendToHomePage(){
     Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
     Navigator.pushReplacementNamed(context, '/root');
   }
   void pauseContent(){
     _sessionTimer?.cancel();
-    if(secondsElapsedDuringSession != sessionLengthInMinutes){
+    if(secondsElapsedDuringSession != sessionLengthInSeconds){
       _videoController?.pause();
     }
   }
   void playContent(){
     initializeSessionTimer();
-    if(secondsElapsedDuringSession != sessionLengthInMinutes){
+    if(secondsElapsedDuringSession != sessionLengthInSeconds){
       _videoController?.play();
     }
   }
@@ -87,11 +105,47 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
     //set up timer
     _sessionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if (secondsElapsedDuringSession < sessionLengthInMinutes) {
+        if (secondsElapsedDuringSession < sessionLengthInSeconds) {
           ++secondsElapsedDuringSession;
+          //handle custom technique display
+          if(techniqueToDisplay.associatedUserID != null){
+            ++breathingRhythmCounter;
+            //handle resetting
+            if(breathingRhythmCounter == (breathingRhythmLength + 1)){
+              breathingRhythmCounter = 1;
+            }
+            //handle inhale duration
+            if(inhaleMatches.contains(breathingRhythmCounter)) {
+              breathingRhythmSectionDisplay = "Breathe In";
+            }
+            //handle first hold duration
+            else if(firstHoldMatches.contains(breathingRhythmCounter)){
+              breathingRhythmSectionDisplay = "Hold";
+            }
+            //handle exhale duration
+            else if(exhaleMatches.contains(breathingRhythmCounter)){
+              breathingRhythmSectionDisplay = "Breathe Out";
+            }
+            //handle second hold duration
+            else if(secondHoldMatches.contains(breathingRhythmCounter)){
+              breathingRhythmSectionDisplay = "Hold";
+            }
+            //handle beginning of each section
+            if(
+            breathingRhythmCounter == inhaleMatches[0] ||
+            breathingRhythmCounter == firstHoldMatches[0] ||
+            breathingRhythmCounter == exhaleMatches[0] ||
+            breathingRhythmCounter == secondHoldMatches[0]
+            ){
+              breathingRhythmSectionCounter = 0;
+            }
+            ++breathingRhythmSectionCounter;
+          }
         } else {
-          _videoController.dispose();
-          _sessionTimer.cancel();
+          if(_videoController != null){
+            _videoController?.dispose();
+          }
+          _sessionTimer?.cancel();
         }
       });
     });
@@ -107,7 +161,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
         if (countdown > 0) {
           --countdown;
         } else {
-          _countdownTimer.cancel();
+          _countdownTimer?.cancel();
         }
       });
     });
@@ -115,7 +169,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   @override
   void dispose() {
     super.dispose();
-    if(secondsElapsedDuringSession != sessionLengthInMinutes && _videoController != null){
+    if(secondsElapsedDuringSession != sessionLengthInSeconds && _videoController != null){
       // Ensure disposing of the VideoPlayerController to free up resources.
       _videoController?.dispose();
     }
@@ -164,6 +218,24 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
         //initialize video player
         _initializeVideoPlayerFuture = _videoController.initialize();
       }
+      else{
+        //list of seconds that match inhale
+        inhaleMatches = List<int>.generate(techniqueToDisplay.inhaleDuration, (i) => i + 1);
+        //list of seconds that match first hold
+        firstHoldMatches = List<int>.generate(techniqueToDisplay.firstHoldDuration,
+                (i) => (i + 1) + techniqueToDisplay.inhaleDuration);
+        //list of seconds that match exhale
+        exhaleMatches = List<int>.generate(techniqueToDisplay.exhaleDuration,
+                (i) => (i + 1) + techniqueToDisplay.inhaleDuration + techniqueToDisplay.firstHoldDuration);
+        //list of seconds that match second hold
+        secondHoldMatches = List<int>.generate(techniqueToDisplay.secondHoldDuration,
+                (i) => (i + 1) + techniqueToDisplay.inhaleDuration + techniqueToDisplay.firstHoldDuration + techniqueToDisplay.exhaleDuration);
+        //total breathing rhythm duration
+        breathingRhythmLength = techniqueToDisplay.inhaleDuration +
+                                techniqueToDisplay.firstHoldDuration +
+                                techniqueToDisplay.exhaleDuration +
+                                techniqueToDisplay.secondHoldDuration;
+      }
       //update flag
       dependenciesAreLoaded = true;
     }
@@ -187,7 +259,10 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                         child: FutureBuilder(
                           future: _initializeVideoPlayerFuture,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            //show display once video is ready
+                            //or show if technique is custom
+                            if (snapshot.connectionState == ConnectionState.done ||
+                            techniqueToDisplay.associatedUserID != null) {
                               return OrientationBuilder(
                                 builder: (context, orientation) {
                                   //handle portrait mode
@@ -234,20 +309,21 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                   onChanged: (double value) {
                                                     setState(() {
                                                       sessionLengthInMinutes = value.round();
+                                                      sessionLengthInSeconds = sessionLengthInMinutes * 60;
                                                     });
                                                   },
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          if(secondsElapsedDuringSession < sessionLengthInMinutes) Text(
+                                          if(secondsElapsedDuringSession < sessionLengthInSeconds) Text(
                                             'Rotate your device to landscape mode to begin the session.',
                                             style: TextStyle(
                                                 fontSize: 28,
                                                 color: appTheme.textSecondaryColor
                                             ),
                                           ),
-                                          if(secondsElapsedDuringSession == sessionLengthInMinutes) Column(
+                                          if(secondsElapsedDuringSession == sessionLengthInSeconds) Column(
                                             children: [
                                               Padding(
                                                 padding: EdgeInsets.only(bottom: 24),
@@ -320,7 +396,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                             ),
                                           ),
                                           Container(
-                                            margin: EdgeInsets.only(top: 112),
+                                            margin: EdgeInsets.only(top: 104),
                                             child: Stack(
                                               alignment: Alignment.center,
                                               children: [
@@ -346,9 +422,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                     }
                                     else{
                                       //start/resume timer if technique isn't custom
-                                      if(secondsElapsedDuringSession < sessionLengthInMinutes &&
+                                      if(secondsElapsedDuringSession < sessionLengthInSeconds &&
                                       techniqueToDisplay.associatedUserID == null){
                                         playContent();
+                                      }
+                                      else if(techniqueToDisplay.associatedUserID != null){
+                                        initializeSessionTimer();
                                       }
                                       return Stack(
                                         alignment: Alignment.topCenter,
@@ -357,11 +436,11 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                             child: FittedBox(
                                               fit: BoxFit.cover,
                                               child: SizedBox(
-                                                width: _videoController?.value?.size?.width ?? 0,
-                                                height: _videoController?.value?.size?.height ?? 0,
+                                                width: _videoController?.value?.size?.width ?? MediaQuery.of(context).size.width,
+                                                height: _videoController?.value?.size?.height ?? MediaQuery.of(context).size.height,
                                                 child:
                                                 //handle display if session isn't over
-                                                secondsElapsedDuringSession < sessionLengthInMinutes ?
+                                                secondsElapsedDuringSession < sessionLengthInSeconds ?
                                                 //check if technique is custom
                                                 techniqueToDisplay.associatedUserID != null ?
                                                 //custom technique display
@@ -374,9 +453,72 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                       focalRadius: 3.5,
                                                     ),
                                                   ),
-                                                  child: Stack(
+                                                  child: breathingRhythmCounter == 0 ?
+                                                  //initial display for custom technique
+                                                  Center(
+                                                    child: Text(
+                                                      'Begin',
+                                                      style: TextStyle(
+                                                          color: appTheme.textPrimaryColor,
+                                                          fontSize: 72
+                                                      ),
+                                                    ),
+                                                  ) :
+                                                  //display for when counting begins
+                                                  Stack(
+                                                    alignment: Alignment.topCenter,
                                                     children: [
-                                                      Text('custom technique')
+                                                      //decoration animation
+                                                      Positioned(
+                                                        left: -120,
+                                                        top: 172,
+                                                        child: SpinKitFadingFour(
+                                                          size: 2048,
+                                                          color: appTheme.textPrimaryColor.withOpacity(0.03),
+                                                        ),
+                                                      ),
+                                                      //decoration animation
+                                                      Positioned(
+                                                        right: -120,
+                                                        top: -272,
+                                                        child: SpinKitFadingGrid(
+                                                          size: 2048,
+                                                          color: appTheme.textPrimaryColor.withOpacity(0.03),
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Text(
+                                                            breathingRhythmSectionDisplay,
+                                                            style: TextStyle(
+                                                                color: appTheme.textPrimaryColor,
+                                                                fontSize: 64
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 24,),
+                                                          CircleAvatar(
+                                                            backgroundColor: appTheme.brandAccentColor,
+                                                            foregroundColor: appTheme.textPrimaryColor,
+                                                            radius: 84,
+                                                            child: Stack(
+                                                              alignment: Alignment.center,
+                                                              children: [
+                                                                Positioned(
+                                                                  top: 28,
+                                                                  child: Text(
+                                                                    breathingRhythmSectionCounter.toString(),
+                                                                    style: TextStyle(
+                                                                        color: appTheme.textPrimaryColor,
+                                                                        fontSize: 80
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
                                                 ) :
@@ -391,14 +533,14 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                           'Session Complete',
                                                           style: TextStyle(
                                                               color: appTheme.textSecondaryColor,
-                                                              fontSize: 132
+                                                              fontSize: 72
                                                           ),
                                                         ),
-                                                        SizedBox(height: 52,),
+                                                        SizedBox(height: 32,),
                                                         Text(
                                                           'Rotate your device back to portrait mode.',
                                                           style: TextStyle(
-                                                            fontSize: 82,
+                                                            fontSize: 36,
                                                             color: appTheme.textSecondaryColor,
                                                           ),
                                                           textAlign: TextAlign.center,
