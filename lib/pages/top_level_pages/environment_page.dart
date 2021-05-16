@@ -15,6 +15,7 @@ import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -50,8 +51,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   NavLink homePage;
   //timer to track session time
   Timer _sessionTimer;
+  //timer for countdown before session begins
+  Timer _countdownTimer;
   //seconds elapsed during session
   int secondsElapsedDuringSession = 0;
+  //track three second countdown
+  int countdown = 3;
   //path for music source after downloading
   String musicSourcePath;
   //CDN asset handler
@@ -69,12 +74,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
     }
   }
   void playContent(){
-    initializeTimer();
+    initializeSessionTimer();
     if(secondsElapsedDuringSession != sessionLengthInMinutes){
       _videoController?.play();
     }
   }
-  void initializeTimer(){
+  void initializeSessionTimer(){
     if(_sessionTimer != null){
       _sessionTimer?.cancel();
       _sessionTimer = null;
@@ -91,6 +96,22 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
       });
     });
   }
+  void initializeCountdownTimer(){
+    if(_countdownTimer != null){
+      _countdownTimer?.cancel();
+      _countdownTimer = null;
+    }
+    //set up timer
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (countdown > 0) {
+          --countdown;
+        } else {
+          _countdownTimer.cancel();
+        }
+      });
+    });
+  }
   @override
   void dispose() {
     super.dispose();
@@ -99,6 +120,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
       _videoController?.dispose();
     }
     _sessionTimer?.cancel();
+    _countdownTimer?.cancel();
   }
   void initializeDependencies() async{
     if(!dependenciesAreLoaded){
@@ -276,49 +298,92 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                   }
                                   //handle landscape mode
                                   else{
-                                    //start/resume timer
-                                    if(secondsElapsedDuringSession < sessionLengthInMinutes){
-                                      playContent();
-                                    }
-                                    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-                                    return Stack(
-                                      alignment: Alignment.topCenter,
-                                      children: [
-                                        SizedBox.expand(
-                                          child: FittedBox(
-                                            fit: BoxFit.cover,
-                                            child: SizedBox(
-                                              width: _videoController.value.size?.width ?? 0,
-                                              height: _videoController.value.size?.height ?? 0,
-                                              child: secondsElapsedDuringSession < sessionLengthInMinutes ?
-                                              VideoPlayer(_videoController) : Center(
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Text(
-                                                        'Session Complete',
-                                                        style: TextStyle(
-                                                            color: appTheme.textSecondaryColor,
-                                                            fontSize: 84
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 52,),
-                                                      Text(
-                                                        'Rotate your device back to portrait mode.',
-                                                        style: TextStyle(
-                                                          fontSize: 56,
-                                                          color: appTheme.textSecondaryColor,
-                                                        ),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ],
-                                                  )
+                                  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+                                  if(countdown > 0){
+                                      //start countdown timer
+                                      initializeCountdownTimer();
+                                      return Stack(
+                                        alignment: Alignment.topCenter,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 20),
+                                            child: Text(
+                                              'Starting Session',
+                                              style: TextStyle(
+                                                  color: appTheme.textSecondaryColor,
+                                                  fontSize: 56
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    );
+                                          Container(
+                                            margin: EdgeInsets.only(top: 52),
+                                            child: Stack(
+                                              children: [
+                                                Center(
+                                                  child: Text(
+                                                    countdown.toString(),
+                                                    style: TextStyle(
+                                                        color: appTheme.textSecondaryColor,
+                                                        fontSize: 84
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: SpinKitCircle(
+                                                    size: 280,
+                                                    color: appTheme.brandPrimaryColor,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }
+                                    else{
+                                      //start/resume timer
+                                      if(secondsElapsedDuringSession < sessionLengthInMinutes){
+                                        playContent();
+                                      }
+                                      return Stack(
+                                        alignment: Alignment.topCenter,
+                                        children: [
+                                          SizedBox.expand(
+                                            child: FittedBox(
+                                              fit: BoxFit.cover,
+                                              child: SizedBox(
+                                                width: _videoController.value.size?.width ?? 0,
+                                                height: _videoController.value.size?.height ?? 0,
+                                                child: secondsElapsedDuringSession < sessionLengthInMinutes ?
+                                                VideoPlayer(_videoController) : Center(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          'Session Complete',
+                                                          style: TextStyle(
+                                                              color: appTheme.textSecondaryColor,
+                                                              fontSize: 140
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 52,),
+                                                        Text(
+                                                          'Rotate your device back to portrait mode.',
+                                                          style: TextStyle(
+                                                            fontSize: 88,
+                                                            color: appTheme.textSecondaryColor,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    )
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
                                   }
                                 },
                               );
