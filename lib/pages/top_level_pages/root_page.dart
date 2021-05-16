@@ -248,30 +248,44 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
             ],
             child: Scaffold(
               backgroundColor: appTheme.brandPrimaryColor,
-              body:
-              AnimatedSwitcher(
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return DualTransitionBuilder(
-                    animation: animation,
-                    forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                      final  customAnimation =
-                      Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
-                          CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
+              body: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandPrimaryColor, Colors.blueGrey[400], 0.1), appTheme.brandPrimaryColor],
+                        center: Alignment(-10.5, 0.8),
+                        focal: Alignment(0.3, -0.1),
+                        focalRadius: 3.5,
+                      ),
+                    ),
+                  ),
+                  AnimatedSwitcher(
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return DualTransitionBuilder(
+                        animation: animation,
+                        forwardBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                          final  customAnimation =
+                          Tween<Offset>(begin: _transitionOffset, end: Offset.zero).animate(
+                              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic)
+                          );
+                          return SlideTransition(position: customAnimation, child: child,);
+                        },
+                        reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
+                          final  customAnimation =
+                          Tween<double>(begin: 1.0, end: 1.0).animate(
+                              CurvedAnimation(parent: animation, curve: Curves.easeInSine)
+                          );
+                          return FadeTransition(opacity: customAnimation, child: child,);
+                        },
+                        child: child,
                       );
-                      return SlideTransition(position: customAnimation, child: child,);
                     },
-                    reverseBuilder: (BuildContext context, Animation<double> animation, Widget child){
-                      final  customAnimation =
-                      Tween<double>(begin: 1.0, end: 1.0).animate(
-                          CurvedAnimation(parent: animation, curve: Curves.easeInSine)
-                      );
-                      return FadeTransition(opacity: customAnimation, child: child,);
-                    },
-                    child: child,
-                  );
-                },
-                duration: Duration(milliseconds: 500),
-                child: _pageToDisplay,
+                    duration: Duration(milliseconds: 500),
+                    child: _pageToDisplay,
+                  ),
+                ],
               ),
               bottomNavigationBar: navLinks.isNotEmpty ? BottomNavigationBar(
                 currentIndex: curPage.pageIndex,

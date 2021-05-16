@@ -115,7 +115,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   @override
   void dispose() {
     super.dispose();
-    if(secondsElapsedDuringSession != sessionLengthInMinutes){
+    if(secondsElapsedDuringSession != sessionLengthInMinutes && _videoController != null){
       // Ensure disposing of the VideoPlayerController to free up resources.
       _videoController?.dispose();
     }
@@ -139,28 +139,31 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
       //get inhale/exhale data from list in main data based on inhaleExhaleTypeID
       inhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.inhaleTypeID);
       exhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.exhaleTypeID);
-      //determine the asset video based on user settings
-      String videoSuffix = "";
-      if(!curUser.userSettings.breathingSound && !curUser.userSettings.backgroundSound){
-        videoSuffix = "_no_music_no_sound";
+      //only use video if technique isn't custom
+      if(techniqueToDisplay.associatedUserID == null){
+        //determine the asset video based on user settings
+        String videoSuffix = "";
+        if(!curUser.userSettings.breathingSound && !curUser.userSettings.backgroundSound){
+          videoSuffix = "_no_music_no_sound";
+        }
+        else if(curUser.userSettings.breathingSound && !curUser.userSettings.backgroundSound){
+          videoSuffix = "_no_music_with_sound";
+        }
+        else if(!curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
+          videoSuffix = "_with_music_no_sound";
+        }
+        else if(curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
+          videoSuffix = "_with_music_with_sound";
+        }
+        //load appropriate video for technique
+        _videoController = VideoPlayerController.network(
+          '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',
+        );
+        //video will loop until session completes
+        _videoController.setLooping(true);
+        //initialize video player
+        _initializeVideoPlayerFuture = _videoController.initialize();
       }
-      else if(curUser.userSettings.breathingSound && !curUser.userSettings.backgroundSound){
-        videoSuffix = "_no_music_with_sound";
-      }
-      else if(!curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
-        videoSuffix = "_with_music_no_sound";
-      }
-      else if(curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
-        videoSuffix = "_with_music_with_sound";
-      }
-      //load appropriate video for technique
-      _videoController = VideoPlayerController.network(
-        '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',
-      );
-      //video will loop until session completes
-      _videoController.setLooping(true);
-      //initialize video player
-      _initializeVideoPlayerFuture = _videoController.initialize();
       //update flag
       dependenciesAreLoaded = true;
     }
@@ -299,6 +302,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                   //handle landscape mode
                                   else{
                                   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+                                  //show countdown timer if session hasn't started
                                   if(countdown > 0){
                                       //start countdown timer
                                       initializeCountdownTimer();
@@ -306,7 +310,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                         alignment: Alignment.topCenter,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(top: 20),
+                                            padding: EdgeInsets.only(top: 48),
                                             child: Text(
                                               'Starting Session',
                                               style: TextStyle(
@@ -316,10 +320,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                             ),
                                           ),
                                           Container(
-                                            margin: EdgeInsets.only(top: 52),
+                                            margin: EdgeInsets.only(top: 80),
                                             child: Stack(
+                                              alignment: Alignment.center,
                                               children: [
-                                                Center(
+                                                Positioned(
+                                                  top: 92,
                                                   child: Text(
                                                     countdown.toString(),
                                                     style: TextStyle(
@@ -328,12 +334,10 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                     ),
                                                   ),
                                                 ),
-                                                Center(
-                                                  child: SpinKitCircle(
-                                                    size: 280,
-                                                    color: appTheme.brandPrimaryColor,
-                                                  ),
-                                                )
+                                                SpinKitDualRing(
+                                                  size: 160,
+                                                  color: appTheme.brandPrimaryColor,
+                                                ),
                                               ],
                                             ),
                                           )
@@ -341,8 +345,9 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                       );
                                     }
                                     else{
-                                      //start/resume timer
-                                      if(secondsElapsedDuringSession < sessionLengthInMinutes){
+                                      //start/resume timer if technique isn't custom
+                                      if(secondsElapsedDuringSession < sessionLengthInMinutes &&
+                                      techniqueToDisplay.associatedUserID == null){
                                         playContent();
                                       }
                                       return Stack(
@@ -352,10 +357,33 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                             child: FittedBox(
                                               fit: BoxFit.cover,
                                               child: SizedBox(
-                                                width: _videoController.value.size?.width ?? 0,
-                                                height: _videoController.value.size?.height ?? 0,
-                                                child: secondsElapsedDuringSession < sessionLengthInMinutes ?
-                                                VideoPlayer(_videoController) : Center(
+                                                width: _videoController?.value?.size?.width ?? 0,
+                                                height: _videoController?.value?.size?.height ?? 0,
+                                                child:
+                                                //handle display if session isn't over
+                                                secondsElapsedDuringSession < sessionLengthInMinutes ?
+                                                //check if technique is custom
+                                                techniqueToDisplay.associatedUserID != null ?
+                                                //custom technique display
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    gradient: RadialGradient(
+                                                      colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandPrimaryColor, Colors.blueGrey[400], 0.1), appTheme.brandPrimaryColor],
+                                                      center: Alignment(-10.5, 0.8),
+                                                      focal: Alignment(0.3, -0.1),
+                                                      focalRadius: 3.5,
+                                                    ),
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      Text('custom technique')
+                                                    ],
+                                                  ),
+                                                ) :
+                                                //standard technique display
+                                                VideoPlayer(_videoController) :
+                                                //session end display
+                                                Center(
                                                     child: Column(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
@@ -363,14 +391,14 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                           'Session Complete',
                                                           style: TextStyle(
                                                               color: appTheme.textSecondaryColor,
-                                                              fontSize: 140
+                                                              fontSize: 132
                                                           ),
                                                         ),
                                                         SizedBox(height: 52,),
                                                         Text(
                                                           'Rotate your device back to portrait mode.',
                                                           style: TextStyle(
-                                                            fontSize: 88,
+                                                            fontSize: 82,
                                                             color: appTheme.textSecondaryColor,
                                                           ),
                                                           textAlign: TextAlign.center,
