@@ -37,9 +37,9 @@ const String notificationFooterKey = 'footer';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //required if platform is android
-  /*if (defaultTargetPlatform == TargetPlatform.android) {
+  if (defaultTargetPlatform == TargetPlatform.android) {
     InAppPurchaseConnection.enablePendingPurchases();
-  }*/
+  }
   prefs = await SharedPreferences.getInstance();
   //set defaults to empty string for notifications
   if (!prefs.containsKey(notificationHeaderKey)) {

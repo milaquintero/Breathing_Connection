@@ -42,6 +42,8 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
   List<String> emailSubscriptionTypes = [];
   //flag for handling enabling birthday selection
   bool shouldEnableBirthday = true;
+  //track if user is email verified
+  bool isEmailVerified;
   //handle setting birthday
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -78,16 +80,6 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       });
     }
   }
-  @override
-  void initState() {
-    super.initState();
-    DateTime now = DateTime.now();
-    dateWhenThirteen = DateTime(
-      now.year - 13,
-      now.month,
-      now.day
-    );
-  }
   String formatTimestampToDisplay(Timestamp timestamp){
     DateTime tempDate = timestamp.toDate();
     return "${tempDate.month}/${tempDate.day}/${tempDate.year}";
@@ -118,11 +110,30 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
       });
     }
   }
+  void getInitDependencies() async{
+    //check if user is email verified
+    isEmailVerified = await UserService().isEmailVerified();
+  }
+  void returnToMain(){
+    Navigator.of(context).pushReplacementNamed("/root");
+  }
+  @override
+  void initState() {
+    super.initState();
+    DateTime now = DateTime.now();
+    dateWhenThirteen = DateTime(
+        now.year - 13,
+        now.month,
+        now.day
+    );
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //selected theme data
     appTheme = Provider.of<CurrentThemeHandler>(context).currentTheme;
+    //get async dependencies
+    getInitDependencies();
   }
   @override
   Widget build(BuildContext context) {
@@ -148,6 +159,70 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                   withIconHeader: true,
                   appBarColor: appTheme.brandPrimaryColor,
                   appBarHeight: mainData.appBarHeight,
+                  notification: isEmailVerified ? Container() : Container(
+                    clipBehavior: Clip.hardEdge,
+                    margin: EdgeInsets.zero,
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 28),
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        colors: [Colors.deepOrange[800], Color.lerp(Colors.deepOrange[900], Colors.deepOrange[900], 0.1), Colors.deepOrange[800]],                        center: Alignment(-10.5, 0.8),
+                        focal: Alignment(0.3, -0.1),
+                        focalRadius: 0.8,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Confirm your email to continue',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: appTheme.textPrimaryColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16,),
+                        TextButton(
+                            onPressed: () async{
+                              //resend confirmation email
+                              await UserService().resendConfirmationEmail();
+                              await showDialog(
+                                  context: context,
+                                  builder: (context){
+                                    return DialogAlert(
+                                      titlePadding: EdgeInsets.only(top: 12),
+                                      subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+                                      buttonText: 'Back to Main',
+                                      cbFunction: (){
+                                        returnToMain();
+                                      },
+                                      titleText: 'Email Confirmation',
+                                      subtitleText: 'You will be receiving an email from us within the next five minutes with instructions on confirming your email. Once you have confirmed, please sign in again into your account to view the changes.',
+                                      headerIcon: Icons.mark_email_read,
+                                      headerBgColor: appTheme.brandPrimaryColor,
+                                      buttonColor: appTheme.brandPrimaryColor,
+                                      titleTextColor: appTheme.textAccentColor,
+                                      bgColor: appTheme.bgPrimaryColor,
+                                      subtitleTextColor: appTheme.textAccentColor,
+                                    );
+                                  }
+                              );
+                            },
+                            child: Text(
+                              'Resend Confirmation',
+                              style: TextStyle(
+                                color: appTheme.textAccentColor,
+                                fontSize: 24
+                              ),
+                            ),
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            backgroundColor: appTheme.textPrimaryColor
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   form: Form(
                     key: _formKey,
                     child: Column(
@@ -254,7 +329,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                         Padding(
                           padding: EdgeInsets.only(top: 38, bottom: 24),
                           child: TextButton(
-                            onPressed: () async{
+                            onPressed: isEmailVerified ? () async{
                               //validate form
                               if(_formKey.currentState.validate() && isBirthdaySelected){
                                 //store valid entries into model
@@ -308,19 +383,19 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                                     }
                                 );
                               }
-                            },
+                            } : (){},
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                               child: Text(
                                 mainData.emailPageSubmitBtnText,
                                 style: TextStyle(
-                                    color: appTheme.textPrimaryColor,
+                                    color: isEmailVerified ? appTheme.textPrimaryColor : appTheme.disabledCardTextColor,
                                     fontSize: 24
                                 ),
                               ),
                             ),
                             style: TextButton.styleFrom(
-                                backgroundColor: appTheme.brandPrimaryColor
+                                backgroundColor: isEmailVerified ? appTheme.brandPrimaryColor : appTheme.disabledCardBgColor
                             ),
                           ),
                         ),
@@ -328,7 +403,7 @@ class _EmailSubscriptionPageState extends State<EmailSubscriptionPage> {
                           padding: EdgeInsets.only(top: 16, bottom: 68),
                           child: TextButton(
                             onPressed: () async{
-                              Navigator.of(context).pushReplacementNamed("/root");
+                              returnToMain();
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),

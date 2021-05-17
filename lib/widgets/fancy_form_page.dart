@@ -14,10 +14,11 @@ class FancyFormPage extends StatefulWidget {
   final Color decorationSecondaryColor;
   final double appBarHeight;
   final bool withAppBar;
+  final Widget notification;
   FancyFormPage({this.form, this.headerIcon, this.headerColor, this.headerIconColor,
   this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
   this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight,
-  this.withAppBar = true});
+  this.withAppBar = true, this.notification});
   @override
   _FancyFormPageState createState() => _FancyFormPageState();
 }
@@ -38,7 +39,8 @@ class _FancyFormPageState extends State<FancyFormPage> {
       decorationPrimaryColor: widget.decorationPrimaryColor,
       decorationSecondaryColor: widget.decorationSecondaryColor,
       appBarHeight: widget.appBarHeight,
-      withAppBar: widget.withAppBar
+      withAppBar: widget.withAppBar,
+      notification: widget.notification,
     );
   }
 }

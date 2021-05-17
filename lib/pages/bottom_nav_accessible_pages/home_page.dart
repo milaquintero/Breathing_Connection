@@ -112,8 +112,8 @@ class _HomePageState extends State<HomePage>{
   void handleQueueingPopups() async {
     //handle showing email confirmation dialog if user hasn't verified
     if(Utility.userJustRegistered && ModalRoute.of(context).isCurrent){
-      emailVerificationTimer = Timer(Duration(seconds: 2), (){
-        showDialog(
+      emailVerificationTimer = Timer(Duration(seconds: 2), () async{
+        await showDialog(
             context: context,
             builder: (context){
               return DialogAlert(

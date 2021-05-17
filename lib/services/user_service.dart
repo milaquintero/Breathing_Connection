@@ -275,4 +275,25 @@ class UserService {
       return false;
     }
   }
+
+  Future<bool> isEmailVerified() async{
+    try{
+      FirebaseUser firebaseUser = await _auth.currentUser();
+      return firebaseUser.isEmailVerified;
+    }
+    catch(error){
+      print(error.toString());
+      return false;
+    }
+  }
+
+  Future resendConfirmationEmail() async{
+    try{
+      FirebaseUser firebaseUser = await _auth.currentUser();
+      firebaseUser.sendEmailVerification();
+    }
+    catch(error){
+      print(error.toString());
+    }
+  }
 }

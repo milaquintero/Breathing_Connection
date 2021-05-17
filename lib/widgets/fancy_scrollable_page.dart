@@ -14,10 +14,11 @@ class FancyScrollablePage extends StatefulWidget {
   final double appBarHeight;
   final bool withAppBar;
   final List<Widget> actions;
+  final Widget notification;
   FancyScrollablePage({this.child, this.headerIcon, this.headerColor, this.headerIconColor,
     this.pageTitle, this.appBarColor, this.bgColor, this.withIconHeader = false,
     this.decorationSecondaryColor, this.decorationPrimaryColor, this.appBarHeight,
-    this.withAppBar = true, this.actions});
+    this.withAppBar = true, this.actions, this.notification});
   @override
   _FancyScrollablePageState createState() => _FancyScrollablePageState();
 }
@@ -46,7 +47,6 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
         ) : null,
         body: Container(
           color: widget.bgColor ?? Colors.blue[50],
-          padding: EdgeInsets.symmetric(horizontal: 32),
           child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
@@ -99,24 +99,35 @@ class _FancyScrollablePageState extends State<FancyScrollablePage> {
                     ),
                   )
               ),
-              ListView(
-                children: [
-                  //icon header
-                  widget.withIconHeader ? Padding(
-                    padding: EdgeInsets.only(top: 36, bottom: 16),
-                    child: CircleAvatar(
-                      backgroundColor: widget.headerColor,
-                      radius: screenHeight / 10.25,
-                      child: Icon(
-                        widget.headerIcon,
-                        size: screenHeight / 10.25,
-                        color: widget.headerIconColor,
+              MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView(
+                  children: [
+                    widget.notification != null ? widget.notification : Container(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
+                        children: [
+                          //icon header
+                          if (widget.withIconHeader) Padding(
+                            padding: EdgeInsets.only(top: 36, bottom: 16),
+                            child: CircleAvatar(
+                              backgroundColor: widget.headerColor,
+                              radius: screenHeight / 10.25,
+                              child: Icon(
+                                widget.headerIcon,
+                                size: screenHeight / 10.25,
+                                color: widget.headerIconColor,
+                              ),
+                            ),
+                          ) else Container(),
+                          //add form after icon header
+                          widget.child],
                       ),
-                    ),
-                  ) : Container(),
-                  //add form after icon header
-                  widget.child
-                ],
+                    )
+                  ],
+                ),
               ),
             ],
           ),
