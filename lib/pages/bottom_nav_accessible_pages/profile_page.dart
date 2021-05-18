@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   MainData mainData;
   Widget profileCard({IconData icon, String title, String subtitle}){
     return Container(
-        margin: EdgeInsets.only(bottom: 20),
+        margin: EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
             gradient: RadialGradient(
               colors: [appTheme.brandAccentColor, Color.lerp(appTheme.brandPrimaryColor, appTheme.brandAccentColor, 0.4), appTheme.brandPrimaryColor],
@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
             borderRadius: BorderRadius.circular(10)
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+          contentPadding: EdgeInsets.only(top: 4, left: 16, right: 32, bottom: 4),
           leading: Icon(
             icon,
             size: 36,
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
             title,
             style: TextStyle(
               color: appTheme.textPrimaryColor,
-              fontSize: 24,
+              fontSize: 22,
             ),
             textAlign: TextAlign.center,
           ),
@@ -57,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: appTheme.textPrimaryColor,
-              fontSize: 22,
+              fontSize: 20,
             ),
             textAlign: TextAlign.center,
           ),
@@ -88,17 +88,17 @@ class _ProfilePageState extends State<ProfilePage> {
             return FancyScrollablePage(
               withIconHeader: false,
               pageTitle: 'Profile',
-              bgColor: appTheme.bgSecondaryColor,
+              bgColor: appTheme.bgPrimaryColor,
               appBarColor: appTheme.brandPrimaryColor,
               decorationPrimaryColor: appTheme.decorationPrimaryColor,
               decorationSecondaryColor: appTheme.decorationSecondaryColor,
               appBarHeight: mainData.appBarHeight,
               child: Container(
                 margin: EdgeInsets.only(top: 36, bottom: 36),
-                padding: EdgeInsets.only(top: 32, left: 32, right: 32, bottom: 24),
+                padding: EdgeInsets.only(top: 32, left: 36, right: 36, bottom: 24),
                 decoration: BoxDecoration(
                     gradient: RadialGradient(
-                      colors: [Colors.grey[900], Color.lerp(Colors.blueGrey[400], Colors.grey[900], 0.9), appTheme.disabledCardBgColor],
+                      colors: [Colors.grey[400], Color.lerp(Colors.blueGrey[900], Colors.black, 0.9), Colors.blueGrey[600]],
                       center: Alignment(0.6, -0.3),
                       focal: Alignment(0.3, -0.1),
                       focalRadius: 4.5,
@@ -110,13 +110,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
                             'Your Information',
                             style: TextStyle(
                                 color: appTheme.textPrimaryColor,
-                                fontSize: 30
+                                fontSize: 28
                             ),
+                            textAlign: TextAlign.center,
                           ),
                           Divider(
                             color: appTheme.textPrimaryColor,
@@ -152,13 +154,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Text(
                             'Sign Out',
                             style: TextStyle(
-                                fontSize: 28,
+                                fontSize: 26,
                                 color: Colors.white
                             ),
                           ),
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.deepOrange[600],
-                            padding: EdgeInsets.symmetric(horizontal: 68, vertical: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                           ),
                         ),
                       ),

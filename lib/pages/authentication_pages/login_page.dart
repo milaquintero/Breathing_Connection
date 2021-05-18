@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 style: TextButton.styleFrom(
                     backgroundColor: Colors.deepOrange[600],
-                    padding: EdgeInsets.symmetric(horizontal: 52, vertical: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 52, vertical: 8),
                 ),
               ),
             ),
@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.deepOrange[600],
-                  padding: EdgeInsets.symmetric(horizontal: 52, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 52, vertical: 8),
                 ),
               ),
             ),

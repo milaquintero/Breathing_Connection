@@ -13,6 +13,7 @@ import 'package:breathing_connection/models/view_technique_details_handler.dart'
 import 'package:breathing_connection/pages/top_level_pages/loading_page.dart';
 import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -42,7 +43,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   //video player controller
   VideoPlayerController _videoController;
   //video player future
-  Future<void> _initializeVideoPlayerFuture;
+  Future _videoPlayerFuture;
   //track user selected session length in minutes (default to 5 min)
   int sessionLengthInMinutes = 5;
   //track user selected session length in seconds (default to 5 min)
@@ -82,18 +83,21 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   //count for each individual breathing rhythm section (custom technique)
   int breathingRhythmSectionCounter = 0;
   void sendToHomePage(){
+    //resume alarms
+    Utility.scheduleDailyReminders(curUser, mainData);
+    //return to home page
     Provider.of<CurrentPageHandler>(context, listen: false).setPageIndex(0);
     Navigator.pushReplacementNamed(context, '/root');
   }
   void pauseContent(){
     _sessionTimer?.cancel();
-    if(secondsElapsedDuringSession != sessionLengthInSeconds){
+    if(_videoController != null && secondsElapsedDuringSession != sessionLengthInSeconds){
       _videoController?.pause();
     }
   }
   void playContent(){
     initializeSessionTimer();
-    if(secondsElapsedDuringSession != sessionLengthInSeconds){
+    if(_videoController != null && secondsElapsedDuringSession != sessionLengthInSeconds){
       _videoController?.play();
     }
   }
@@ -178,6 +182,8 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
   }
   void initializeDependencies() async{
     if(!dependenciesAreLoaded){
+      //no interruptions while in environment
+      Utility.cancelAllAlarms();
       //available nav links from provider
       navLinks = mainData.pages;
       //find home page in main data page links
@@ -209,14 +215,16 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
         else if(curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
           videoSuffix = "_with_music_with_sound";
         }
+        print('${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4');
         //load appropriate video for technique
         _videoController = VideoPlayerController.network(
-          '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',
+          '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',
+          videoPlayerOptions: VideoPlayerOptions(
+            mixWithOthers: true
+          )
         );
-        //video will loop until session completes
+        _videoPlayerFuture =  _videoController.initialize();
         _videoController.setLooping(true);
-        //initialize video player
-        _initializeVideoPlayerFuture = _videoController.initialize();
       }
       else{
         //list of seconds that match inhale
@@ -257,12 +265,12 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                       backgroundColor: appTheme.bgPrimaryColor,
                       body: SafeArea(
                         child: FutureBuilder(
-                          future: _initializeVideoPlayerFuture,
+                          future: _videoPlayerFuture,
                           builder: (context, snapshot) {
                             //show display once video is ready
                             //or show if technique is custom
-                            if (snapshot.connectionState == ConnectionState.done ||
-                            techniqueToDisplay.associatedUserID != null) {
+                            if(snapshot.connectionState == ConnectionState.done ||
+                            techniqueToDisplay.associatedUserID != null){
                               return OrientationBuilder(
                                 builder: (context, orientation) {
                                   //handle portrait mode
@@ -317,7 +325,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                             ],
                                           ),
                                           if(secondsElapsedDuringSession < sessionLengthInSeconds) Text(
-                                            'Rotate your device to landscape mode to begin the session.',
+                                            'Rotate your device to landscape mode to ${secondsElapsedDuringSession == 0 ? 'begin' : 'resume'} the session.',
                                             style: TextStyle(
                                                 fontSize: 28,
                                                 color: appTheme.textSecondaryColor
@@ -377,45 +385,39 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                   }
                                   //handle landscape mode
                                   else{
-                                  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-                                  //show countdown timer if session hasn't started
-                                  if(countdown > 0){
+                                    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+                                    //show countdown timer if session hasn't started
+                                    if(countdown > 0){
                                       //start countdown timer
                                       initializeCountdownTimer();
-                                      return Stack(
-                                        alignment: Alignment.topCenter,
+                                      return Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 68),
-                                            child: Text(
-                                              'Starting Session',
-                                              style: TextStyle(
-                                                  color: appTheme.textSecondaryColor,
-                                                  fontSize: 64
-                                              ),
+                                          Text(
+                                            'Starting Session',
+                                            style: TextStyle(
+                                                color: appTheme.textSecondaryColor,
+                                                fontSize: 64
                                             ),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.only(top: 104),
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                Positioned(
-                                                  top: 92,
-                                                  child: Text(
-                                                    countdown.toString(),
-                                                    style: TextStyle(
-                                                        color: appTheme.textSecondaryColor,
-                                                        fontSize: 72
-                                                    ),
+                                          Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Positioned(
+                                                top: 12,
+                                                child: Text(
+                                                  countdown.toString(),
+                                                  style: TextStyle(
+                                                      color: appTheme.textSecondaryColor,
+                                                      fontSize: 72
                                                   ),
                                                 ),
-                                                SpinKitDualRing(
-                                                  size: 120,
-                                                  color: appTheme.brandPrimaryColor,
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                              SpinKitDualRing(
+                                                size: 120,
+                                                color: appTheme.brandPrimaryColor,
+                                              ),
+                                            ],
                                           )
                                         ],
                                       );
@@ -423,7 +425,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                     else{
                                       //start/resume timer if technique isn't custom
                                       if(secondsElapsedDuringSession < sessionLengthInSeconds &&
-                                      techniqueToDisplay.associatedUserID == null){
+                                          techniqueToDisplay.associatedUserID == null){
                                         playContent();
                                       }
                                       else if(techniqueToDisplay.associatedUserID != null){
@@ -431,6 +433,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                       }
                                       return Stack(
                                         alignment: Alignment.topCenter,
+                                        fit: StackFit.expand,
                                         children: [
                                           SizedBox.expand(
                                             child: FittedBox(
@@ -446,6 +449,7 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                 //custom technique display
                                                 Container(
                                                   decoration: BoxDecoration(
+                                                    color: appTheme.brandPrimaryColor,
                                                     gradient: RadialGradient(
                                                       colors: [Colors.blueGrey[400], Color.lerp(appTheme.brandPrimaryColor, Colors.blueGrey[400], 0.1), appTheme.brandPrimaryColor],
                                                       center: Alignment(-10.5, 0.8),
@@ -523,7 +527,28 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                   ),
                                                 ) :
                                                 //standard technique display
-                                                VideoPlayer(_videoController) :
+                                                //clipper used to fix video_player bug with green screen leftover
+                                                SizedBox.expand(
+                                                  child: FittedBox(
+                                                    fit: BoxFit.cover,
+                                                    child: SizedBox(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      height: MediaQuery.of(context).size.height,
+                                                      child: ClipRect(
+                                                        child: AspectRatio(
+                                                          aspectRatio: _videoController.value.aspectRatio,
+                                                          child: AspectRatio(
+                                                              aspectRatio: _videoController.value.aspectRatio,
+                                                              child: VideoPlayer(
+                                                                  _videoController
+                                                              )
+                                                          )
+                                                        ),
+                                                        clipper: RectClipper(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ) :
                                                 //session end display
                                                 Center(
                                                     child: Column(
@@ -533,14 +558,14 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                           'Session Complete',
                                                           style: TextStyle(
                                                               color: appTheme.textSecondaryColor,
-                                                              fontSize: 72
+                                                              fontSize: 180
                                                           ),
                                                         ),
                                                         SizedBox(height: 32,),
                                                         Text(
                                                           'Rotate your device back to portrait mode.',
                                                           style: TextStyle(
-                                                            fontSize: 36,
+                                                            fontSize: 82,
                                                             color: appTheme.textSecondaryColor,
                                                           ),
                                                           textAlign: TextAlign.center,
@@ -557,7 +582,8 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                   }
                                 },
                               );
-                            } else {
+                            }
+                            else{
                               return LoadingPage();
                             }
                           },
@@ -576,5 +602,19 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
           }
         }
     );
+  }
+}
+
+class RectClipper extends CustomClipper<Rect> {
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
+  }
+
+  @override
+  Rect getClip(Size size) {
+    Rect rect = Rect.fromLTRB(0, 0, size.width, size.height - 8);
+    return rect;
   }
 }

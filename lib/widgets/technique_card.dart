@@ -78,7 +78,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
             )
         ),
         gradient: RadialGradient(
-          colors: [Colors.blueGrey, Color.lerp(widget.cardBgColor, Colors.blueGrey, 0.25), widget.cardBgColor],
+          colors: [Colors.blueGrey, Color.lerp(listTileBg, Colors.blueGrey, 0.25), listTileBg],
           center: Alignment(0.6, -0.3),
           focal: Alignment(0.3, -0.1),
           focalRadius: 12.5,
@@ -88,7 +88,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
         margin: EdgeInsets.zero,
         child: ListTile(
           enabled: shouldBeEnabled,
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           onTap: (){},
           leading: shouldBeEnabled ? PopupMenuButton(
             child: IconButton(
@@ -117,7 +117,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
             child: Text(
                 widget.technique.title,
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     color: titleColor,
                 ),
             ),
@@ -130,7 +130,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     color: subtitleColor
                 ),
               )
@@ -159,7 +159,7 @@ class _TechniqueCardState extends State<TechniqueCard> {
               'PRO',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
               ),
             ),
           ),

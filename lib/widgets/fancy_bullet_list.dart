@@ -29,7 +29,7 @@ class FancyBulletList extends StatelessWidget {
                 child: Text(
                   listItem,
                   style: TextStyle(
-                      fontSize: 21,
+                      fontSize: 18,
                       color: textColor
                   ),
                 ),

@@ -77,7 +77,7 @@ class _SettingSectionState extends State<SettingSection> {
                     )
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 28),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   child: Center(
                     child: Text(
                       widget.headerTitle,

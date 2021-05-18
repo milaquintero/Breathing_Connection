@@ -72,7 +72,7 @@ class _TechniqueSectionState extends State<TechniqueSection> {
                 ),
                 //section header text
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 28),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text(
                     widget.headerText,
                     textAlign: TextAlign.center,

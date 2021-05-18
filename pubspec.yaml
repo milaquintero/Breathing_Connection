@@ -34,7 +34,7 @@ dependencies:
   shared_preferences: ^2.0.5
   url_launcher: ^6.0.3
   video_player: ^2.1.1
-  in_app_purchase: ^0.3.4+5
+  in_app_purchase: ^0.6.0
   rxdart: ^0.27.0
 
   # The following adds the Cupertino Icons font to your application.

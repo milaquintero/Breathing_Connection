@@ -60,7 +60,7 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
       //update popup queued flag
       popupIsQueued = true;
       //page links from main data provider
-      List<NavLink> navLinks = Provider.of<MainData>(widget.rootContext).pages;
+      List<NavLink> navLinks = mainData.pages;
       //find pro page in main data page links
       NavLink proLicensePage = navLinks.firstWhere((page) => page.pageRoute == '/pro');
       proDialogTimer = Timer(Duration(seconds: mainData.popupWaitTime), (){

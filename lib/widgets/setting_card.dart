@@ -36,10 +36,10 @@ class _SettingCardState extends State<SettingCard> {
   @override
   Widget build(BuildContext context) {
     settingTextStyle = TextStyle(
-        fontSize: 28,
+        fontSize: 26,
         color: widget.textColor
     );
-    cardPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 36);
+    cardPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 20);
     //get run time type of value
     type = widget.settingValue.runtimeType;
     //screen height

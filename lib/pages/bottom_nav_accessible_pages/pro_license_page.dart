@@ -31,11 +31,11 @@ class _ProLicensePageState extends State<ProLicensePage> {
   //current user data
   User curUser;
   //in app purchase connection instance
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  InAppPurchase _iap = InAppPurchase.instance;
   //subscription store data
   SubscriptionStore subscriptionStore;
   void _purchase(String op){
-    if(subscriptionStore.purchases.length != 0){
+    if(subscriptionStore.purchases.length == 0){
       String selectedProductID = mainData.availableProducts.firstWhere(
         (availableProduct) => availableProduct.contains(op),
         orElse: null
@@ -66,8 +66,6 @@ class _ProLicensePageState extends State<ProLicensePage> {
     appTheme = Provider.of<CurrentThemeHandler>(widget.rootContext).currentTheme;
     //app main data
     mainData = Provider.of<MainData>(context);
-    //subscription store data
-    subscriptionStore = Provider.of<SubscriptionStore>(widget.rootContext);
   }
   @override
   Widget build(BuildContext context) {
@@ -76,10 +74,12 @@ class _ProLicensePageState extends State<ProLicensePage> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           curUser = snapshot.data;
+          //subscription store data
+          subscriptionStore = Provider.of<SubscriptionStore>(widget.rootContext);
           return FancyScrollablePage(
             withIconHeader: false,
             pageTitle: 'Pro License',
-            bgColor: appTheme.bgSecondaryColor,
+            bgColor: appTheme.bgPrimaryColor,
             appBarColor: appTheme.brandPrimaryColor,
             decorationPrimaryColor: appTheme.decorationPrimaryColor,
             decorationSecondaryColor: appTheme.decorationSecondaryColor,
@@ -92,7 +92,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
                     mainData.proPageHeaderText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 48,
+                        fontSize: 38,
                         fontWeight: FontWeight.bold,
                         color: appTheme.textSecondaryColor,
                         letterSpacing: -0.75
@@ -141,7 +141,7 @@ class _ProLicensePageState extends State<ProLicensePage> {
                           child: Text(
                             'Select an option below',
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 18,
                               color: appTheme.textPrimaryColor,
                             ),
                           ),

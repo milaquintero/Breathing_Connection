@@ -371,7 +371,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           child: Container(
             margin: EdgeInsets.zero,
             child: ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               leading: Icon(
                 Icons.account_balance_wallet_outlined,
                 size: 32,
@@ -380,7 +380,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               title: Text(
                 'Edit Reminders',
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     color: appTheme.textAccentColor
                 ),
               ),
@@ -506,7 +506,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             Navigator.of(context).pushReplacementNamed("/email-subscription");
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 24),
+            padding: EdgeInsets.symmetric(vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -540,7 +540,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           openEmailApp();
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24),
+          padding: EdgeInsets.symmetric(vertical: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -575,7 +575,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             unsubscribeFromPro();
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 24),
+            padding: EdgeInsets.symmetric(vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

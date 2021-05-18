@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:breathing_connection/pages/authentication_pages/subscription_store.dart';
 import 'package:breathing_connection/pages/bottom_nav_accessible_pages/app_settings_page.dart';
@@ -44,7 +43,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   Offset _transitionOffset;
 
   //in app purchase connection instance
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  InAppPurchase _iap = InAppPurchase.instance;
   //list of available products
   List<ProductDetails> _products = [];
   //list of past purchases
@@ -60,40 +59,69 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
     if(Utility.iapIsAvailable){
       await _getProducts();
       await _getPastPurchases();
-      _verifyPurchase();
-      Provider.of<SubscriptionStore>(context, listen: false).setProducts(_products);
-      Provider.of<SubscriptionStore>(context, listen: false).setPurchases(_purchases);
-      _subscription = _iap.purchaseUpdatedStream.listen((data) => setState((){
-        print("NEW PURCHASE");
-        _purchases.addAll(data);
-        _verifyPurchase();
-      }));
+      _subscription = _iap.purchaseStream.listen((data) => setState((){
+        _listenToPurchaseUpdated(_purchases);
+      }), onDone: () {
+        _subscription.cancel();
+      }, onError: (error) {
+        // handle error here.
+      });
     }
   }
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        _iap.completePurchase(purchaseDetails);
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.purchased ||
+            purchaseDetails.status == PurchaseStatus.restored) {
+          bool valid = await _verifyPurchase(purchaseDetails);
+          if (valid) {
+            _deliverProduct(purchaseDetails);
+          } else {
+            _handleInvalidPurchase(purchaseDetails);
+            return;
+          }
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await InAppPurchase.instance
+              .completePurchase(purchaseDetails);
+        }
+      }
+    });
+  }
+  void _deliverProduct(PurchaseDetails purchaseDetails) async {
+    _purchases.add(purchaseDetails);
+    Provider.of<SubscriptionStore>(context, listen: false).setPurchases(_purchases ?? []);
+  }
+
+  void _handleInvalidPurchase(PurchaseDetails purchaseDetails) async{
+    await showDialog(
+        context: context,
+        builder: (context){
+          return DialogAlert(
+
+          );
+        }
+    );
+  }
   Future<void> _getProducts() async{
-    Set<String> productIDs = Set.from(mainData.availableProducts);
-    ProductDetailsResponse response = await _iap.queryProductDetails(productIDs);
+    Iterable<String> mainDataProducts = mainData.availableProducts.map((availableProduct) => availableProduct.toString());
+    Set<String> productIDs = Set<String>.from(mainDataProducts);
+    final ProductDetailsResponse response = await _iap.queryProductDetails(productIDs);
+    print(response.productDetails);
     setState(() {
       _products = response.productDetails;
+      Provider.of<SubscriptionStore>(context, listen: false).setProducts(_products ?? []);
     });
   }
   Future<void> _getPastPurchases() async{
-    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
-    if(Platform.isIOS){
-      response.pastPurchases.forEach((pastPurchase) {
-        if(pastPurchase.pendingCompletePurchase){
-          _iap.completePurchase(pastPurchase);
-        }
-      });
-    }
-    setState(() {
-      _purchases = response.pastPurchases;
-    });
+    _iap.restorePurchases();
   }
   PurchaseDetails _hasPurchased(String productID){
     return _purchases.firstWhere((purchase) => purchase.productID == productID, orElse: null);
   }
-  void _verifyPurchase() async{
+  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async{
     if(_purchases.length != 0){
       for(int i = 0; i < mainData.availableProducts.length; i++){
         PurchaseDetails purchase = _hasPurchased(mainData.availableProducts[i]);
@@ -101,14 +129,16 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
         if(purchase != null && purchase.status == PurchaseStatus.purchased){
           handleSubscriptionUpdate('pro');
           //end loop if user has already purchased a subscription
-          break;
+          return true;
         }
       }
     }
     //user has unsubscribed from Pro Version
     else if(_purchases.length != 0 && curUser.hasFullAccess){
       handleSubscriptionUpdate('free');
+      return false;
     }
+    return false;
   }
   void handleSubscriptionUpdate(String op) async{
     //handle updating user's hasFullAccess flag
@@ -239,17 +269,17 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                   //app main data
                   mainData = snapshot.data;
                   /*
-          initial setup with async dependencies
-          flag prevents from running more than once
-          depends on main data
-          */
+                  initial setup with async dependencies
+                  flag prevents from running more than once
+                  depends on main data
+                  */
                   initWithDependencies();
                   //update displayed page
                   updatePageInView();
                   return MultiProvider(
                     providers: [
                       StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: mainData),
-                      StreamProvider<User>.value(value: UserService().userWithData, initialData: curUser)
+                      StreamProvider<User>.value(value: UserService().userWithData, initialData: curUser),
                     ],
                     child: Scaffold(
                       backgroundColor: appTheme.brandPrimaryColor,

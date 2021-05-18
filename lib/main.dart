@@ -13,7 +13,7 @@ import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/current_theme_handler.dart';
@@ -38,7 +38,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //required if platform is android
   if (defaultTargetPlatform == TargetPlatform.android) {
-    InAppPurchaseConnection.enablePendingPurchases();
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
   prefs = await SharedPreferences.getInstance();
   //set defaults to empty string for notifications
@@ -101,6 +101,7 @@ class _BreathingConnectionState extends State<BreathingConnection> {
         StreamProvider<MainData>.value(value: MainDataService().mainData, initialData: null,),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         onUnknownRoute: (settings){
           return MaterialPageRoute(
               builder: (context)=>Scaffold(
