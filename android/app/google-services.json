@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "491735788767",
+    "project_id": "breathing-connection",
+    "storage_bucket": "breathing-connection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491735788767:android:17b633a4e3b7bfe9f30d6a",
+        "android_client_info": {
+          "package_name": "com.hylicmerit.breathing_connection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491735788767-m77dt2rlacsqsbmbdomj12ca4uap02is.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hylicmerit.breathing_connection",
+            "certificate_hash": "bdcad72c0eb1bb1b1c20611e0db9da47d14ae0a0"
+          }
+        },
+        {
+          "client_id": "491735788767-a9jo0tgc7q77247en8mgcgj0p0bd6k0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKEZY2DLLDKY789H5QTjGOYiS8M1mhj6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491735788767-a9jo0tgc7q77247en8mgcgj0p0bd6k0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

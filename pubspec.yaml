@@ -23,10 +23,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_auth: ^0.14.0+5
+  cloud_firestore: ^0.12.9+4
   http: ^0.12.2
-  intl: ^0.16.1
+  intl: ^0.17.0
   flutter_spinkit: ^4.1.2+1
-
+  provider: ^5.0.0
+  android_alarm_manager: ^2.0.0
+  flutter_local_notifications: ^5.0.0+1
+  shared_preferences: ^2.0.5
+  url_launcher: ^6.0.3
+  video_player: ^2.1.1
+  in_app_purchase: ^0.6.0
+  rxdart: ^0.27.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -76,3 +85,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: 'ZillaSlab'
+      fonts:
+        - asset: fonts/ZillaSlab-Medium.ttf
+        - asset: fonts/ZillaSlab-Bold.ttf
+          weight: 700
