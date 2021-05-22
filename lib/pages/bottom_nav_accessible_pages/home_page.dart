@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage>{
     }
     return techniqueMatches;
   }
-
   void handleViewTechniqueDetails(Technique selectedTechnique){
     cancelTimers();
     //set technique being viewed in handler provider
