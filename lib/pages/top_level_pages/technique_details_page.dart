@@ -61,6 +61,12 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
     inhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.inhaleTypeID);
     exhaleType = mainData.inhaleExhaleTypes.firstWhere((inhaleExhaleType) => inhaleExhaleType.inhaleExhaleTypeID == techniqueToDisplay.exhaleTypeID);
   }
+  void handleBeginTechniqueInEnvironment(){
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(context, listen: false).setTechnique(techniqueToDisplay);
+    //send to technique details page
+    Navigator.of(context).pushNamed('/environment');
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -285,6 +291,28 @@ class _TechniqueDetailsPageState extends State<TechniqueDetailsPage> {
                     textColor: appTheme.textPrimaryColor,
                     margin: EdgeInsets.only(top: 68, bottom: 24),
                     subtitleAlignment: TextAlign.justify,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 28, bottom: 60),
+                    child: TextButton(
+                      onPressed: () {
+                        //begin technique in environment
+                        handleBeginTechniqueInEnvironment();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                        child: Text(
+                          'Begin Technique',
+                          style: TextStyle(
+                              color: appTheme.textPrimaryColor,
+                              fontSize: 24
+                          ),
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                          backgroundColor: appTheme.brandPrimaryColor
+                      ),
+                    ),
                   ),
                   if(techniqueToDisplay.associatedUserID != null) Column(
                     children: [

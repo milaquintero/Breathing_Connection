@@ -215,7 +215,6 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
         else if(curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
           videoSuffix = "_with_music_with_sound";
         }
-        print('${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4');
         //load appropriate video for technique
         _videoController = VideoPlayerController.network(
           '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',
@@ -533,16 +532,11 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                     fit: BoxFit.cover,
                                                     child: SizedBox(
                                                       width: MediaQuery.of(context).size.width,
-                                                      height: MediaQuery.of(context).size.height,
+                                                      //compensate for clipped height
+                                                      height: MediaQuery.of(context).size.height - 8,
                                                       child: ClipRect(
-                                                        child: AspectRatio(
-                                                          aspectRatio: _videoController.value.aspectRatio,
-                                                          child: AspectRatio(
-                                                              aspectRatio: _videoController.value.aspectRatio,
-                                                              child: VideoPlayer(
-                                                                  _videoController
-                                                              )
-                                                          )
+                                                        child: VideoPlayer(
+                                                            _videoController
                                                         ),
                                                         clipper: RectClipper(),
                                                       ),

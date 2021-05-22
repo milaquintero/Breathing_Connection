@@ -55,6 +55,27 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
       return a.techniqueID.compareTo(b.techniqueID);
     });
   }
+  void handleViewTechniqueDetails(Technique selectedTechnique){
+    cancelTimers();
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(widget.rootContext).pushNamed('/technique-details');
+  }
+  void handleEditCustomTechnique(Technique selectedTechnique){
+    //send to custom technique page with edit mode on
+    Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: selectedTechnique));
+  }
+  void handleBeginTechniqueInEnvironment(Technique selectedTechnique){
+    cancelTimers();
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(widget.rootContext).pushNamed('/environment');
+  }
+  void cancelTimers(){
+    proDialogTimer?.cancel();
+  }
   void handleQueueingPopup(){
     if(!curUser.hasFullAccess && !popupIsQueued && ModalRoute.of(context).isCurrent){
       //update popup queued flag
@@ -204,15 +225,15 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                     );
                                   },
                                   viewTechniqueDetails: (Technique selectedTechnique){
-                                    //set technique being viewed in handler provider
-                                    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
-                                    //send to technique details page
-                                    Navigator.of(context).pushNamed('/technique-details');
+                                    handleViewTechniqueDetails(selectedTechnique);
                                   },
                                   editCustomTechnique: availableTechniques[index].associatedUserID != null ? (Technique selectedTechnique){
                                     //send to custom technique page with edit mode on
-                                    Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: selectedTechnique));
-                                  } : (Technique selectedTechnique){}
+                                    handleEditCustomTechnique(selectedTechnique);
+                                  } : (Technique selectedTechnique){},
+                                  beginTechniqueInEnvironment: (Technique selectedTechnique){
+                                    handleBeginTechniqueInEnvironment(selectedTechnique);
+                                  },
                               );
                             }
                             else {
