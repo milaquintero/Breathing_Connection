@@ -86,6 +86,5 @@ class Utility{
         wakeup: true,
         rescheduleOnReboot: true
     );
-    print("scheduled alarm at $paramTimeToStart");
   }
 }
