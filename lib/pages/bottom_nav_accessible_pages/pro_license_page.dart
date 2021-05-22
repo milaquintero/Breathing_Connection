@@ -48,7 +48,10 @@ class _ProLicensePageState extends State<ProLicensePage> {
     }
   }
   void _buyProduct(ProductDetails product){
-    final PurchaseParam purchaseParam = PurchaseParam(productDetails: product);
+    final PurchaseParam purchaseParam = PurchaseParam(
+        productDetails: product,
+        applicationUserName: null
+    );
     _iap.buyNonConsumable(purchaseParam: purchaseParam);
   }
   @override

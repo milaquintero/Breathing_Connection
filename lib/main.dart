@@ -27,10 +27,9 @@ import 'pages/top_level_pages/root_page.dart';
 import 'pages/top_level_pages/technique_details_page.dart';
 import 'models/technique.dart';
 import 'models/view_technique_details_handler.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
-/// Global [SharedPreferences] object.
 SharedPreferences prefs;
-/// The [SharedPreferences] keys to access the notification header and footer.
 const String notificationHeaderKey = 'header';
 const String notificationFooterKey = 'footer';
 
@@ -78,6 +77,7 @@ class BreathingConnection extends StatefulWidget {
 }
 
 class _BreathingConnectionState extends State<BreathingConnection> {
+
   @override
   void initState(){
     super.initState();

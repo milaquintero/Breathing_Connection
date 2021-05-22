@@ -17,46 +17,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:breathing_connection/models/main_data.dart';
 
-List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableTechniques, String op, List<String> availableImages){
-  List<Technique> techniqueMatches = [];
-  for(int techniqueID in techniqueIDs){
-    Technique techniqueMatch = availableTechniques
-        .firstWhere(
-            (technique) => technique.techniqueID == techniqueID,
-            orElse: () => null
-    );
-    Technique mutableTechnique = Technique.clone(techniqueMatch);
-    //only get default image if technique isn't custom
-    if(op != 'custom' && techniqueMatch != null){
-      mutableTechnique.assetImage = getAssetImage(op, availableImages);
-    }
-    techniqueMatches.add(mutableTechnique);
-  }
-  return techniqueMatches;
-}
-
-void handleViewTechniqueDetails(Technique selectedTechnique, BuildContext rootContext){
-    //set technique being viewed in handler provider
-    Provider.of<ViewTechniqueDetailsHandler>(rootContext, listen: false).setTechnique(selectedTechnique);
-    //send to technique details page
-    Navigator.of(rootContext).pushNamed('/technique-details');
-}
-
-String getAssetImage(String patternToMatch, List<String> availableImages){
-  return availableImages
-      .firstWhere(
-          (imageUrl) => imageUrl.contains(patternToMatch),
-          orElse: () => ""
-  );
-}
-
-void handleBeginTechniqueInEnvironment(Technique selectedTechnique, BuildContext rootContext){
-  //set technique being viewed in handler provider
-  Provider.of<ViewTechniqueDetailsHandler>(rootContext, listen: false).setTechnique(selectedTechnique);
-  //send to technique details page
-  Navigator.of(rootContext).pushNamed('/environment');
-}
-
 class HomePage extends StatefulWidget {
   final BuildContext rootContext;
   HomePage({this.rootContext, Key key}) : super(key: key);
@@ -92,8 +52,7 @@ class _HomePageState extends State<HomePage>{
   @override
   void dispose() {
     super.dispose();
-    emailSubDialogTimer?.cancel();
-    emailVerificationTimer?.cancel();
+    cancelTimers();
   }
   @override
   void didChangeDependencies() {
@@ -108,6 +67,45 @@ class _HomePageState extends State<HomePage>{
     screenHeight = MediaQuery.of(context).size.height;
     //available techniques
     availableTechniques = Provider.of<List<Technique>>(context);
+  }
+  List<Technique> getTechniques(List<int> techniqueIDs, List<Technique> availableTechniques, String op){
+    List<Technique> techniqueMatches = [];
+    for(int techniqueID in techniqueIDs){
+      Technique techniqueMatch = availableTechniques
+          .firstWhere(
+              (technique) => technique.techniqueID == techniqueID,
+          orElse: () => null
+      );
+      Technique mutableTechnique = Technique.clone(techniqueMatch);
+      //only get default image if technique isn't custom
+      if(op != 'custom' && techniqueMatch != null){
+        mutableTechnique.assetImage = getAssetImage(op);
+      }
+      techniqueMatches.add(mutableTechnique);
+    }
+    return techniqueMatches;
+  }
+
+  void handleViewTechniqueDetails(Technique selectedTechnique){
+    cancelTimers();
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(widget.rootContext).pushNamed('/technique-details');
+  }
+  String getAssetImage(String patternToMatch){
+    return mainData.images
+        .firstWhere(
+            (imageUrl) => imageUrl.contains(patternToMatch),
+        orElse: () => ""
+    );
+  }
+  void handleBeginTechniqueInEnvironment(Technique selectedTechnique){
+    cancelTimers();
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(widget.rootContext).pushNamed('/environment');
   }
   void handleQueueingPopups() async {
     //handle showing email confirmation dialog if user hasn't verified
@@ -168,6 +166,10 @@ class _HomePageState extends State<HomePage>{
       );
     }
   }
+  void cancelTimers(){
+    emailSubDialogTimer?.cancel();
+    emailVerificationTimer?.cancel();
+  }
   @override
   Widget build(BuildContext context) {
     return FancySplitPage(
@@ -227,7 +229,7 @@ class _HomePageState extends State<HomePage>{
                 children: [
                   TechniqueSection(
                       headerText: mainData.amSessionHeaderText,
-                      techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day', mainData.images),
+                      techniques: getTechniques([curUser.amTechniqueID], availableTechniques, 'day'),
                       textBgColor: appTheme.amTechniqueSectionColor,
                       textColor: appTheme.amTechniqueTextColor,
                       startIcon: Icons.play_circle_fill,
@@ -236,15 +238,15 @@ class _HomePageState extends State<HomePage>{
                       decorationColor: appTheme.bgAccentColor,
                       assetURL: assetHandler.imageAssetURL,
                       viewTechniqueDetails: (Technique selectedTechnique){
-                        handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                        handleViewTechniqueDetails(selectedTechnique);
                       },
                       beginTechniqueInEnvironment: (Technique selectedTechnique){
-                        handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                        handleBeginTechniqueInEnvironment(selectedTechnique);
                       }
                   ),
                   TechniqueSection(
                     headerText: mainData.pmSessionHeaderText,
-                    techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night', mainData.images),
+                    techniques: getTechniques([curUser.pmTechniqueID], availableTechniques, 'night'),
                     textBgColor: appTheme.pmTechniqueSectionColor,
                     textColor: appTheme.pmTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -253,15 +255,15 @@ class _HomePageState extends State<HomePage>{
                     decorationColor: appTheme.bgAccentColor,
                     assetURL: assetHandler.imageAssetURL,
                     viewTechniqueDetails: (Technique selectedTechnique){
-                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      handleViewTechniqueDetails(selectedTechnique);
                     },
                     beginTechniqueInEnvironment: (Technique selectedTechnique){
-                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                      handleBeginTechniqueInEnvironment(selectedTechnique);
                     }
                   ),
                   TechniqueSection(
                     headerText: mainData.emergencySessionHeaderText,
-                    techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency', mainData.images),
+                    techniques: getTechniques([curUser.emergencyTechniqueID], availableTechniques, 'emergency'),
                     textBgColor: appTheme.emergencyTechniqueSectionColor,
                     textColor: appTheme.emergencyTechniqueTextColor,
                     startIcon: Icons.add_circle,
@@ -270,15 +272,15 @@ class _HomePageState extends State<HomePage>{
                     decorationColor: appTheme.bgAccentColor,
                     assetURL: assetHandler.imageAssetURL,
                     viewTechniqueDetails: (Technique selectedTechnique){
-                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      handleViewTechniqueDetails(selectedTechnique);
                     },
                     beginTechniqueInEnvironment: (Technique selectedTechnique){
-                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                      handleBeginTechniqueInEnvironment(selectedTechnique);
                     }
                   ),
                   if (curUser.hasFullAccess) TechniqueSection(
                     headerText: mainData.challengeSessionHeaderText,
-                    techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge', mainData.images),
+                    techniques: getTechniques([curUser.challengeTechniqueID], availableTechniques, 'challenge'),
                     textBgColor: appTheme.challengeTechniqueSectionColor,
                     textColor: appTheme.challengeTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -287,15 +289,15 @@ class _HomePageState extends State<HomePage>{
                     decorationColor: appTheme.bgAccentColor,
                     assetURL: assetHandler.imageAssetURL,
                     viewTechniqueDetails: (Technique selectedTechnique){
-                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      handleViewTechniqueDetails(selectedTechnique);
                     },
                     beginTechniqueInEnvironment: (Technique selectedTechnique){
-                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                      handleBeginTechniqueInEnvironment(selectedTechnique);
                     }
                   ),
                   if (curUser.hasFullAccess && curUser.customTechniqueIDs.isNotEmpty) TechniqueSection(
                     headerText: mainData.customSessionHeaderText,
-                    techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom', mainData.images),
+                    techniques: getTechniques(curUser.customTechniqueIDs, availableTechniques, 'custom'),
                     textBgColor: appTheme.customTechniqueSectionColor,
                     textColor: appTheme.customTechniqueTextColor,
                     startIcon: Icons.play_circle_fill,
@@ -304,10 +306,10 @@ class _HomePageState extends State<HomePage>{
                     decorationColor: appTheme.bgAccentColor,
                     assetURL: assetHandler.imageAssetURL,
                     viewTechniqueDetails: (Technique selectedTechnique){
-                      handleViewTechniqueDetails(selectedTechnique, widget.rootContext);
+                      handleViewTechniqueDetails(selectedTechnique);
                     },
                     beginTechniqueInEnvironment: (Technique selectedTechnique){
-                      handleBeginTechniqueInEnvironment(selectedTechnique, widget.rootContext);
+                      handleBeginTechniqueInEnvironment(selectedTechnique);
                     }
                   )
                 ],

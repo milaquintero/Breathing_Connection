@@ -533,16 +533,11 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
                                                     fit: BoxFit.cover,
                                                     child: SizedBox(
                                                       width: MediaQuery.of(context).size.width,
-                                                      height: MediaQuery.of(context).size.height,
+                                                      //compensate for clipped height
+                                                      height: MediaQuery.of(context).size.height - 8,
                                                       child: ClipRect(
-                                                        child: AspectRatio(
-                                                          aspectRatio: _videoController.value.aspectRatio,
-                                                          child: AspectRatio(
-                                                              aspectRatio: _videoController.value.aspectRatio,
-                                                              child: VideoPlayer(
-                                                                  _videoController
-                                                              )
-                                                          )
+                                                        child: VideoPlayer(
+                                                            _videoController
                                                         ),
                                                         clipper: RectClipper(),
                                                       ),

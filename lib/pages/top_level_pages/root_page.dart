@@ -40,8 +40,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   User curUser;
   //page to display
   Widget _pageToDisplay;
+  //animation for pages
   Offset _transitionOffset;
-
   //in app purchase connection instance
   InAppPurchase _iap = InAppPurchase.instance;
   //list of available products
@@ -54,35 +54,28 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
   SubscriptionStore subscriptionStore;
   //track if data has already been initialized (init depends on main data available products)
   bool areDependenciesInitialized = false;
-  void _initializePurchaseData() async{
-    Utility.iapIsAvailable = await _iap.isAvailable();
-    if(Utility.iapIsAvailable){
-      await _getProducts();
-      await _getPastPurchases();
-      _subscription = _iap.purchaseStream.listen((data) => setState((){
-        _listenToPurchaseUpdated(_purchases);
-      }), onDone: () {
-        _subscription.cancel();
-      }, onError: (error) {
-        // handle error here.
-      });
-    }
-  }
+  //handle purchase update events
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      //purchase is still pending
       if (purchaseDetails.status == PurchaseStatus.pending) {
-        _iap.completePurchase(purchaseDetails);
+        //TODO: show loading page with boolean flag
       } else {
+        //subscription has been purchased or restored
         if (purchaseDetails.status == PurchaseStatus.purchased ||
             purchaseDetails.status == PurchaseStatus.restored) {
+          //check if purchase is valid (only one subscription at a time)
           bool valid = await _verifyPurchase(purchaseDetails);
+          //purchase is valid so add to purchase array
           if (valid) {
             _deliverProduct(purchaseDetails);
           } else {
+            //user tried to purchase a second subscription so show error dialog
             _handleInvalidPurchase(purchaseDetails);
             return;
           }
         }
+        //subscription is pending purchase so complete it
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance
               .completePurchase(purchaseDetails);
@@ -90,37 +83,44 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
       }
     });
   }
+
+  //update purchase array after successful purchase
   void _deliverProduct(PurchaseDetails purchaseDetails) async {
-    _purchases.add(purchaseDetails);
-    Provider.of<SubscriptionStore>(context, listen: false).setPurchases(_purchases ?? []);
+    setState(() {
+      _purchases.add(purchaseDetails);
+    });
+    Provider.of<SubscriptionStore>(context, listen: false).setPurchases(_purchases);
   }
 
+  //show dialog when user tries to purchase a second subscription
   void _handleInvalidPurchase(PurchaseDetails purchaseDetails) async{
     await showDialog(
         context: context,
         builder: (context){
           return DialogAlert(
-
+            titlePadding: EdgeInsets.only(top: 12),
+            subtitlePadding: EdgeInsets.only(top: 16, bottom: 28, left: 24, right: 24),
+            buttonText: 'Back to Home',
+            titleText: 'Error',
+            subtitleText: 'Only one subscription plan is allowed at a time. Please go to the Settings page to unsubscribe to your current plan before continuing.',
+            headerIcon: Icons.support_agent,
+            headerBgColor: appTheme.errorColor,
+            buttonColor: appTheme.brandPrimaryColor,
+            titleTextColor: appTheme.textAccentColor,
+            bgColor: appTheme.bgPrimaryColor,
+            subtitleTextColor: appTheme.textAccentColor,
+            cbFunction: (){},
           );
         }
     );
   }
-  Future<void> _getProducts() async{
-    Iterable<String> mainDataProducts = mainData.availableProducts.map((availableProduct) => availableProduct.toString());
-    Set<String> productIDs = Set<String>.from(mainDataProducts);
-    final ProductDetailsResponse response = await _iap.queryProductDetails(productIDs);
-    print(response.productDetails);
-    setState(() {
-      _products = response.productDetails;
-      Provider.of<SubscriptionStore>(context, listen: false).setProducts(_products ?? []);
-    });
-  }
-  Future<void> _getPastPurchases() async{
-    _iap.restorePurchases();
-  }
+
+  //check if user has purchased the subscription before
   PurchaseDetails _hasPurchased(String productID){
     return _purchases.firstWhere((purchase) => purchase.productID == productID, orElse: null);
   }
+
+  //verify that the user has only one subscription
   Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async{
     if(_purchases.length != 0){
       for(int i = 0; i < mainData.availableProducts.length; i++){
@@ -140,6 +140,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
     }
     return false;
   }
+
+  //handle when a user has subscribed/unsubscribed to Pro Version
   void handleSubscriptionUpdate(String op) async{
     //handle updating user's hasFullAccess flag
     bool wasSuccessful = await UserService().updateAccountType(op);
@@ -192,10 +194,43 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
       );
     }
   }
+
+  Future<void> initStoreInfo() async {
+    Utility.iapIsAvailable = await _iap.isAvailable();
+    //handle when iap is not available on the device
+    if (!Utility.iapIsAvailable) {
+      setState(() {
+        _products = [];
+        _purchases = [];
+      });
+      return;
+    }
+    //get available products if iap is available in the device
+    ProductDetailsResponse productDetailResponse =
+    await _iap.queryProductDetails(mainData.availableProducts.toSet());
+    //update available products received from query
+    setState(() {
+      _products = productDetailResponse.productDetails;
+      _purchases = [];
+    });
+    //restore previous purchases
+    await _iap.restorePurchases();
+    //update purchases and products in provider
+    Provider.of<SubscriptionStore>(context, listen: false).setPurchases(_purchases);
+    Provider.of<SubscriptionStore>(context, listen: false).setProducts(_products);
+  }
   Future<void> initWithDependencies() async{
     if(!areDependenciesInitialized){
-      //initialize purchase data
-      _initializePurchaseData();
+      final Stream<List<PurchaseDetails>> purchaseUpdated =
+          _iap.purchaseStream;
+      _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+        _listenToPurchaseUpdated(purchaseDetailsList);
+      }, onDone: () {
+        _subscription.cancel();
+      }, onError: (error) {
+        // handle error here.
+      });
+      initStoreInfo();
       //cancel all previous alarms
       Utility.cancelAllAlarms();
       //schedule daily reminders if setting is on
@@ -268,11 +303,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin{
                 if(snapshot.hasData){
                   //app main data
                   mainData = snapshot.data;
-                  /*
-                  initial setup with async dependencies
-                  flag prevents from running more than once
-                  depends on main data
-                  */
+
+
                   initWithDependencies();
                   //update displayed page
                   updatePageInView();

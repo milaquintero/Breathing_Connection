@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:breathing_connection/models/main_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'main.dart';
 import 'models/user.dart';
 
