@@ -215,7 +215,6 @@ class _EnvironmentPageState extends State<EnvironmentPage> {
         else if(curUser.userSettings.breathingSound && curUser.userSettings.backgroundSound){
           videoSuffix = "_with_music_with_sound";
         }
-        print('${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4');
         //load appropriate video for technique
         _videoController = VideoPlayerController.network(
           '${assetHandler.videoAssetURL}/${techniqueToDisplay.associatedVideo}/${techniqueToDisplay.associatedVideo}$videoSuffix.mp4',

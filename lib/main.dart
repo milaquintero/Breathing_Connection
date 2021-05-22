@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:breathing_connection/models/asset_handler.dart';
 import 'package:breathing_connection/models/notification_manager.dart';
 import 'package:breathing_connection/models/route_arguments.dart';
@@ -11,6 +11,7 @@ import 'package:breathing_connection/pages/top_level_pages/environment_page.dart
 import 'package:breathing_connection/services/main_data_service.dart';
 import 'package:breathing_connection/services/technique_service.dart';
 import 'package:breathing_connection/services/user_service.dart';
+import 'package:breathing_connection/utility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -27,7 +28,6 @@ import 'pages/top_level_pages/root_page.dart';
 import 'pages/top_level_pages/technique_details_page.dart';
 import 'models/technique.dart';
 import 'models/view_technique_details_handler.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 
 SharedPreferences prefs;
 const String notificationHeaderKey = 'header';
@@ -61,7 +61,7 @@ class BreathingConnection extends StatefulWidget {
     String currentFooter = footer ?? "";
     await prefs.setString(notificationFooterKey, currentFooter);
   }
-  static Future<void> showNotification()async{
+  static Future<void> showNotification() async{
     //get header and footer for notification
     final prefs = await SharedPreferences.getInstance();
     String notificationHeader = prefs.getString(notificationHeaderKey) ?? "";
@@ -70,7 +70,6 @@ class BreathingConnection extends StatefulWidget {
     NotificationManager nm = NotificationManager();
     nm.initNotificationManager();
     nm.showNotification(notificationHeader, notificationFooter);
-
   }
   @override
   _BreathingConnectionState createState() => _BreathingConnectionState();
