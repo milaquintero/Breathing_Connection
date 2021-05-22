@@ -17,11 +17,12 @@ class TechniqueCard extends StatefulWidget {
   final Color cardBgColor;
   final Color cardActionColor;
   final Function(Technique) deleteCustomTechnique;
+  final Function(Technique) beginTechniqueInEnvironment;
   TechniqueCard({this.technique, this.changePersonalTechnique, this.viewTechniqueDetails,
   this.disabledCardTextColor, this.disabledCardBorderColor, this.disabledCardBgColor,
   this.disabledCardBgAccentColor, this.cardTitleColor, this.cardSubtitleColor,
   this.cardBorderColor, this.cardBgColor, this.cardActionColor, this.userHasFullAccess,
-  this.deleteCustomTechnique, this.editCustomTechnique});
+  this.deleteCustomTechnique, this.editCustomTechnique, this.beginTechniqueInEnvironment});
 
   @override
   _TechniqueCardState createState() => _TechniqueCardState();
@@ -89,7 +90,11 @@ class _TechniqueCardState extends State<TechniqueCard> {
         child: ListTile(
           enabled: shouldBeEnabled,
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          onTap: (){},
+          onTap: (){
+            if(widget.beginTechniqueInEnvironment != null){
+              widget.beginTechniqueInEnvironment(widget.technique);
+            }
+          },
           leading: shouldBeEnabled ? PopupMenuButton(
             child: IconButton(
               icon: Icon(

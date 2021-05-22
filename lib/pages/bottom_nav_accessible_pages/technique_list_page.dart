@@ -62,6 +62,17 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
     //send to technique details page
     Navigator.of(widget.rootContext).pushNamed('/technique-details');
   }
+  void handleEditCustomTechnique(Technique selectedTechnique){
+    //send to custom technique page with edit mode on
+    Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: selectedTechnique));
+  }
+  void handleBeginTechniqueInEnvironment(Technique selectedTechnique){
+    cancelTimers();
+    //set technique being viewed in handler provider
+    Provider.of<ViewTechniqueDetailsHandler>(widget.rootContext, listen: false).setTechnique(selectedTechnique);
+    //send to technique details page
+    Navigator.of(widget.rootContext).pushNamed('/environment');
+  }
   void cancelTimers(){
     proDialogTimer?.cancel();
   }
@@ -218,8 +229,11 @@ class _TechniqueListPageState extends State<TechniqueListPage> {
                                   },
                                   editCustomTechnique: availableTechniques[index].associatedUserID != null ? (Technique selectedTechnique){
                                     //send to custom technique page with edit mode on
-                                    Navigator.of(context).pushNamed('/create-custom-technique', arguments: RouteArguments(isEditing: true, selectedTechnique: selectedTechnique));
-                                  } : (Technique selectedTechnique){}
+                                    handleEditCustomTechnique(selectedTechnique);
+                                  } : (Technique selectedTechnique){},
+                                  beginTechniqueInEnvironment: (Technique selectedTechnique){
+                                    handleBeginTechniqueInEnvironment(selectedTechnique);
+                                  },
                               );
                             }
                             else {
